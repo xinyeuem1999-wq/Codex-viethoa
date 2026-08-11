@@ -143,7 +143,7 @@ impl App {
 
         if self.agent_navigation.is_empty() {
             self.chat_widget
-                .add_info_message("No agents available yet.".to_string(), /*hint*/ None);
+                .add_info_message("Chưa có tác tử nào khả dụng.".to_string(), /*hint*/ None);
             return;
         }
 
@@ -234,9 +234,9 @@ impl App {
     pub(super) fn can_fallback_from_include_turns_error(err: &color_eyre::Report) -> bool {
         err.chain().any(|cause| {
             let message = cause.to_string();
-            message.contains("includeTurns is unavailable before first user message")
+            message.contains("includeTurns không khả dụng trước tin nhắn đầu tiên của người dùng")
                 || message.contains("thread/turns/list is unavailable before first user message")
-                || message.contains("ephemeral threads do not support includeTurns")
+                || message.contains("luồng tạm thời không hỗ trợ includeTurns")
         })
     }
 
@@ -406,7 +406,7 @@ impl App {
                     // A `thread/read` fallback without turns would create a blank local replay
                     // channel with no live listener attached, which blocks later real re-attach.
                     return Err(color_eyre::eyre::eyre!(
-                        "Agent thread {thread_id} is not yet available for replay or live attach."
+                        "Luồng tác tử {thread_id} chưa khả dụng để phát lại hoặc đính kèm trực tiếp."
                     ));
                 }
                 let mut session = self.session_state_for_thread_read(thread_id, &thread).await;
@@ -471,7 +471,7 @@ impl App {
                 .await)
         {
             self.chat_widget
-                .add_error_message(format!("Agent thread {thread_id} is no longer available."));
+                .add_error_message(format!("Luồng tác tử {thread_id} không còn khả dụng."));
             return Ok(());
         }
         let mut is_replay_only = self
@@ -492,14 +492,14 @@ impl App {
                 }
                 Err(err) => {
                     self.chat_widget.add_error_message(format!(
-                        "Failed to attach to agent thread {thread_id}: {err}"
+                        "Không thể đính kèm vào luồng tác tử {thread_id}: {err}"
                     ));
                     return Ok(());
                 }
             }
         } else if !self.thread_event_channels.contains_key(&thread_id) && is_replay_only {
             self.chat_widget
-                .add_error_message(format!("Agent thread {thread_id} is no longer available."));
+                .add_error_message(format!("Luồng tác tử {thread_id} không còn khả dụng."));
             return Ok(());
         }
         let previous_thread_id = self.active_thread_id;
@@ -508,7 +508,7 @@ impl App {
         let Some((receiver, mut snapshot)) = self.activate_thread_for_replay(thread_id).await
         else {
             self.chat_widget
-                .add_error_message(format!("Agent thread {thread_id} is already active."));
+                .add_error_message(format!("Luồng tác tử {thread_id} đã hoạt động."));
             if let Some(previous_thread_id) = previous_thread_id {
                 self.activate_thread_channel(previous_thread_id).await;
             }
@@ -542,10 +542,10 @@ impl App {
         if is_replay_only {
             let message = if attached_replay_only {
                 format!(
-                    "Agent thread {thread_id} could not be resumed live. Replaying saved transcript."
+                    "Không thể tiếp tục trực tiếp luồng tác tử {thread_id}. Đang phát lại bản ghi đã lưu."
                 )
             } else {
-                format!("Agent thread {thread_id} is closed. Replaying saved transcript.")
+                format!("Luồng tác tử {thread_id} đã đóng. Đang phát lại bản ghi đã lưu.")
             };
             self.chat_widget.add_info_message(message, /*hint*/ None);
         }
@@ -635,7 +635,7 @@ impl App {
             }
             Err(err) => {
                 return Err(color_eyre::eyre::eyre!(
-                    "Failed to start a fresh session through the app server: {err}"
+                    "Không thể bắt đầu phiên mới qua app server: {err}"
                 ));
             }
         }
@@ -692,7 +692,7 @@ impl App {
                             started.session.thread_name = Some(name);
                             None
                         }
-                        Err(err) => Some(format!("Failed to name the new session: {err}")),
+                        Err(err) => Some(format!("Không thể đặt tên phiên mới: {err}")),
                     }
                 } else {
                     None
@@ -707,7 +707,7 @@ impl App {
                     .await
                 {
                     self.chat_widget.add_error_message(format!(
-                        "Failed to attach to fresh app-server thread: {err}"
+                        "Không thể đính kèm vào luồng app-server mới: {err}"
                     ));
                 } else {
                     if let Some(err) = name_error {
@@ -729,7 +729,7 @@ impl App {
             }
             Err(err) => {
                 self.chat_widget.add_error_message(format!(
-                    "Failed to start a fresh session through the app server: {err}"
+                    "Không thể bắt đầu phiên mới qua app server: {err}"
                 ));
                 self.config.model = Some(model);
             }
@@ -968,7 +968,7 @@ impl App {
             match outcome {
                 Err(err) => {
                     self.chat_widget.add_error_message(format!(
-                        "Failed to determine working directory for resume: {err}"
+                        "Không thể xác định thư mục làm việc để tiếp tục: {err}"
                     ));
                     return Ok(AppRunControl::Continue);
                 }
@@ -994,7 +994,7 @@ impl App {
             Ok(cfg) => cfg,
             Err(err) => {
                 self.chat_widget.add_error_message(format!(
-                    "Failed to rebuild configuration for resume: {err}"
+                    "Không thể xây dựng lại cấu hình để tiếp tục: {err}"
                 ));
                 return Ok(AppRunControl::Continue);
             }
@@ -1056,7 +1056,7 @@ impl App {
                     }
                     Err(err) => {
                         self.chat_widget.add_error_message(format!(
-                            "Failed to attach to resumed app-server thread: {err}"
+                            "Không thể đính kèm vào luồng app-server đã tiếp tục: {err}"
                         ));
                     }
                 }
@@ -1064,7 +1064,7 @@ impl App {
             Err(err) => {
                 let path_display = target_session.display_label();
                 self.chat_widget.add_error_message(format!(
-                    "Failed to resume session from {path_display}: {err}"
+                    "Không thể tiếp tục phiên từ {path_display}: {err}"
                 ));
             }
         }
@@ -1120,10 +1120,10 @@ mod tests {
     #[test]
     fn include_turns_fallback_detection_handles_unmaterialized_and_ephemeral_threads() {
         let unmaterialized = color_eyre::eyre::eyre!(
-            "thread/read failed during TUI session lookup: thread/read failed: thread thr_123 is not materialized yet; includeTurns is unavailable before first user message"
+            "thread/read failed during TUI session lookup: thread/read failed: thread thr_123 is not materialized yet; includeTurns không khả dụng trước tin nhắn đầu tiên của người dùng"
         );
         let ephemeral = color_eyre::eyre::eyre!(
-            "thread/read failed during TUI session lookup: thread/read failed: ephemeral threads do not support includeTurns"
+            "thread/read failed during TUI session lookup: thread/read failed: luồng tạm thời không hỗ trợ includeTurns"
         );
 
         assert!(App::can_fallback_from_include_turns_error(&unmaterialized));

@@ -293,7 +293,7 @@ impl ChatWidget {
         let effective_mode = self.effective_collaboration_mode();
         if effective_mode.model().trim().is_empty() {
             self.add_error_message(
-                "Thread model is unavailable. Wait for the thread to finish syncing or choose a model before sending input.".to_string(),
+                "Model của luồng không khả dụng. Hãy chờ luồng đồng bộ xong hoặc chọn model trước khi gửi đầu vào.".to_string(),
             );
             self.restore_user_message_to_composer(user_message_for_restore(
                 UserMessage {

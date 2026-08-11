@@ -77,7 +77,7 @@ pub(super) fn loaded_lines(
     // Separate the headline numbers from the calendar below.
     lines.push(Line::default());
     let Some(buckets) = response.daily_usage_buckets.as_ref() else {
-        lines.push("   Token activity history unavailable".dim().into());
+        lines.push("   Lịch sử hoạt động token không khả dụng".dim().into());
         return lines;
     };
 
@@ -95,7 +95,7 @@ fn chart_lines(
     let values = daily_values(buckets, today);
     let shown_columns = shown_columns(width);
     if shown_columns == 0 {
-        lines.push("   Widen terminal to show activity graph".dim().into());
+        lines.push("   Mở rộng terminal để xem biểu đồ hoạt động".dim().into());
         return lines;
     }
 

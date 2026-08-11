@@ -199,10 +199,10 @@ pub(crate) fn rewrite_inline_visualizations<'a>(
                     },
                 );
             } else {
-                rewritten.push_str("_Visualization unavailable on this device._");
+                rewritten.push_str("_Trực quan hóa không khả dụng trên thiết bị này._");
             }
         } else if trimmed.ends_with('}') {
-            rewritten.push_str("_Visualization unavailable on this device._");
+            rewritten.push_str("_Trực quan hóa không khả dụng trên thiết bị này._");
         }
         rewritten.push_str(newline);
     }
@@ -217,11 +217,11 @@ fn visualization_link_labels(file: &str) -> (String, String) {
         .file_stem()
         .and_then(|name| name.to_str())
         .filter(|name| !name.is_empty())
-        .unwrap_or("generated");
+        .unwrap_or("đã tạo");
     let escaped_name = escape_markdown_label(name);
     (
-        format!("Open {escaped_name} visualization in the browser"),
-        format!("Open {name} visualization in the browser"),
+        format!("Mở trực quan hóa {escaped_name} trong trình duyệt"),
+        format!("Mở trực quan hóa {name} trong trình duyệt"),
     )
 }
 

@@ -15,7 +15,7 @@ use codex_protocol::user_input::TextElement;
 use uuid::Uuid;
 
 const GOAL_ATTACHMENT_DIR: &str = "attachments";
-const GOAL_FILE_PREFIX: &str = "Read the Codex goal objective file at ";
+const GOAL_FILE_PREFIX: &str = "Đọc tệp mục tiêu của Codex tại ";
 const GOAL_FILE_SUFFIX: &str = " before continuing.";
 const GOAL_FILE_NAME: &str = "goal-objective.md";
 
@@ -37,7 +37,7 @@ pub(crate) async fn materialize_goal_draft(
 ) -> Result<(String, Option<GoalFilePath>)> {
     let mut objective = draft.objective;
     if objective.trim().is_empty() {
-        bail!("Goal objective must not be empty.");
+        bail!("Mục tiêu không được để trống.");
     }
     let text_elements = draft.text_elements;
     if !draft.pending_pastes.is_empty() {
@@ -47,7 +47,7 @@ pub(crate) async fn materialize_goal_draft(
             &draft.pending_pastes,
         );
         if expanded_objective.trim().is_empty() {
-            bail!("Goal objective must not be empty.");
+            bail!("Mục tiêu không được để trống.");
         }
     }
 
@@ -73,7 +73,7 @@ pub(crate) async fn materialize_goal_draft(
 
         replacements.push((
             placeholder.clone(),
-            format!("pasted text file: {path}. Read this file before continuing."),
+            format!("đã dán tệp văn bản: {path}. Hãy đọc tệp này trước khi tiếp tục."),
         ));
     }
 
@@ -93,7 +93,7 @@ pub(crate) async fn materialize_goal_draft(
             .await?
             .join(format!("image-{}.{}", idx + 1, extension));
         let bytes = fs::read(&image.path)
-            .with_context(|| format!("Could not read goal image {}", image.path.display()))?;
+            .with_context(|| format!("Không thể đọc hình ảnh mục tiêu {}", image.path.display()))?;
         write_goal_file(app_server, path.clone(), bytes).await?;
         if image.placeholder.is_empty() {
             image_lines.push(format!("- [Image #{}]: {path}", idx + 1));
@@ -149,9 +149,9 @@ pub(crate) async fn objective_text_for_edit(
         .fs_read_file_path(&path)
         .await
         .map_err(|err| anyhow::anyhow!("{err}"))
-        .with_context(|| format!("Could not read goal objective file {path}"))?;
+        .with_context(|| format!("Không thể đọc tệp mục tiêu {path}"))?;
     String::from_utf8(bytes)
-        .with_context(|| format!("Goal objective file {path} is not valid UTF-8"))
+        .with_context(|| format!("Tệp mục tiêu {path} không phải UTF-8 hợp lệ"))
 }
 
 pub(crate) fn objective_file_path(
@@ -176,7 +176,7 @@ pub(crate) fn objective_file_reference(path: &GoalFilePath) -> Result<String> {
     let actual_chars = reference.chars().count();
     if actual_chars > MAX_THREAD_GOAL_OBJECTIVE_CHARS {
         bail!(
-            "Goal objective file reference is too long: {actual_chars} characters. Limit: {MAX_THREAD_GOAL_OBJECTIVE_CHARS} characters."
+            "Tham chiếu tệp mục tiêu quá dài: {actual_chars} ký tự. Giới hạn: {MAX_THREAD_GOAL_OBJECTIVE_CHARS} ký tự."
         );
     }
     Ok(reference)
@@ -191,7 +191,7 @@ async fn ensure_goal_output_dir(
         return Ok(output_dir.clone());
     }
     let codex_home = codex_home
-        .context("App server did not report $CODEX_HOME; cannot materialize goal files")?;
+        .context("App server không báo cáo $CODEX_HOME; không thể tạo các tệp mục tiêu")?;
     let path = codex_home
         .join(GOAL_ATTACHMENT_DIR)
         .join(Uuid::new_v4().to_string());
@@ -199,7 +199,7 @@ async fn ensure_goal_output_dir(
         .fs_create_directory_all_path(&path)
         .await
         .map_err(|err| anyhow::anyhow!("{err}"))
-        .with_context(|| format!("Could not create goal attachment directory {path}"))?;
+        .with_context(|| format!("Không thể tạo thư mục đính kèm mục tiêu {path}"))?;
     *output_dir = Some(path.clone());
     Ok(path)
 }
@@ -213,7 +213,7 @@ async fn write_goal_file(
         .fs_write_file_path(&path, bytes)
         .await
         .map_err(|err| anyhow::anyhow!("{err}"))
-        .with_context(|| format!("Could not write goal file {path}"))
+        .with_context(|| format!("Không thể ghi tệp mục tiêu {path}"))
 }
 fn append_section(objective: &mut String, heading: &str, lines: Vec<String>) {
     if lines.is_empty() {

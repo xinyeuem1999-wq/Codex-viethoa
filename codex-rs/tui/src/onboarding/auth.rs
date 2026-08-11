@@ -97,7 +97,7 @@ pub(crate) enum SignInOption {
     ApiKey,
 }
 
-const API_KEY_DISABLED_MESSAGE: &str = "API key login is disabled.";
+const API_KEY_DISABLED_MESSAGE: &str = "Đăng nhập bằng API key đã bị tắt.";
 fn onboarding_request_id() -> codex_app_server_protocol::RequestId {
     codex_app_server_protocol::RequestId::String(Uuid::new_v4().to_string())
 }
@@ -396,11 +396,11 @@ impl AuthModeWidget {
         let mut lines: Vec<Line> = vec![
             Line::from(vec![
                 "  ".into(),
-                "Sign in with ChatGPT to use Codex as part of your paid plan".into(),
+                "Đăng nhập bằng ChatGPT để dùng Codex trong gói trả phí của bạn".into(),
             ]),
             Line::from(vec![
                 "  ".into(),
-                "or connect an API key for usage-based billing".into(),
+                "hoặc kết nối API key để trả phí theo mức sử dụng".into(),
             ]),
             "".into(),
         ];
@@ -435,11 +435,11 @@ impl AuthModeWidget {
         };
 
         let chatgpt_description = if !self.is_chatgpt_login_allowed() {
-            "ChatGPT login is disabled"
+            "Đăng nhập ChatGPT đã bị tắt"
         } else {
-            "Usage included with Plus, Pro, Business, and Enterprise plans"
+            "Bao gồm trong các gói Plus, Pro, Business và Enterprise"
         };
-        let device_code_description = "Sign in from another device with a one-time code";
+        let device_code_description = "Đăng nhập từ thiết bị khác bằng mã dùng một lần";
 
         for (idx, option) in self.displayed_sign_in_options().into_iter().enumerate() {
             match option {
@@ -447,7 +447,7 @@ impl AuthModeWidget {
                     lines.extend(create_mode_item(
                         idx,
                         option,
-                        "Sign in with ChatGPT",
+                        "Đăng nhập bằng ChatGPT",
                         chatgpt_description,
                     ));
                 }
@@ -455,7 +455,7 @@ impl AuthModeWidget {
                     lines.extend(create_mode_item(
                         idx,
                         option,
-                        "Sign in with Device Code",
+                        "Đăng nhập bằng Mã thiết bị",
                         device_code_description,
                     ));
                 }
@@ -463,8 +463,8 @@ impl AuthModeWidget {
                     lines.extend(create_mode_item(
                         idx,
                         option,
-                        "Provide your own API key",
-                        "Pay for what you use",
+                        "Cung cấp API key của bạn",
+                        "Trả tiền theo mức sử dụng",
                     ));
                 }
             }
@@ -473,7 +473,7 @@ impl AuthModeWidget {
 
         if !self.is_api_login_allowed() {
             lines.push(
-                "  API key login is disabled by this workspace. Sign in with ChatGPT to continue."
+                "  Đăng nhập bằng API key bị tắt bởi workspace này. Hãy đăng nhập bằng ChatGPT để tiếp tục."
                     .dim()
                     .into(),
             );
@@ -482,7 +482,7 @@ impl AuthModeWidget {
         lines.push(Line::from(vec![
             "  Press ".dim(),
             self.confirm_binding().into(),
-            " to continue".dim(),
+            " để tiếp tục".dim(),
         ]));
         if let Some(err) = self.error_message() {
             lines.push("".into());
@@ -501,11 +501,11 @@ impl AuthModeWidget {
             self.request_frame
                 .schedule_frame_in(std::time::Duration::from_millis(100));
             spans.extend(shimmer_text(
-                "Finish signing in via your browser",
+                "Hoàn tất đăng nhập qua trình duyệt",
                 MotionMode::Animated,
             ));
         } else {
-            spans.push("Finish signing in via your browser".into());
+            spans.push("Hoàn tất đăng nhập qua trình duyệt".into());
         }
         let mut lines = vec![spans.into(), "".into()];
 
@@ -513,7 +513,7 @@ impl AuthModeWidget {
         let auth_url = if let SignInState::ChatGptContinueInBrowser(state) = &*sign_in_state
             && !state.auth_url.is_empty()
         {
-            lines.push("  If the link doesn't open automatically, open the following link to authenticate:".into());
+            lines.push("  Nếu liên kết không tự mở, hãy mở liên kết sau để xác thực:".into());
             lines.push("".into());
             lines.push(Line::from(vec![
                 "  ".into(),
@@ -521,10 +521,10 @@ impl AuthModeWidget {
             ]));
             lines.push("".into());
             lines.push(Line::from(vec![
-                "  On a remote or headless machine? Press ".into(),
+                "  Dùng máy từ xa hoặc không có màn hình? Nhấn ".into(),
                 self.cancel_binding().into(),
-                " and choose ".into(),
-                "Sign in with Device Code".cyan(),
+                " và chọn ".into(),
+                "Đăng nhập bằng Mã thiết bị".cyan(),
                 ".".into(),
             ]));
             lines.push("".into());
@@ -534,9 +534,9 @@ impl AuthModeWidget {
         };
 
         lines.push(Line::from(vec![
-            "  Press ".dim(),
+            "  Nhấn ".dim(),
             self.cancel_binding().into(),
-            " to cancel".dim(),
+            " để hủy".dim(),
         ]));
         Paragraph::new(lines)
             .wrap(Wrap { trim: false })
@@ -550,44 +550,44 @@ impl AuthModeWidget {
     }
 
     fn render_chatgpt_success_message(&self, area: Rect, buf: &mut Buffer) {
-        let mut docs_line = HyperlinkLine::new(Line::from("  For more details see the ").dim());
+        let mut docs_line = HyperlinkLine::new(Line::from("  Xem thêm chi tiết tại ").dim());
         docs_line.push_span(
-            "Codex docs".underlined(),
+            "Tài liệu Codex".underlined(),
             Some("https://developers.openai.com/codex/security"),
         );
         let mut preferences_line =
-            HyperlinkLine::new(Line::from("  Uses your plan's rate limits and ").dim());
+            HyperlinkLine::new(Line::from("  Dùng giới hạn tốc độ của gói bạn và ").dim());
         preferences_line.push_span(
-            "training data preferences".underlined(),
+            "tùy chọn dữ liệu huấn luyện".underlined(),
             Some("https://chatgpt.com/#settings"),
         );
 
         let lines = vec![
             HyperlinkLine::new(
-                "✓ Signed in with your ChatGPT account"
+                "✓ Đã đăng nhập bằng tài khoản ChatGPT của bạn"
                     .fg(Color::Green)
                     .into(),
             ),
             "".into(),
-            "  Before you start:".into(),
+            "  Trước khi bắt đầu:".into(),
             "".into(),
-            "  Decide how much autonomy you want to grant Codex".into(),
+            "  Quyết định mức độ tự chủ bạn muốn trao cho Codex".into(),
             docs_line,
             "".into(),
-            "  Codex can make mistakes".into(),
+            "  Codex có thể mắc lỗi".into(),
             HyperlinkLine::new(
-                "  Review the code it writes and commands it runs"
+                "  Xem lại mã nó viết và lệnh nó chạy"
                     .dim()
                     .into(),
             ),
             "".into(),
-            "  Powered by your ChatGPT account".into(),
+            "  Được hỗ trợ bởi tài khoản ChatGPT của bạn".into(),
             preferences_line,
             "".into(),
             HyperlinkLine::new(Line::from(vec![
-                "  Press ".fg(Color::Cyan),
+                "  Nhấn ".fg(Color::Cyan),
                 self.confirm_binding().into(),
-                " to continue".fg(Color::Cyan),
+                " để tiếp tục".fg(Color::Cyan),
             ])),
         ];
 
@@ -599,7 +599,7 @@ impl AuthModeWidget {
 
     fn render_chatgpt_success(&self, area: Rect, buf: &mut Buffer) {
         let lines = vec![
-            "✓ Signed in with your ChatGPT account"
+            "✓ Đã đăng nhập bằng tài khoản ChatGPT của bạn"
                 .fg(Color::Green)
                 .into(),
         ];
@@ -611,9 +611,9 @@ impl AuthModeWidget {
 
     fn render_api_key_configured(&self, area: Rect, buf: &mut Buffer) {
         let lines = vec![
-            "✓ API key configured".fg(Color::Green).into(),
+            "✓ Đã cấu hình API key".fg(Color::Green).into(),
             "".into(),
-            "  Codex will use usage-based billing with your API key.".into(),
+            "  Codex sẽ dùng hóa đơn theo mức sử dụng với API key của bạn.".into(),
         ];
 
         Paragraph::new(lines)
@@ -632,16 +632,16 @@ impl AuthModeWidget {
         let mut intro_lines: Vec<Line> = vec![
             Line::from(vec![
                 "> ".into(),
-                "Use your own OpenAI API key for usage-based billing".bold(),
+                "Dùng API key OpenAI của bạn để tính phí theo mức sử dụng".bold(),
             ]),
             "".into(),
-            "  Paste or type your API key below. It will be stored locally in auth.json.".into(),
+            "  Dán hoặc gõ API key của bạn bên dưới. Nó sẽ được lưu cục bộ trong auth.json.".into(),
             "".into(),
         ];
         if state.prepopulated_from_env {
-            intro_lines.push("  Detected OPENAI_API_KEY environment variable.".into());
+            intro_lines.push("  Đã phát hiện biến môi trường OPENAI_API_KEY.".into());
             intro_lines.push(
-                "  Paste a different key if you prefer to use another account."
+                "  Dán một key khác nếu bạn muốn dùng tài khoản khác."
                     .dim()
                     .into(),
             );
@@ -652,7 +652,7 @@ impl AuthModeWidget {
             .render(intro_area, buf);
 
         let content_line: Line = if state.value.is_empty() {
-            vec!["Paste or type your API key".dim()].into()
+            vec!["Dán hoặc gõ API key của bạn".dim()].into()
         } else {
             Line::from(state.value.clone())
         };
@@ -702,7 +702,7 @@ impl AuthModeWidget {
                 } else if keys::CONFIRM.is_pressed(*key_event) {
                     let trimmed = state.value.trim().to_string();
                     if trimmed.is_empty() {
-                        self.set_error(Some("API key cannot be empty".to_string()));
+                        self.set_error(Some("API key không được để trống".to_string()));
                         should_request_frame = true;
                     } else {
                         should_save = Some(trimmed);
@@ -830,7 +830,7 @@ impl AuthModeWidget {
                 }
                 Ok(other) => {
                     *error.write().unwrap() = Some(format!(
-                        "Unexpected account/login/start response: {other:?}"
+                        "Phản hồi account/login/start không mong đợi: {other:?}"
                     ));
                     *sign_in_state.write().unwrap() = SignInState::ApiKeyEntry(ApiKeyInputState {
                         value: api_key,
@@ -838,7 +838,7 @@ impl AuthModeWidget {
                     });
                 }
                 Err(err) => {
-                    *error.write().unwrap() = Some(format!("Failed to save API key: {err}"));
+                    *error.write().unwrap() = Some(format!("Không lưu được API key: {err}"));
                     *sign_in_state.write().unwrap() = SignInState::ApiKeyEntry(ApiKeyInputState {
                         value: api_key,
                         prepopulated_from_env: false,
@@ -900,7 +900,7 @@ impl AuthModeWidget {
                 Ok(other) => {
                     *sign_in_state.write().unwrap() = SignInState::PickMode;
                     *error.write().unwrap() = Some(format!(
-                        "Unexpected account/login/start response: {other:?}"
+                        "Phản hồi account/login/start không mong đợi: {other:?}"
                     ));
                 }
                 Err(err) => {
@@ -1263,7 +1263,7 @@ mod tests {
 
         assert_eq!(
             collect_osc8_chars(&buf, area, "https://developers.openai.com/codex/security"),
-            "Codex docs"
+            "Tài liệu Codex"
         );
         assert_eq!(
             collect_osc8_chars(&buf, area, "https://chatgpt.com/#settings"),

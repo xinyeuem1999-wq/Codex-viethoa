@@ -36,7 +36,7 @@ impl ChatWidget {
                     Ok(event) => self.on_request_permissions(event),
                     Err(err) => {
                         self.add_error_message(format!(
-                            "failed to localize requested filesystem paths: {err}"
+                            "không thể nội địa hóa các đường dẫn hệ thống file được yêu cầu: {err}"
                         ));
                     }
                 }
@@ -78,7 +78,7 @@ impl ChatWidget {
             Ok(action) => action,
             Err(err) => {
                 self.add_error_message(format!(
-                    "failed to localize guardian filesystem paths: {err}"
+                    "không thể nội địa hóa các đường dẫn hệ thống file giám hộ: {err}"
                 ));
                 return;
             }

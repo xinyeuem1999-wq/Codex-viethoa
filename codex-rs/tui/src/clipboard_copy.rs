@@ -110,11 +110,11 @@ fn copy_to_clipboard_with(
         )
         .map(|()| None)
         .map_err(|terminal_err| {
-            tracing::warn!("terminal clipboard copy failed over SSH: {terminal_err}");
+            tracing::warn!("Lỗi sao chép clipboard qua terminal khi SSH: {terminal_err}");
             if environment.tmux_session {
-                format!("terminal clipboard copy failed over SSH: {terminal_err}")
+                format!("Lỗi sao chép clipboard qua terminal khi SSH: {terminal_err}")
             } else {
-                format!("OSC 52 clipboard copy failed over SSH: {terminal_err}")
+                format!("Lỗi sao chép clipboard OSC 52 khi SSH: {terminal_err}")
             }
         });
     }
@@ -142,11 +142,11 @@ fn copy_to_clipboard_with(
                         .map_err(|terminal_err| {
                             if environment.tmux_session {
                                 format!(
-                                    "native clipboard: {native_err}; WSL fallback: {wsl_err}; terminal fallback: {terminal_err}"
+                                    "clipboard gốc: {native_err}; dự phòng WSL: {wsl_err}; dự phòng terminal: {terminal_err}"
                                 )
                             } else {
                                 format!(
-                                    "native clipboard: {native_err}; WSL fallback: {wsl_err}; OSC 52 fallback: {terminal_err}"
+                                    "clipboard gốc: {native_err}; dự phòng WSL: {wsl_err}; dự phòng OSC 52: {terminal_err}"
                                 )
                             }
                         });
@@ -165,9 +165,9 @@ fn copy_to_clipboard_with(
             .map(|()| None)
             .map_err(|terminal_err| {
                 if environment.tmux_session {
-                    format!("native clipboard: {native_err}; terminal fallback: {terminal_err}")
+                    format!("clipboard gốc: {native_err}; dự phòng terminal: {terminal_err}")
                 } else {
-                    format!("native clipboard: {native_err}; OSC 52 fallback: {terminal_err}")
+                    format!("clipboard gốc: {native_err}; dự phòng OSC 52: {terminal_err}")
                 }
             })
         }
@@ -231,10 +231,10 @@ fn arboard_copy(text: &str) -> Result<Option<ClipboardLease>, String> {
         .map_err(|_| "stderr suppression lock poisoned".to_string())?;
     let _guard = SuppressStderr::new();
     let mut clipboard =
-        arboard::Clipboard::new().map_err(|e| format!("clipboard unavailable: {e}"))?;
+        arboard::Clipboard::new().map_err(|e| format!("không truy cập được clipboard: {e}"))?;
     clipboard
         .set_text(text)
-        .map_err(|e| format!("failed to set clipboard text: {e}"))?;
+        .map_err(|e| format!("không đặt được nội dung clipboard: {e}"))?;
     Ok(None)
 }
 
@@ -247,16 +247,16 @@ fn arboard_copy(text: &str) -> Result<Option<ClipboardLease>, String> {
 fn arboard_copy(text: &str) -> Result<Option<ClipboardLease>, String> {
     let _guard = SuppressStderr::new();
     let mut clipboard =
-        arboard::Clipboard::new().map_err(|e| format!("clipboard unavailable: {e}"))?;
+        arboard::Clipboard::new().map_err(|e| format!("không truy cập được clipboard: {e}"))?;
     clipboard
         .set_text(text)
-        .map_err(|e| format!("failed to set clipboard text: {e}"))?;
+        .map_err(|e| format!("không đặt được nội dung clipboard: {e}"))?;
     Ok(Some(ClipboardLease::native_linux(clipboard)))
 }
 
 #[cfg(target_os = "android")]
 fn arboard_copy(_text: &str) -> Result<Option<ClipboardLease>, String> {
-    Err("native clipboard unavailable on Android".to_string())
+    Err("clipboard gốc không khả dụng trên Android".to_string())
 }
 
 /// Copy text into the Windows clipboard from a WSL process.
@@ -272,25 +272,25 @@ fn wsl_clipboard_copy(text: &str) -> Result<(), String> {
             "[Console]::InputEncoding = [System.Text.Encoding]::UTF8; $ErrorActionPreference = 'Stop'; $text = [Console]::In.ReadToEnd(); Set-Clipboard -Value $text",
         ])
         .spawn()
-        .map_err(|e| format!("failed to spawn powershell.exe: {e}"))?;
+        .map_err(|e| format!("không khởi chạy được powershell.exe: {e}"))?;
 
     let Some(mut stdin) = child.stdin.take() else {
         let _ = child.kill();
         let _ = child.wait();
-        return Err("failed to open powershell.exe stdin".to_string());
+        return Err("không mở được stdin của powershell.exe".to_string());
     };
 
     if let Err(err) = stdin.write_all(text.as_bytes()) {
         let _ = child.kill();
         let _ = child.wait();
-        return Err(format!("failed to write to powershell.exe: {err}"));
+        return Err(format!("không ghi được vào powershell.exe: {err}"));
     }
 
     drop(stdin);
 
     let output = child
         .wait_with_output()
-        .map_err(|e| format!("failed to wait for powershell.exe: {e}"))?;
+        .map_err(|e| format!("không chờ được powershell.exe: {e}"))?;
 
     if output.status.success() {
         Ok(())
@@ -298,16 +298,16 @@ fn wsl_clipboard_copy(text: &str) -> Result<(), String> {
         let stderr = String::from_utf8_lossy(&output.stderr).trim().to_string();
         if stderr.is_empty() {
             let status = output.status;
-            Err(format!("powershell.exe exited with status {status}"))
+            Err(format!("powershell.exe thoát với trạng thái {status}"))
         } else {
-            Err(format!("powershell.exe failed: {stderr}"))
+            Err(format!("powershell.exe thất bại: {stderr}"))
         }
     }
 }
 
 #[cfg(not(target_os = "linux"))]
 fn wsl_clipboard_copy(_text: &str) -> Result<(), String> {
-    Err("WSL clipboard fallback unavailable on this platform".to_string())
+    Err("phương án dự phòng clipboard WSL không khả dụng trên nền tảng này".to_string())
 }
 
 /// Copy text through tmux's native clipboard integration.
@@ -327,25 +327,25 @@ fn tmux_clipboard_copy(text: &str) -> Result<(), String> {
         .stdout(std::process::Stdio::null())
         .stderr(std::process::Stdio::piped())
         .spawn()
-        .map_err(|e| format!("failed to spawn tmux: {e}"))?;
+        .map_err(|e| format!("không khởi chạy được tmux: {e}"))?;
 
     let Some(mut stdin) = child.stdin.take() else {
         let _ = child.kill();
         let _ = child.wait();
-        return Err("failed to open tmux stdin".to_string());
+        return Err("không mở được stdin của tmux".to_string());
     };
 
     if let Err(err) = stdin.write_all(text.as_bytes()) {
         let _ = child.kill();
         let _ = child.wait();
-        return Err(format!("failed to write to tmux: {err}"));
+        return Err(format!("không ghi được vào tmux: {err}"));
     }
 
     drop(stdin);
 
     let output = child
         .wait_with_output()
-        .map_err(|e| format!("failed to wait for tmux: {e}"))?;
+        .map_err(|e| format!("không chờ được tmux: {e}"))?;
 
     if output.status.success() {
         Ok(())
@@ -353,9 +353,9 @@ fn tmux_clipboard_copy(text: &str) -> Result<(), String> {
         let stderr = String::from_utf8_lossy(&output.stderr).trim().to_string();
         if stderr.is_empty() {
             let status = output.status;
-            Err(format!("tmux exited with status {status}"))
+            Err(format!("tmux thoát với trạng thái {status}"))
         } else {
-            Err(format!("tmux failed: {stderr}"))
+            Err(format!("tmux thất bại: {stderr}"))
         }
     }
 }
@@ -367,12 +367,12 @@ fn tmux_clipboard_copy_ready(
 ) -> Result<(), String> {
     let set_clipboard = set_clipboard_fn()?;
     if set_clipboard.trim() == "off" {
-        return Err("tmux clipboard forwarding is disabled".to_string());
+        return Err("chuyển tiếp clipboard tmux đã bị tắt".to_string());
     }
 
     let tmux_info = tmux_info_fn()?;
     if tmux_info.lines().any(|line| line.contains("Ms: [missing]")) {
-        return Err("tmux clipboard forwarding is unavailable: missing Ms capability".to_string());
+        return Err("không thể chuyển tiếp clipboard tmux: thiếu khả năng Ms".to_string());
     }
 
     Ok(())
@@ -382,17 +382,17 @@ fn tmux_command_output<const N: usize>(args: [&str; N]) -> Result<String, String
     let output = std::process::Command::new("tmux")
         .args(args)
         .output()
-        .map_err(|e| format!("failed to spawn tmux: {e}"))?;
+        .map_err(|e| format!("không khởi chạy được tmux: {e}"))?;
 
     if output.status.success() {
-        String::from_utf8(output.stdout).map_err(|e| format!("tmux output was not UTF-8: {e}"))
+        String::from_utf8(output.stdout).map_err(|e| format!("đầu ra tmux không phải UTF-8: {e}"))
     } else {
         let stderr = String::from_utf8_lossy(&output.stderr).trim().to_string();
         if stderr.is_empty() {
             let status = output.status;
-            Err(format!("tmux exited with status {status}"))
+            Err(format!("tmux thoát với trạng thái {status}"))
         } else {
-            Err(format!("tmux failed: {stderr}"))
+            Err(format!("tmux thất bại: {stderr}"))
         }
     }
 }
@@ -478,17 +478,17 @@ fn osc52_copy(text: &str) -> Result<(), String> {
 fn write_osc52_to_writer(mut writer: impl Write, sequence: &str) -> Result<(), String> {
     writer
         .write_all(sequence.as_bytes())
-        .map_err(|e| format!("failed to write OSC 52: {e}"))?;
+        .map_err(|e| format!("không ghi được OSC 52: {e}"))?;
     writer
         .flush()
-        .map_err(|e| format!("failed to flush OSC 52: {e}"))
+        .map_err(|e| format!("không xả được OSC 52: {e}"))
 }
 
 fn osc52_sequence(text: &str, tmux: bool) -> Result<String, String> {
     let raw_bytes = text.len();
     if raw_bytes > OSC52_MAX_RAW_BYTES {
         return Err(format!(
-            "OSC 52 payload too large ({raw_bytes} bytes; max {OSC52_MAX_RAW_BYTES})"
+            "tải trọng OSC 52 quá lớn ({raw_bytes} byte; tối đa {OSC52_MAX_RAW_BYTES})"
         ));
     }
 
@@ -769,7 +769,7 @@ mod tests {
 
         assert_eq!(
             result,
-            Err("tmux clipboard forwarding is disabled".to_string())
+            Err("chuyển tiếp clipboard tmux đã bị tắt".to_string())
         );
     }
 
@@ -782,7 +782,7 @@ mod tests {
 
         assert_eq!(
             result,
-            Err("tmux clipboard forwarding is unavailable: missing Ms capability".to_string())
+            Err("không thể chuyển tiếp clipboard tmux: thiếu khả năng Ms".to_string())
         );
     }
 

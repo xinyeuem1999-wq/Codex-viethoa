@@ -398,10 +398,10 @@ impl StatusHistoryCell {
         let window_fmt = format_tokens_compact(context.window);
 
         Some(vec![
-            Span::from(format!("{percent}% left")),
+            Span::from(format!("còn {percent}%")),
             Span::from(" (").dim(),
             Span::from(used_fmt).dim(),
-            Span::from(" used / ").dim(),
+            Span::from(" đã dùng / ").dim(),
             Span::from(window_fmt).dim(),
             Span::from(")").dim(),
         ])
@@ -417,8 +417,8 @@ impl StatusHistoryCell {
             StatusRateLimitData::Available(rows_data) => {
                 if rows_data.is_empty() {
                     return vec![formatter.line(
-                        "Limits",
-                        vec![Span::from("not available for this account").dim()],
+                        "Giới hạn",
+                        vec![Span::from("không khả dụng cho tài khoản này").dim()],
                     )];
                 }
 
@@ -428,11 +428,11 @@ impl StatusHistoryCell {
                 let mut lines =
                     self.rate_limit_row_lines(rows_data, available_inner_width, formatter);
                 lines.push(formatter.line(
-                    "Warning",
+                    "Cảnh báo",
                     vec![Span::from(if state.refreshing_rate_limits {
-                        "limits may be stale - run /status again shortly."
+                        "giới hạn có thể đã cũ - chạy /status lại ngay."
                     } else {
-                        "limits may be stale - start new turn to refresh."
+                        "giới hạn có thể đã cũ - bắt đầu lượt mới để làm mới."
                     })
                     .dim()],
                 ));
@@ -440,17 +440,17 @@ impl StatusHistoryCell {
             }
             StatusRateLimitData::Unavailable => {
                 vec![formatter.line(
-                    "Limits",
-                    vec![Span::from("not available for this account").dim()],
+                    "Giới hạn",
+                    vec![Span::from("không khả dụng cho tài khoản này").dim()],
                 )]
             }
             StatusRateLimitData::Missing => {
                 vec![formatter.line(
-                    "Limits",
+                    "Giới hạn",
                     vec![Span::from(if state.refreshing_rate_limits {
-                        "refresh requested; run /status again shortly."
+                        "đã yêu cầu làm mới; chạy /status lại ngay."
                     } else {
-                        "data not available yet"
+                        "dữ liệu chưa khả dụng"
                     })
                     .dim()],
                 )]
@@ -555,7 +555,7 @@ impl StatusHistoryCell {
         match &state.rate_limits {
             StatusRateLimitData::Available(rows) => {
                 if rows.is_empty() {
-                    push_label(labels, seen, "Limits");
+                    push_label(labels, seen, "Giới hạn");
                 } else {
                     for row in rows {
                         push_label(labels, seen, row.label.as_str());
@@ -566,10 +566,10 @@ impl StatusHistoryCell {
                 for row in rows {
                     push_label(labels, seen, row.label.as_str());
                 }
-                push_label(labels, seen, "Warning");
+                push_label(labels, seen, "Cảnh báo");
             }
-            StatusRateLimitData::Unavailable => push_label(labels, seen, "Limits"),
-            StatusRateLimitData::Missing => push_label(labels, seen, "Limits"),
+            StatusRateLimitData::Unavailable => push_label(labels, seen, "Giới hạn"),
+            StatusRateLimitData::Missing => push_label(labels, seen, "Giới hạn"),
         }
     }
 }
@@ -626,22 +626,22 @@ fn status_permissions_label(
     match active_id {
         Some(BUILT_IN_PERMISSION_PROFILE_READ_ONLY) => {
             let label = if sandbox == "read-only with network access" {
-                "Read Only with network access"
+                "Chỉ đọc có truy cập mạng"
             } else {
-                "Read Only"
+                "Chỉ đọc"
             };
             return format!("{label} ({approval})");
         }
         Some(BUILT_IN_PERMISSION_PROFILE_WORKSPACE) => match sandbox {
             "workspace" => {
                 return format!(
-                    "Workspace{} ({approval})",
+                    "Không gian làm việc{} ({approval})",
                     workspace_root_suffix.unwrap_or("")
                 );
             }
             "workspace with network access" => {
                 return format!(
-                    "Workspace with network access{} ({approval})",
+                    "Không gian làm việc có truy cập mạng{} ({approval})",
                     workspace_root_suffix.unwrap_or("")
                 );
             }
@@ -651,34 +651,34 @@ fn status_permissions_label(
             if permission_profile == &PermissionProfile::Disabled =>
         {
             return if approval_policy == AskForApproval::Never {
-                "Full Access".to_string()
+                "Toàn quyền".to_string()
             } else {
-                format!("No Sandbox ({approval})")
+                format!("Không có Sandbox ({approval})")
             };
         }
         Some(id) => {
             let sandbox = decorate_workspace_sandbox_label(sandbox, workspace_root_suffix);
-            return format!("Profile {id} ({sandbox}, {approval})");
+            return format!("Hồ sơ {id} ({sandbox}, {approval})");
         }
         None => {}
     }
 
     if sandbox == "read-only" {
-        return format!("Read Only ({approval})");
+        return format!("Chỉ đọc ({approval})");
     }
     if approval_policy == AskForApproval::OnRequest && sandbox == "workspace" {
         return format!(
-            "Workspace{} ({approval})",
+            "Không gian làm việc{} ({approval})",
             workspace_root_suffix.unwrap_or("")
         );
     }
     if approval_policy == AskForApproval::Never
         && permission_profile == &PermissionProfile::Disabled
     {
-        return "Full Access".to_string();
+        return "Toàn quyền".to_string();
     }
     let sandbox = decorate_workspace_sandbox_label(sandbox, workspace_root_suffix);
-    format!("Custom ({sandbox}, {approval})")
+    format!("Tùy chỉnh ({sandbox}, {approval})")
 }
 
 fn decorate_workspace_sandbox_label(sandbox: &str, workspace_root_suffix: Option<&str>) -> String {
@@ -695,8 +695,8 @@ fn status_approval_label(
 ) -> String {
     if approval_policy == AskForApproval::OnRequest {
         return match approvals_reviewer {
-            ApprovalsReviewer::AutoReview => "Approve for me".to_string(),
-            ApprovalsReviewer::User => "Ask for approval".to_string(),
+            ApprovalsReviewer::AutoReview => "Tự duyệt".to_string(),
+            ApprovalsReviewer::User => "Hỏi để duyệt".to_string(),
         };
     }
 
@@ -726,11 +726,12 @@ impl HistoryCell for StatusHistoryCell {
                 (None, None) => "ChatGPT".to_string(),
             },
             StatusAccountDisplay::ApiKey => {
-                "API key configured (run codex login to use ChatGPT)".to_string()
+                "Đã cấu hình API key (chạy codex login để dùng ChatGPT)".to_string()
             }
         });
 
-        let mut labels: Vec<String> = vec!["Model", "Directory", "Permissions", "Agents.md"]
+        let mut labels: Vec<String> =
+            vec!["Model", "Thư mục", "Quyền hạn", "Agents.md"]
             .into_iter()
             .map(str::to_string)
             .collect();
@@ -749,26 +750,26 @@ impl HistoryCell for StatusHistoryCell {
             .clone();
 
         if self.model_provider.is_some() {
-            push_label(&mut labels, &mut seen, "Model provider");
+            push_label(&mut labels, &mut seen, "Nhà cung cấp model");
         }
         if account_value.is_some() {
-            push_label(&mut labels, &mut seen, "Account");
+            push_label(&mut labels, &mut seen, "Tài khoản");
         }
         if thread_name.is_some() {
-            push_label(&mut labels, &mut seen, "Thread name");
+            push_label(&mut labels, &mut seen, "Tên luồng");
         }
         if self.session_id.is_some() {
-            push_label(&mut labels, &mut seen, "Session");
+            push_label(&mut labels, &mut seen, "Phiên");
         }
         if self.session_id.is_some() && self.forked_from.is_some() {
-            push_label(&mut labels, &mut seen, "Forked from");
+            push_label(&mut labels, &mut seen, "Bắt nguồn từ");
         }
         if self.collaboration_mode.is_some() {
-            push_label(&mut labels, &mut seen, "Collaboration mode");
+            push_label(&mut labels, &mut seen, "Chế độ cộng tác");
         }
-        push_label(&mut labels, &mut seen, "Token usage");
+        push_label(&mut labels, &mut seen, "Lượng token dùng");
         if self.token_usage.context_window.is_some() {
-            push_label(&mut labels, &mut seen, "Context window");
+            push_label(&mut labels, &mut seen, "Cửa sổ ngữ cảnh");
         }
 
         self.collect_rate_limit_labels(&rate_limit_state, &mut seen, &mut labels);
@@ -777,12 +778,12 @@ impl HistoryCell for StatusHistoryCell {
         let value_width = formatter.value_width(available_inner_width);
 
         let note_first_line = Line::from(vec![
-            Span::from("Visit ").cyan(),
+            Span::from("Truy cập ").cyan(),
             CHATGPT_USAGE_URL.cyan().underlined(),
-            Span::from(" for up-to-date").cyan(),
+            Span::from(" để xem thông tin mới nhất").cyan(),
         ]);
         let note_second_line = Line::from(vec![
-            Span::from("information on rate limits and credits").cyan(),
+            Span::from("về giới hạn tốc độ và tín dụng").cyan(),
         ]);
         let note_lines = adaptive_wrap_lines(
             [note_first_line, note_second_line],
@@ -807,7 +808,7 @@ impl HistoryCell for StatusHistoryCell {
             );
             let mut wrapped_remote = wrapped_remote.into_iter();
             if let Some(first) = wrapped_remote.next() {
-                lines.push(formatter.line("Remote", first.spans));
+                lines.push(formatter.line("Từ xa", first.spans));
                 lines.extend(wrapped_remote.map(|line| formatter.continuation(line.spans)));
             }
             lines.push(Line::from(Vec::<Span<'static>>::new()));
@@ -824,39 +825,48 @@ impl HistoryCell for StatusHistoryCell {
 
         lines.push(formatter.line("Model", model_spans));
         if let Some(model_provider) = self.model_provider.as_ref() {
-            lines.push(formatter.line("Model provider", vec![Span::from(model_provider.clone())]));
+            lines.push(formatter.line(
+                "Nhà cung cấp model",
+                vec![Span::from(model_provider.clone())],
+            ));
         }
-        lines.push(formatter.line("Directory", vec![Span::from(directory_value)]));
-        lines.push(formatter.line("Permissions", vec![Span::from(self.permissions.clone())]));
+        lines.push(formatter.line("Thư mục", vec![Span::from(directory_value)]));
+        lines.push(formatter.line("Quyền hạn", vec![Span::from(self.permissions.clone())]));
         lines.push(formatter.line("Agents.md", vec![Span::from(agents_summary)]));
 
         if let Some(account_value) = account_value {
-            lines.push(formatter.line("Account", vec![Span::from(account_value)]));
+            lines.push(formatter.line("Tài khoản", vec![Span::from(account_value)]));
         }
 
         if let Some(thread_name) = thread_name {
-            lines.push(formatter.line("Thread name", vec![Span::from(thread_name.to_string())]));
+            lines.push(formatter.line("Tên luồng", vec![Span::from(thread_name.to_string())]));
         }
         if let Some(collab_mode) = self.collaboration_mode.as_ref() {
-            lines.push(formatter.line("Collaboration mode", vec![Span::from(collab_mode.clone())]));
+            lines.push(formatter.line(
+                "Chế độ cộng tác",
+                vec![Span::from(collab_mode.clone())],
+            ));
         }
         if let Some(session) = self.session_id.as_ref() {
-            lines.push(formatter.line("Session", vec![Span::from(session.clone())]));
+            lines.push(formatter.line("Phiên", vec![Span::from(session.clone())]));
         }
         if self.session_id.is_some()
             && let Some(forked_from) = self.forked_from.as_ref()
         {
-            lines.push(formatter.line("Forked from", vec![Span::from(forked_from.clone())]));
+            lines.push(formatter.line(
+                "Bắt nguồn từ",
+                vec![Span::from(forked_from.clone())],
+            ));
         }
 
         lines.push(Line::from(Vec::<Span<'static>>::new()));
         // Hide token usage only for ChatGPT subscribers
         if !matches!(self.account, Some(StatusAccountDisplay::ChatGpt { .. })) {
-            lines.push(formatter.line("Token usage", self.token_usage_spans()));
+            lines.push(formatter.line("Lượng token dùng", self.token_usage_spans()));
         }
 
         if let Some(spans) = self.context_window_spans() {
-            lines.push(formatter.line("Context window", spans));
+            lines.push(formatter.line("Cửa sổ ngữ cảnh", spans));
         }
 
         lines.extend(self.rate_limit_lines(&rate_limit_state, available_inner_width, &formatter));

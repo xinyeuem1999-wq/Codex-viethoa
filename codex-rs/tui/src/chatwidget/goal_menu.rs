@@ -16,7 +16,7 @@ impl ChatWidget {
         let token_budget = goal.token_budget;
         let view = CustomPromptView::new(
             "Edit goal".to_string(),
-            "Type a goal objective and press Enter".to_string(),
+            "Nhập mục tiêu và nhấn Enter".to_string(),
             goal.objective,
             /*context_label*/ None,
             Box::new(move |objective: String| {
@@ -55,14 +55,14 @@ impl ChatWidget {
             items: vec![
                 SelectionItem {
                     name: "Resume goal".to_string(),
-                    description: Some("Mark it active and continue when idle".to_string()),
+                    description: Some("Đánh dấu đang hoạt động và tiếp tục khi rảnh".to_string()),
                     actions: resume_actions,
                     dismiss_on_select: true,
                     ..Default::default()
                 },
                 SelectionItem {
                     name: "Leave paused".to_string(),
-                    description: Some("Keep it paused; use /goal resume later".to_string()),
+                    description: Some("Giữ tạm dừng; dùng /goal resume sau".to_string()),
                     dismiss_on_select: true,
                     ..Default::default()
                 },
@@ -106,12 +106,12 @@ fn goal_summary_lines(goal: &AppThreadGoal) -> Vec<Line<'static>> {
         ]));
     }
     let command_hint = match goal.status {
-        AppThreadGoalStatus::Active => "Commands: /goal edit, /goal pause, /goal clear",
+        AppThreadGoalStatus::Active => "Lệnh: /goal edit, /goal pause, /goal clear",
         AppThreadGoalStatus::Paused
         | AppThreadGoalStatus::Blocked
-        | AppThreadGoalStatus::UsageLimited => "Commands: /goal edit, /goal resume, /goal clear",
+        | AppThreadGoalStatus::UsageLimited => "Lệnh: /goal edit, /goal resume, /goal clear",
         AppThreadGoalStatus::BudgetLimited | AppThreadGoalStatus::Complete => {
-            "Commands: /goal edit, /goal clear"
+            "Lệnh: /goal edit, /goal clear"
         }
     };
     lines.push(Line::default());

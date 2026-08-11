@@ -42,19 +42,19 @@ impl ChatWidget {
         let presets = builtin_approval_presets();
         let Some(read_only) = presets.iter().find(|preset| preset.id == "read-only") else {
             self.add_error_message(
-                "Internal error: missing the 'read-only' approval preset.".to_string(),
+                "Lỗi nội bộ: thiếu bộ cài sẵn phê duyệt 'read-only'.".to_string(),
             );
             return;
         };
         let Some(default) = presets.iter().find(|preset| preset.id == "auto") else {
             self.add_error_message(
-                "Internal error: missing the 'auto' approval preset.".to_string(),
+                "Lỗi nội bộ: thiếu bộ cài sẵn phê duyệt 'auto'.".to_string(),
             );
             return;
         };
         let Some(full_access) = presets.iter().find(|preset| preset.id == "full-access") else {
             self.add_error_message(
-                "Internal error: missing the 'full-access' approval preset.".to_string(),
+                "Lỗi nội bộ: thiếu bộ cài sẵn phê duyệt 'full-access'.".to_string(),
             );
             return;
         };
@@ -64,7 +64,7 @@ impl ChatWidget {
                 ":workspace",
                 default
                     .description
-                    .replace(" (Identical to Agent mode)", ""),
+                    .replace(" (Giống với chế độ Agent)", ""),
                 AskForApproval::from(default.approval),
                 ApprovalsReviewer::User,
             ),

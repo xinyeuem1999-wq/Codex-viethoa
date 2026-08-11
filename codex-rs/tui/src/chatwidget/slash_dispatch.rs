@@ -33,10 +33,10 @@ struct PreparedSlashCommandArgs {
 
 const SIDE_STARTING_CONTEXT_LABEL: &str = "Side starting...";
 const SIDE_SLASH_COMMAND_UNAVAILABLE_HINT: &str =
-    "Press Ctrl+C to return to the main thread first.";
-const GOAL_USAGE_HINT: &str = "Example: /goal improve benchmark coverage";
-const RAW_USAGE: &str = "Usage: /raw [on|off]";
-const USAGE_CHATGPT_LOGIN_REQUIRED: &str = "Sign in with ChatGPT to use /usage.";
+    "Nhấn Ctrl+C để quay về luồng chính trước.";
+const GOAL_USAGE_HINT: &str = "Ví dụ: /goal improve benchmark coverage";
+const RAW_USAGE: &str = "Cách dùng: /raw [on|off]";
+const USAGE_CHATGPT_LOGIN_REQUIRED: &str = "Đăng nhập bằng ChatGPT để dùng /usage.";
 
 impl ChatWidget {
     /// Dispatch a bare slash command and record its staged local-history entry.
@@ -55,7 +55,7 @@ impl ChatWidget {
     pub(super) fn handle_service_tier_command_dispatch(&mut self, command: ServiceTierCommand) {
         if self.active_side_conversation {
             self.add_error_message(format!(
-                "'/{}' is unavailable in side conversations. {SIDE_SLASH_COMMAND_UNAVAILABLE_HINT}",
+                "'/{}' không khả dụng trong hội thoại phụ. {SIDE_SLASH_COMMAND_UNAVAILABLE_HINT}",
                 command.name
             ));
             self.bottom_pane.drain_pending_submission_state();
@@ -84,8 +84,8 @@ impl ChatWidget {
     fn apply_plan_slash_command(&mut self) -> bool {
         if !self.collaboration_modes_enabled() {
             self.add_info_message(
-                "Collaboration modes are disabled.".to_string(),
-                Some("Enable collaboration modes to use /plan.".to_string()),
+                "Các chế độ cộng tác đã bị tắt.".to_string(),
+                Some("Bật các chế độ cộng tác để dùng /plan.".to_string()),
             );
             return false;
         }
@@ -94,7 +94,7 @@ impl ChatWidget {
             true
         } else {
             self.add_info_message(
-                "Plan mode unavailable right now.".to_string(),
+                "Chế độ Plan hiện không khả dụng.".to_string(),
                 /*hint*/ None,
             );
             false
@@ -118,7 +118,7 @@ impl ChatWidget {
         let Some(parent_thread_id) = self.thread_id else {
             let command = cmd.command();
             self.add_error_message(format!(
-                "'/{command}' is unavailable before the session starts."
+                "'/{command}' không khả dụng trước khi phiên bắt đầu."
             ));
             return;
         };
@@ -152,7 +152,7 @@ impl ChatWidget {
         }
         if self.slash_command_blocked_by_active_task(cmd) {
             let message = format!(
-                "'/{}' is disabled while a task is in progress.",
+                "'/{}' bị tắt khi đang có tác vụ chạy.",
                 cmd.command()
             );
             self.add_to_history(history_cell::new_error_event(message));
@@ -182,20 +182,20 @@ impl ChatWidget {
                 self.bottom_pane.show_selection_view(SelectionViewParams {
                     title: Some("Archive this session?".to_string()),
                     subtitle: Some(
-                        "Are you sure? This will archive the current session and exit Codex"
+                        "Bạn chắc chắn? Việc này sẽ lưu trữ phiên hiện tại và thoát Codex"
                             .to_string(),
                     ),
                     footer_hint: Some(standard_popup_hint_line()),
                     items: vec![
                         SelectionItem {
                             name: "No, don't archive".to_string(),
-                            description: Some("Return to the current session".to_string()),
+                            description: Some("Quay lại phiên hiện tại".to_string()),
                             dismiss_on_select: true,
                             ..Default::default()
                         },
                         SelectionItem {
-                            name: "Yes, archive and exit".to_string(),
-                            description: Some("Archive this session now".to_string()),
+                            name: "Có, lưu trữ và thoát".to_string(),
+                            description: Some("Lưu trữ phiên này ngay".to_string()),
                             actions: vec![Box::new(|tx| {
                                 tx.send(AppEvent::ArchiveCurrentThread);
                             })],
@@ -211,19 +211,19 @@ impl ChatWidget {
                 self.bottom_pane.show_selection_view(SelectionViewParams {
                     title: Some("Delete this session?".to_string()),
                     subtitle: Some(
-                        "Cannot be undone. Subagent threads will also be deleted.".to_string(),
+                        "Không thể hoàn tác. Các luồng subagent cũng sẽ bị xóa.".to_string(),
                     ),
                     footer_hint: Some(standard_popup_hint_line()),
                     items: vec![
                         SelectionItem {
                             name: "No, keep this session".to_string(),
-                            description: Some("Return to the current session".to_string()),
+                            description: Some("Quay lại phiên hiện tại".to_string()),
                             dismiss_on_select: true,
                             ..Default::default()
                         },
                         SelectionItem {
-                            name: "Yes, delete and exit".to_string(),
-                            description: Some("Permanently delete this session now".to_string()),
+                            name: "Có, xóa và thoát".to_string(),
+                            description: Some("Xóa vĩnh viễn phiên này ngay".to_string()),
                             actions: vec![Box::new(|tx| {
                                 tx.send(AppEvent::DeleteCurrentThread);
                             })],
@@ -248,7 +248,7 @@ impl ChatWidget {
             SlashCommand::App => {
                 let Some(thread_id) = self.thread_id else {
                     self.add_error_message(
-                        "Session is still starting; try /app again in a moment.".to_string(),
+                        "Phiên vẫn đang khởi động; thử /app lại sau giây lát.".to_string(),
                     );
                     return;
                 };
@@ -344,7 +344,7 @@ impl ChatWidget {
                         // Avoid panicking in interactive UI; treat this as a recoverable
                         // internal error.
                         self.add_error_message(
-                            "Internal error: missing the 'auto' approval preset.".to_string(),
+                            "Lỗi nội bộ: thiếu preset phê duyệt 'auto'.".to_string(),
                         );
                         return;
                     };
@@ -421,9 +421,9 @@ impl ChatWidget {
                                     "`/diff` — _not inside a git repository_".to_string()
                                 }
                             }
-                            Err(e) => format!("Failed to compute diff: {e}"),
+                            Err(e) => format!("Không thể tính diff: {e}"),
                         },
-                        None => "Failed to compute diff: workspace command runner unavailable"
+                        None => "Không thể tính diff: trình chạy lệnh workspace không khả dụng"
                             .to_string(),
                     };
                     tx.send(AppEvent::DiffResult(text));
@@ -509,7 +509,7 @@ impl ChatWidget {
                     );
                 } else {
                     self.add_info_message(
-                        "Rollout path is not available yet.".to_string(),
+                        "Đường dẫn rollout chưa khả dụng.".to_string(),
                         /*hint*/ None,
                     );
                 }
@@ -571,7 +571,7 @@ impl ChatWidget {
         }
         if self.slash_command_blocked_by_active_task(cmd) {
             let message = format!(
-                "'/{}' is disabled while a task is in progress.",
+                "'/{}' bị tắt khi đang có tác vụ chạy.",
                 cmd.command()
             );
             self.add_to_history(history_cell::new_error_event(message));
@@ -686,7 +686,7 @@ impl ChatWidget {
                     match tokens::TokenActivityView::parse(trimmed) {
                         Some(view) => self.add_token_activity_output(view),
                         None => self.add_error_message(
-                            "Usage: /usage [daily|weekly|cumulative]".to_string(),
+                            "Cách dùng: /usage [daily|weekly|cumulative]".to_string(),
                         ),
                     }
                 }
@@ -705,7 +705,7 @@ impl ChatWidget {
                         Ok(runtime_keymap) => self.open_keymap_debug(&runtime_keymap),
                         Err(err) => {
                             self.add_error_message(format!(
-                                "Invalid `tui.keymap` configuration: {err}"
+                                "Cấu hình `tui.keymap` không hợp lệ: {err}"
                             ));
                         }
                     }
@@ -730,7 +730,7 @@ impl ChatWidget {
                 self.session_telemetry
                     .counter("codex.thread.rename", /*inc*/ 1, &[]);
                 let Some(name) = normalize_thread_name(&args) else {
-                    self.add_error_message("Thread name cannot be empty.".to_string());
+                    self.add_error_message("Tên luồng không được để trống.".to_string());
                     return;
                 };
                 self.app_event_tx.set_thread_name(name);
@@ -766,7 +766,7 @@ impl ChatWidget {
                     self.reasoning_buffer.clear();
                     self.reasoning_header = None;
                     self.reasoning_summary_parts.clear();
-                    self.set_status_header(String::from("Working"));
+                    self.set_status_header(String::from("Đang xử lý"));
                     self.submit_user_message(user_message);
                 } else {
                     self.queue_user_message(user_message);
@@ -803,7 +803,7 @@ impl ChatWidget {
                         self.add_info_message(
                             GOAL_USAGE.to_string(),
                             Some(
-                                "The session must start before you can change a goal.".to_string(),
+                                "Phiên phải bắt đầu trước khi bạn có thể thay đổi mục tiêu.".to_string(),
                             ),
                         );
                         if source == SlashCommandDispatchSource::Live {
@@ -862,7 +862,7 @@ impl ChatWidget {
                     } else {
                         self.add_info_message(
                             GOAL_USAGE.to_string(),
-                            Some("The session must start before you can set a goal.".to_string()),
+                            Some("Phiên phải bắt đầu trước khi bạn có thể đặt mục tiêu.".to_string()),
                         );
                     }
                     return;
@@ -882,7 +882,7 @@ impl ChatWidget {
                 let Some(parent_thread_id) = self.thread_id else {
                     let command = cmd.command();
                     self.add_error_message(format!(
-                        "'/{command}' is unavailable before the session starts."
+                        "'/{command}' không khả dụng trước khi phiên bắt đầu."
                     ));
                     return;
                 };
@@ -971,7 +971,7 @@ impl ChatWidget {
         else {
             self.add_info_message(
                 format!(
-                    r#"Unrecognized command '/{name}'. Type "/" for a list of supported commands."#
+                    r#"Không nhận diện được lệnh '/{name}'. Gõ "/" for a list of supported commands."#
                 ),
                 /*hint*/ None,
             );
@@ -1158,7 +1158,7 @@ impl ChatWidget {
             return true;
         }
         self.add_error_message(format!(
-            "'/{}' is unavailable in side conversations. {SIDE_SLASH_COMMAND_UNAVAILABLE_HINT}",
+            "'/{}' không khả dụng trong hội thoại phụ. {SIDE_SLASH_COMMAND_UNAVAILABLE_HINT}",
             cmd.command()
         ));
         self.bottom_pane.drain_pending_submission_state();
@@ -1172,7 +1172,7 @@ impl ChatWidget {
 
         let command = cmd.command();
         self.add_error_message(format!(
-            "'/{command}' is unavailable while code review is running."
+            "'/{command}' không khả dụng trong khi đánh giá mã đang chạy."
         ));
         self.bottom_pane.drain_pending_submission_state();
         false

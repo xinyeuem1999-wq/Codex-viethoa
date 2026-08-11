@@ -58,7 +58,7 @@ impl ExperimentalFeaturesView {
         let mut header = ColumnRenderable::new();
         header.push(Line::from("Experimental features".bold()));
         header.push(Line::from(
-            "Toggle experimental features. Changes are saved to config.toml.".dim(),
+            "Bật/tắt tính năng thử nghiệm. Thay đổi được lưu vào config.toml.".dim(),
         ));
 
         let mut view = Self {
@@ -289,15 +289,15 @@ impl Renderable for ExperimentalFeaturesView {
 
 fn experimental_popup_hint_line(keymap: &ListKeymap) -> Line<'static> {
     let mut spans = vec![
-        "Press ".into(),
+        "Nhấn ".into(),
         key_hint::plain(KeyCode::Char(' ')).into(),
-        " to select".into(),
+        " để chọn".into(),
     ];
     if let Some(accept) = keymap.primary_hint(ListAction::Accept) {
         spans.extend([
-            " or ".into(),
+            " hoặc ".into(),
             accept.into(),
-            " to save for next conversation".into(),
+            " để lưu cho cuộc trò chuyện tiếp theo".into(),
         ]);
     }
     Line::from(spans)

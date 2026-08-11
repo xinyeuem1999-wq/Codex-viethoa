@@ -7,13 +7,13 @@ use crate::bottom_pane::SelectionViewParams;
 use crate::bottom_pane::popup_consts::standard_popup_hint_line;
 
 pub(super) const PLAN_IMPLEMENTATION_TITLE: &str = "Implement this plan?";
-const PLAN_IMPLEMENTATION_YES: &str = "Yes, implement this plan";
-const PLAN_IMPLEMENTATION_CLEAR_CONTEXT: &str = "Yes, clear context and implement";
-const PLAN_IMPLEMENTATION_NO: &str = "No, stay in Plan mode";
+const PLAN_IMPLEMENTATION_YES: &str = "Có, thực hiện kế hoạch này";
+const PLAN_IMPLEMENTATION_CLEAR_CONTEXT: &str = "Có, xóa ngữ cảnh và thực hiện";
+const PLAN_IMPLEMENTATION_NO: &str = "Không, ở lại chế độ Plan";
 pub(super) const PLAN_IMPLEMENTATION_CODING_MESSAGE: &str = "Implement the plan.";
 pub(super) const PLAN_IMPLEMENTATION_CLEAR_CONTEXT_PREFIX: &str = concat!(
-    "A previous agent produced the plan below to accomplish the user's task. ",
-    "Implement the plan in a fresh context. Treat the plan as the source of ",
+    "Một tác tử trước đó đã tạo kế hoạch dưới đây để hoàn thành tác vụ của người dùng. ",
+    "Thực hiện kế hoạch trong ngữ cảnh mới. Coi kế hoạch là nguồn ",
     "user intent, re-read files as needed, and carry the work through ",
     "implementation and verification."
 );
@@ -70,8 +70,8 @@ pub(super) fn selection_view_params(
     };
 
     let clear_context_description = clear_context_usage_label.map_or_else(
-        || "Fresh thread with this plan.".to_string(),
-        |label| format!("Fresh thread. Context: {label}."),
+        || "Luồng mới với kế hoạch này.".to_string(),
+        |label| format!("Luồng mới. Ngữ cảnh: {label}."),
     );
 
     SelectionViewParams {
@@ -81,7 +81,7 @@ pub(super) fn selection_view_params(
         items: vec![
             SelectionItem {
                 name: PLAN_IMPLEMENTATION_YES.to_string(),
-                description: Some("Switch to Default and start coding.".to_string()),
+                description: Some("Chuyển sang Default và bắt đầu viết code.".to_string()),
                 selected_description: None,
                 is_current: false,
                 actions: implement_actions,
@@ -101,7 +101,7 @@ pub(super) fn selection_view_params(
             },
             SelectionItem {
                 name: PLAN_IMPLEMENTATION_NO.to_string(),
-                description: Some("Continue planning with the model.".to_string()),
+                description: Some("Tiếp tục lập kế hoạch với model.".to_string()),
                 selected_description: None,
                 is_current: false,
                 actions: Vec::new(),

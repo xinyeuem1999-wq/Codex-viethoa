@@ -167,33 +167,33 @@ pub(crate) fn build_keymap_action_menu_params(
         .to_string();
     let description = descriptor
         .map(|descriptor| descriptor.description)
-        .unwrap_or("Configure this shortcut.");
+        .unwrap_or("Cấu hình phím tắt này.");
     let remove_disabled_reason =
-        (!custom_binding).then(|| "No custom root override to remove.".to_string());
+        (!custom_binding).then(|| "Không có override gốc tùy chỉnh nào để xóa.".to_string());
     let label = action_label(&action);
     let remove_context = context.clone();
     let remove_action = action.clone();
     let config_path = format!("tui.keymap.{context}.{action}");
     let source = if custom_binding {
-        "Custom root override".cyan()
+        "Override gốc tùy chỉnh".cyan()
     } else {
-        "Default keymap".dim()
+        "Keymap mặc định".dim()
     };
     let mut header = ColumnRenderable::new();
-    header.push(Line::from("Edit Shortcut".bold()));
+    header.push(Line::from("Chỉnh sửa phím tắt".bold()));
     header.push(Line::from(vec![
         label.bold(),
         " · ".dim(),
         context_label.dim(),
     ]));
     header.push(Line::from(vec![
-        "Current ".dim(),
+        "Hiện tại ".dim(),
         key_binding_span(&current_binding),
         " · ".dim(),
         source,
     ]));
     header.push(Line::from(vec![
-        "Config ".dim(),
+        "Cấu hình ".dim(),
         format!("`{config_path}`").cyan(),
     ]));
     header.push(Line::from(description.to_string().dim()));
@@ -202,9 +202,9 @@ pub(crate) fn build_keymap_action_menu_params(
     match active_binding_count {
         0 => {
             items.push(action_menu_item(
-                "Set key",
-                "Capture a key for this unbound action.",
-                "Capture one key and bind this action.".to_string(),
+                "Đặt phím",
+                "Bắt một phím cho hành động chưa gán này.",
+                "Bắt một phím và gán hành động này.".to_string(),
                 &context,
                 &action,
                 KeymapEditIntent::ReplaceAll,
@@ -213,18 +213,18 @@ pub(crate) fn build_keymap_action_menu_params(
         }
         1 => {
             items.push(action_menu_item(
-                "Replace binding",
-                "Capture a replacement key.",
-                format!("Capture one key and replace `{current_binding}`."),
+                "Thay binding",
+                "Bắt một phím thay thế.",
+                format!("Bắt một phím và thay `{current_binding}`."),
                 &context,
                 &action,
                 KeymapEditIntent::ReplaceAll,
                 KeymapCaptureMode::SingleKey,
             ));
             items.push(action_menu_item(
-                "Add alternate binding",
-                "Keep the current binding and add another key.",
-                format!("Capture one key and keep `{current_binding}` as an alternate."),
+                "Thêm binding thay thế",
+                "Giữ binding hiện tại và thêm phím khác.",
+                format!("Bắt một phím và giữ `{current_binding}` làm phím thay thế."),
                 &context,
                 &action,
                 KeymapEditIntent::AddAlternate,
@@ -235,10 +235,10 @@ pub(crate) fn build_keymap_action_menu_params(
             let replace_one_context = context.clone();
             let replace_one_action = action.clone();
             items.push(SelectionItem {
-                name: "Replace one binding...".to_string(),
-                description: Some("Choose which existing binding to replace.".to_string()),
+                name: "Thay một binding...".to_string(),
+                description: Some("Chọn binding hiện có cần thay.".to_string()),
                 selected_description: Some(
-                    "Pick one current binding, then capture its replacement.".to_string(),
+                    "Chọn một binding hiện tại, rồi bắt phím thay thế.".to_string(),
                 ),
                 actions: vec![Box::new(move |tx| {
                     tx.send(AppEvent::OpenKeymapReplaceBindingMenu {
@@ -249,18 +249,18 @@ pub(crate) fn build_keymap_action_menu_params(
                 ..Default::default()
             });
             items.push(action_menu_item(
-                "Replace all bindings",
-                "Replace every current binding with one key.",
-                format!("Capture one key and replace `{current_binding}`."),
+                "Thay mọi binding",
+                "Thay mọi binding hiện tại bằng một phím.",
+                format!("Bắt một phím và thay `{current_binding}`."),
                 &context,
                 &action,
                 KeymapEditIntent::ReplaceAll,
                 KeymapCaptureMode::SingleKey,
             ));
             items.push(action_menu_item(
-                "Add alternate binding",
-                "Keep current bindings and add another key.",
-                format!("Capture one key and keep `{current_binding}`."),
+                "Thêm binding thay thế",
+                "Giữ binding hiện tại và thêm phím khác.",
+                format!("Bắt một phím và giữ `{current_binding}`."),
                 &context,
                 &action,
                 KeymapEditIntent::AddAlternate,
@@ -270,9 +270,9 @@ pub(crate) fn build_keymap_action_menu_params(
     }
     if active_binding_count == 0 {
         items.push(action_menu_item(
-            "Set key chord",
-            "Capture two consecutive keys for this action.",
-            "Capture a two-stroke key chord.".to_string(),
+            "Đặt tổ hợp phím",
+            "Bắt hai phím liên tiếp cho hành động này.",
+            "Bắt tổ hợp hai phím.".to_string(),
             &context,
             &action,
             KeymapEditIntent::ReplaceAll,
@@ -280,18 +280,18 @@ pub(crate) fn build_keymap_action_menu_params(
         ));
     } else {
         items.push(action_menu_item(
-            "Replace with key chord",
-            "Replace current bindings with a two-stroke key chord.",
-            format!("Capture two keys and replace `{current_binding}`."),
+            "Thay bằng tổ hợp phím",
+            "Thay binding hiện tại bằng tổ hợp hai phím.",
+            format!("Bắt hai phím và thay `{current_binding}`."),
             &context,
             &action,
             KeymapEditIntent::ReplaceAll,
             KeymapCaptureMode::Chord,
         ));
         items.push(action_menu_item(
-            "Add alternate key chord",
-            "Keep current bindings and add a two-stroke key chord.",
-            format!("Capture two keys and keep `{current_binding}`."),
+            "Thêm tổ hợp phím thay thế",
+            "Giữ binding hiện tại và thêm tổ hợp hai phím.",
+            format!("Bắt hai phím và giữ `{current_binding}`."),
             &context,
             &action,
             KeymapEditIntent::AddAlternate,
@@ -299,10 +299,10 @@ pub(crate) fn build_keymap_action_menu_params(
         ));
     }
     items.push(SelectionItem {
-        name: "Remove custom binding".to_string(),
-        description: custom_binding.then(|| "Restore the default keymap binding.".to_string()),
+        name: "Xóa binding tùy chỉnh".to_string(),
+        description: custom_binding.then(|| "Khôi phục binding keymap mặc định.".to_string()),
         selected_description: custom_binding
-            .then(|| "Delete the root override and use the default keymap again.".to_string()),
+            .then(|| "Xóa override gốc và dùng lại keymap mặc định.".to_string()),
         disabled_reason: remove_disabled_reason,
         disabled_gutter_marker: Some("–"),
         actions: vec![Box::new(move |tx| {
@@ -314,8 +314,8 @@ pub(crate) fn build_keymap_action_menu_params(
         ..Default::default()
     });
     items.push(SelectionItem {
-        name: "Back to shortcuts".to_string(),
-        description: Some("Return to the shortcut list.".to_string()),
+        name: "Quay lại danh sách phím tắt".to_string(),
+        description: Some("Quay lại danh sách phím tắt.".to_string()),
         dismiss_on_select: true,
         ..Default::default()
     });
@@ -324,7 +324,7 @@ pub(crate) fn build_keymap_action_menu_params(
         view_id: Some(KEYMAP_ACTION_MENU_VIEW_ID),
         header: Box::new(header),
         footer_note: Some(Line::from(vec![
-            "Changes write the root ".dim(),
+            "Thay đổi ghi vào root ".dim(),
             "`tui.keymap.*`".cyan(),
             " override.".dim(),
         ])),
@@ -346,13 +346,13 @@ pub(crate) fn build_keymap_replace_binding_menu_params(
     let bindings = active_binding_specs(runtime_keymap, &context, &action).unwrap_or_default();
     let label = action_label(&action);
     let mut header = ColumnRenderable::new();
-    header.push(Line::from("Replace Binding".bold()));
+    header.push(Line::from("Thay binding".bold()));
     header.push(Line::from(vec![
         label.bold(),
         " · ".dim(),
         format!("{context}.{action}").dim(),
     ]));
-    header.push(Line::from("Choose the binding to replace.".dim()));
+    header.push(Line::from("Chọn binding cần thay.".dim()));
 
     let items = bindings
         .into_iter()
@@ -360,9 +360,9 @@ pub(crate) fn build_keymap_replace_binding_menu_params(
             [
                 SelectionItem {
                     name: binding.clone(),
-                    description: Some("Replace this binding.".to_string()),
+                    description: Some("Thay binding này.".to_string()),
                     selected_description: Some(format!(
-                        "Capture a new key to replace `{binding}`."
+                        "Bắt một phím mới để thay `{binding}`."
                     )),
                     actions: vec![open_capture_action(
                         context.clone(),
@@ -377,8 +377,8 @@ pub(crate) fn build_keymap_replace_binding_menu_params(
                 },
                 SelectionItem {
                     name: format!("{binding} (key chord)"),
-                    description: Some("Replace this binding with a key chord.".to_string()),
-                    selected_description: Some(format!("Capture two keys to replace `{binding}`.")),
+                    description: Some("Thay binding này bằng tổ hợp hai phím.".to_string()),
+                    selected_description: Some(format!("Bắt hai phím để thay `{binding}`.")),
                     actions: vec![open_capture_action(
                         context.clone(),
                         action.clone(),
@@ -415,21 +415,21 @@ pub(crate) fn build_keymap_conflict_params(
         KeymapCaptureMode::SingleKey
     };
     SelectionViewParams {
-        title: Some("Shortcut Conflict".to_string()),
-        subtitle: Some(format!("{context}.{action} cannot use `{key}`.")),
+        title: Some("Xung đột phím tắt".to_string()),
+        subtitle: Some(format!("`{context}.{action}` không thể dùng `{key}`.")),
         footer_note: Some(Line::from(error)),
         footer_hint: Some(standard_popup_hint_line()),
         items: vec![
             SelectionItem {
-                name: "Pick another key".to_string(),
-                description: Some("Return to key capture for this action.".to_string()),
+                name: "Chọn phím khác".to_string(),
+                description: Some("Quay lại bắt phím cho hành động này.".to_string()),
                 actions: vec![open_capture_action(context, action, intent, capture_mode)],
                 dismiss_on_select: true,
                 ..Default::default()
             },
             SelectionItem {
-                name: "Cancel".to_string(),
-                description: Some("Leave keymap unchanged.".to_string()),
+                name: "Hủy".to_string(),
+                description: Some("Giữ nguyên keymap.".to_string()),
                 dismiss_on_select: true,
                 ..Default::default()
             },
@@ -498,7 +498,7 @@ pub(crate) fn keymap_with_edit(
         KeymapEditIntent::AddAlternate => {
             if current_bindings.iter().any(|binding| binding == key) {
                 return Ok(KeymapEditOutcome::Unchanged {
-                    message: format!("No change: `{context}.{action}` already uses `{key}`."),
+                    message: format!("Không đổi: `{context}.{action}` đã dùng `{key}`."),
                 });
             }
             let mut bindings = current_bindings.clone();
@@ -508,7 +508,7 @@ pub(crate) fn keymap_with_edit(
         KeymapEditIntent::ReplaceOne { old_key } => {
             if !current_bindings.iter().any(|binding| binding == old_key) {
                 return Err(format!(
-                    "`{context}.{action}` no longer uses `{old_key}`. Reopen /keymap and choose a binding again."
+                    "`{context}.{action}` không còn dùng `{old_key}`. Mở lại /keymap và chọn binding lần nữa."
                 ));
             }
             let bindings = current_bindings
@@ -527,15 +527,17 @@ pub(crate) fn keymap_with_edit(
 
     if next_bindings == current_bindings {
         return Ok(KeymapEditOutcome::Unchanged {
-            message: format!("No change: `{context}.{action}` already uses `{key}`."),
+            message: format!("Không đổi: `{context}.{action}` đã dùng `{key}`."),
         });
     }
 
     let message = match intent {
-        KeymapEditIntent::ReplaceAll => format!("Remapped `{context}.{action}` to `{key}`."),
-        KeymapEditIntent::AddAlternate => format!("Added `{key}` to `{context}.{action}`."),
+        KeymapEditIntent::ReplaceAll => {
+            format!("Đã gán lại `{context}.{action}` thành `{key}`.")
+        }
+        KeymapEditIntent::AddAlternate => format!("Đã thêm `{key}` vào `{context}.{action}`."),
         KeymapEditIntent::ReplaceOne { old_key } => {
-            format!("Replaced `{old_key}` with `{key}` for `{context}.{action}`.")
+            format!("Đã thay `{old_key}` bằng `{key}` cho `{context}.{action}`.")
         }
     };
 
@@ -559,7 +561,9 @@ fn keymap_with_bindings(
 ) -> Result<TuiKeymap, String> {
     let mut keymap = keymap.clone();
     let slot = binding_slot(&mut keymap, context, action).ok_or_else(|| {
-        format!("Unknown keymap action `{context}.{action}`. Reopen /keymap and choose an action.")
+        format!(
+            "Hành động keymap không xác định `{context}.{action}`. Mở lại /keymap và chọn một hành động."
+        )
     })?;
     *slot = Some(match keys {
         [key] => KeybindingsSpec::One(KeybindingSpec(key.clone())),
@@ -590,7 +594,9 @@ pub(crate) fn active_binding_specs(
     }
 
     let bindings = bindings_for_action(runtime_keymap, context, action).ok_or_else(|| {
-        format!("Unknown keymap action `{context}.{action}`. Reopen /keymap and choose an action.")
+        format!(
+            "Hành động keymap không xác định `{context}.{action}`. Mở lại /keymap và chọn một hành động."
+        )
     })?;
     bindings
         .iter()
@@ -619,7 +625,9 @@ pub(crate) fn keymap_without_custom_binding(
 ) -> Result<TuiKeymap, String> {
     let mut keymap = keymap.clone();
     let slot = binding_slot(&mut keymap, context, action).ok_or_else(|| {
-        format!("Unknown keymap action `{context}.{action}`. Reopen /keymap and choose an action.")
+        format!(
+            "Hành động keymap không xác định `{context}.{action}`. Mở lại /keymap và chọn một hành động."
+        )
     })?;
     *slot = None;
     Ok(keymap)
@@ -628,7 +636,9 @@ pub(crate) fn keymap_without_custom_binding(
 fn has_custom_binding(keymap: &TuiKeymap, context: &str, action: &str) -> Result<bool, String> {
     let mut keymap = keymap.clone();
     let slot = binding_slot(&mut keymap, context, action).ok_or_else(|| {
-        format!("Unknown keymap action `{context}.{action}`. Reopen /keymap and choose an action.")
+        format!(
+            "Hành động keymap không xác định `{context}.{action}`. Mở lại /keymap và chọn một hành động."
+        )
     })?;
     Ok(slot.is_some())
 }
@@ -651,9 +661,7 @@ fn key_parts_to_config_key_spec(
 
     let supported_modifiers = KeyModifiers::CONTROL | KeyModifiers::ALT | KeyModifiers::SHIFT;
     if !modifiers.difference(supported_modifiers).is_empty() {
-        return Err(
-            "Only ctrl, alt, and shift modifiers can be stored in `tui.keymap`.".to_string(),
-        );
+        return Err("Chỉ các phím bổ trợ ctrl, alt và shift mới lưu được trong `tui.keymap`.".to_string());
     }
 
     let key = match code {
@@ -673,7 +681,7 @@ fn key_parts_to_config_key_spec(
         KeyCode::F(number) if (1..=MAX_FUNCTION_KEY).contains(&number) => format!("f{number}"),
         KeyCode::F(_) => {
             return Err(format!(
-                "Only function keys F1 through F{MAX_FUNCTION_KEY} can be stored in `tui.keymap`."
+                "Chỉ các phím chức năng F1 đến F{MAX_FUNCTION_KEY} mới lưu được trong `tui.keymap`."
             ));
         }
         KeyCode::Char(' ') => "space".to_string(),
@@ -682,7 +690,7 @@ fn key_parts_to_config_key_spec(
                 return Ok(format_key_spec(modifiers, "minus"));
             }
             if !ch.is_ascii() || ch.is_ascii_control() {
-                return Err("Only printable ASCII keys can be stored in `tui.keymap`.".to_string());
+                return Err("Chỉ các phím ASCII in được mới lưu được trong `tui.keymap`.".to_string());
             }
             if ch.is_ascii_uppercase() {
                 modifiers.insert(KeyModifiers::SHIFT);
@@ -691,7 +699,7 @@ fn key_parts_to_config_key_spec(
             ch.to_string()
         }
         _ => {
-            return Err("That key is not supported by `tui.keymap`.".to_string());
+            return Err("Phím đó không được `tui.keymap` hỗ trợ.".to_string());
         }
     };
 
@@ -1078,10 +1086,10 @@ mod tests {
         assert_eq!(debug_tab.id, KEYMAP_DEBUG_TAB_ID);
         assert_eq!(debug_tab.label, "Debug");
         assert_eq!(debug_tab.items.len(), 1);
-        assert_eq!(debug_tab.items[0].name, "Inspect keypresses");
+        assert_eq!(debug_tab.items[0].name, "Kiểm tra phím nhấn");
         assert_eq!(
             debug_tab.items[0].description.as_deref(),
-            Some("Press Enter to start. Then press any key to inspect it; Ctrl+C exits.")
+            Some("Nhấn Enter để bắt đầu. Sau đó nhấn bất kỳ phím nào để kiểm tra; Ctrl+C để thoát.")
         );
         assert!(
             params
@@ -1309,13 +1317,13 @@ mod tests {
         );
 
         assert_eq!(params.view_id, Some(KEYMAP_ACTION_MENU_VIEW_ID));
-        let replace = selection_item(&params, "Replace binding");
-        let add_alternate = selection_item(&params, "Add alternate binding");
-        let remove = selection_item(&params, "Remove custom binding");
-        let back = selection_item(&params, "Back to shortcuts");
+        let replace = selection_item(&params, "Thay binding");
+        let add_alternate = selection_item(&params, "Thêm binding thay thế");
+        let remove = selection_item(&params, "Xóa binding tùy chỉnh");
+        let back = selection_item(&params, "Quay lại danh sách phím tắt");
         assert_eq!(
             remove.disabled_reason.as_deref(),
-            Some("No custom root override to remove.")
+            Some("Không có override gốc tùy chỉnh nào để xóa.")
         );
         assert!(
             !replace.dismiss_on_select,
@@ -1393,7 +1401,7 @@ mod tests {
 
         let rendered = render_debug(&view, /*width*/ 100);
         assert!(rendered.contains("global.copy (Copy)"));
-        assert!(rendered.contains("[Custom]"));
+        assert!(rendered.contains("[Tùy chỉnh]"));
     }
 
     #[test]
@@ -1407,7 +1415,7 @@ mod tests {
 
         let rendered = render_debug(&view, /*width*/ 100);
         assert!(rendered.contains("composer.queue (Queue)"));
-        assert!(rendered.contains("[Custom global]"));
+        assert!(rendered.contains("[Tùy chỉnh toàn cục]"));
     }
 
     #[test]
@@ -1509,7 +1517,7 @@ mod tests {
         let remove_idx = action_menu
             .items
             .iter()
-            .position(|item| item.name == "Remove custom binding")
+            .position(|item| item.name == "Xóa binding tùy chỉnh")
             .expect("remove custom binding menu item");
         pane.show_selection_view(action_menu);
 
@@ -1639,7 +1647,9 @@ mod tests {
         );
         assert_eq!(
             key_event_to_config_key_spec(KeyEvent::from(KeyCode::F(25))),
-            Err("Only function keys F1 through F24 can be stored in `tui.keymap`.".to_string())
+            Err(
+                "Chỉ các phím chức năng F1 đến F24 mới lưu được trong `tui.keymap`.".to_string()
+            )
         );
     }
 
@@ -1817,7 +1827,7 @@ mod tests {
         assert_eq!(
             outcome,
             KeymapEditOutcome::Unchanged {
-                message: "No change: `composer.submit` already uses `enter`.".to_string()
+                message: "Không đổi: `composer.submit` đã dùng `enter`.".to_string()
             }
         );
     }

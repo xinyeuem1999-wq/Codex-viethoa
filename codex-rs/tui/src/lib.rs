@@ -1470,7 +1470,7 @@ async fn run_ratatui_app(
             resume_hint: None,
             update_action: None,
             exit_reason: ExitReason::Fatal(format!(
-                "No saved session found with ID {id_str}. Run `codex {action}` without an ID to choose from existing sessions."
+                "Không tìm thấy phiên đã lưu với ID {id_str}. Chạy `codex {action}` mà không có ID để chọn từ các phiên hiện có."
             )),
         })
     };
@@ -1796,7 +1796,7 @@ async fn run_ratatui_app(
 fn restore() {
     if let Err(err) = tui::restore_after_exit() {
         eprintln!(
-            "failed to restore terminal. Run `reset` or restart your terminal to recover: {err}"
+            "không khôi phục được terminal. Chạy `reset` hoặc khởi động lại terminal để khôi phục: {err}"
         );
     }
 }

@@ -90,7 +90,7 @@ pub(crate) enum StatusLineItem {
     /// Active permission profile or sandbox summary.
     Permissions,
 
-    /// Active command approval mode.
+    /// Chế độ phê duyệt lệnh đang hoạt động.
     #[strum(to_string = "approval-mode", serialize = "approval")]
     ApprovalMode,
 
@@ -128,7 +128,7 @@ pub(crate) enum StatusLineItem {
     #[strum(to_string = "thread-id", serialize = "session-id")]
     SessionId,
 
-    /// Whether Fast mode is currently active.
+    /// Có đang bật chế độ Fast hay không.
     FastMode,
 
     /// Whether raw scrollback mode is currently active.
@@ -149,50 +149,50 @@ impl StatusLineItem {
     pub(crate) fn description(self) -> &'static str {
         match self {
             StatusLineItem::ModelName => "Current model name",
-            StatusLineItem::ModelWithReasoning => "Current model name with reasoning level",
+            StatusLineItem::ModelWithReasoning => "Tên model hiện tại với mức suy luận",
             StatusLineItem::Reasoning => "Current reasoning level",
             StatusLineItem::CurrentDir => "Current working directory",
-            StatusLineItem::ProjectRoot => "Project name (omitted when unavailable)",
-            StatusLineItem::GitBranch => "Current Git branch (omitted when unavailable)",
+            StatusLineItem::ProjectRoot => "Tên dự án (bỏ qua khi không khả dụng)",
+            StatusLineItem::GitBranch => "Nhánh Git hiện tại (bỏ qua khi không khả dụng)",
             StatusLineItem::PullRequestNumber => {
-                "Open pull request number for the current branch (omitted when unavailable)"
+                "Số pull request đang mở cho nhánh hiện tại (bỏ qua khi không khả dụng)"
             }
             StatusLineItem::BranchChanges => {
-                "Committed branch changes against the default branch (omitted when unavailable)"
+                "Số thay đổi đã commit của nhánh so với nhánh mặc định (bỏ qua khi không khả dụng)"
             }
-            StatusLineItem::Status => "Compact session run-state text (Ready, Working, Thinking)",
-            StatusLineItem::Permissions => "Active permission profile or sandbox mode",
-            StatusLineItem::ApprovalMode => "Active command approval mode",
+            StatusLineItem::Status => "Văn bản trạng thái chạy phiên gọn (Ready, Working, Thinking)",
+            StatusLineItem::Permissions => "Hồ sơ quyền hoặc chế độ sandbox đang hoạt động",
+            StatusLineItem::ApprovalMode => "Chế độ phê duyệt lệnh đang hoạt động",
             StatusLineItem::ContextRemaining => {
-                "Percentage of context window remaining (omitted when unknown)"
+                "Phần trăm cửa sổ ngữ cảnh còn lại (bỏ qua khi không xác định)"
             }
             StatusLineItem::ContextUsed => {
-                "Percentage of context window used (omitted when unknown)"
+                "Phần trăm cửa sổ ngữ cảnh đã dùng (bỏ qua khi không xác định)"
             }
             StatusLineItem::FiveHourLimit => {
-                "Remaining usage on the primary usage limit (omitted when unavailable)"
+                "Lượng sử dụng còn lại trên giới hạn sử dụng chính (bỏ qua khi không khả dụng)"
             }
             StatusLineItem::WeeklyLimit => {
-                "Remaining usage on the secondary usage limit (omitted when unavailable)"
+                "Lượng sử dụng còn lại trên giới hạn sử dụng phụ (bỏ qua khi không khả dụng)"
             }
             StatusLineItem::CodexVersion => "Codex application version",
             StatusLineItem::ContextWindowSize => {
-                "Total context window size in tokens (omitted when unknown)"
+                "Tổng kích thước cửa sổ ngữ cảnh tính bằng token (bỏ qua khi không xác định)"
             }
-            StatusLineItem::UsedTokens => "Total tokens used in session (omitted when zero)",
-            StatusLineItem::TotalInputTokens => "Total input tokens used in session",
-            StatusLineItem::TotalOutputTokens => "Total output tokens used in session",
-            StatusLineItem::SessionId => "Current thread identifier (omitted until thread starts)",
-            StatusLineItem::FastMode => "Whether Fast mode is currently active",
-            StatusLineItem::RawOutput => "Whether raw scrollback mode is active",
+            StatusLineItem::UsedTokens => "Tổng token đã dùng trong phiên (bỏ qua khi bằng 0)",
+            StatusLineItem::TotalInputTokens => "Tổng token đầu vào đã dùng trong phiên",
+            StatusLineItem::TotalOutputTokens => "Tổng token đầu ra đã dùng trong phiên",
+            StatusLineItem::SessionId => "Định danh luồng hiện tại (bỏ qua cho đến khi luồng bắt đầu)",
+            StatusLineItem::FastMode => "Có đang bật chế độ Fast hay không",
+            StatusLineItem::RawOutput => "Có đang bật chế độ cuộn thô hay không",
             StatusLineItem::ThreadTitle => {
-                "Current thread title, or thread identifier when unnamed"
+                "Tiêu đề luồng hiện tại, hoặc định danh luồng khi chưa đặt tên"
             }
             StatusLineItem::WorkspaceHeadline => {
-                "Workspace notification headline (Enterprise workspaces only; omitted when unavailable)"
+                "Dòng tiêu đề thông báo workspace (chỉ dành cho workspace Enterprise; bỏ qua khi không khả dụng)"
             }
             StatusLineItem::TaskProgress => {
-                "Latest task progress from update_plan (omitted until available)"
+                "Tiến độ tác vụ mới nhất từ update_plan (bỏ qua cho đến khi có)"
             }
         }
     }
@@ -265,7 +265,7 @@ impl StatusLineSetupView {
         let mut items = vec![MultiSelectItem {
             id: STATUS_LINE_USE_THEME_COLORS_ITEM_ID.to_string(),
             name: "Use theme colors".to_string(),
-            description: Some("Apply colors from the active /theme".to_string()),
+            description: Some("Áp dụng màu từ /theme đang hoạt động".to_string()),
             enabled: use_theme_colors,
             orderable: false,
             section_break_after: true,
@@ -303,7 +303,7 @@ impl StatusLineSetupView {
         Self {
             picker: MultiSelectPicker::builder(
                 "Configure Status Line".to_string(),
-                Some("Select which items to display in the status line.".to_string()),
+                Some("Chọn các mục để hiển thị trong dòng trạng thái.".to_string()),
                 app_event_tx,
             )
             .list_keymap(list_keymap)

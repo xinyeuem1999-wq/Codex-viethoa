@@ -122,7 +122,7 @@ impl ChatWidget {
             return;
         }
 
-        const REVIEW_STEER_UNAVAILABLE_MESSAGE: &str = "Steer messages aren't supported during /review. Press Ctrl+C now to cancel the review.";
+        const REVIEW_STEER_UNAVAILABLE_MESSAGE: &str = "Tin nhắn điều hướng không được hỗ trợ trong /review. Nhấn Ctrl+C ngay để hủy đánh giá.";
 
         if self.chat_keymap.interrupt_turn.is_pressed(key_event)
             && self.review.is_review_mode
@@ -270,7 +270,7 @@ impl ChatWidget {
             return true;
         }
 
-        let message = "Ctrl+L is disabled while a task is in progress.".to_string();
+        let message = "Ctrl+L bị tắt trong khi tác vụ đang chạy.".to_string();
         self.add_to_history(history_cell::new_error_event(message));
         self.request_redraw();
         false
@@ -291,7 +291,7 @@ impl ChatWidget {
                 Ok(lease) => {
                     self.clipboard_lease = lease;
                     self.add_to_history(history_cell::new_info_event(
-                        "Copied last message to clipboard".into(),
+                        "Đã sao chép tin nhắn cuối vào bộ nhớ tạm".into(),
                         /*hint*/ None,
                     ));
                 }
@@ -324,13 +324,13 @@ impl ChatWidget {
         };
         let view = CustomPromptView::new(
             title.to_string(),
-            "Type a name and press Enter".to_string(),
+            "Nhập tên và nhấn Enter".to_string(),
             /*initial_text*/ existing_name.unwrap_or_default().to_string(),
             /*context_label*/ None,
             Box::new(move |name: String| {
                 let Some(name) = normalize_thread_name(&name) else {
                     tx.send(AppEvent::InsertHistoryCell(Box::new(
-                        history_cell::new_error_event("Thread name cannot be empty.".to_string()),
+                        history_cell::new_error_event("Tên luồng không được để trống.".to_string()),
                     )));
                     return;
                 };

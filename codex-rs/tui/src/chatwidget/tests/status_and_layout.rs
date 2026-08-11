@@ -3973,7 +3973,7 @@ async fn reasoning_delta_restores_recreated_status_indicator_header() {
         .bottom_pane
         .status_widget()
         .expect("status indicator should be recreated");
-    assert_eq!(status.header(), "Working");
+    assert_eq!(status.header(), "Đang xử lý");
 
     chat.on_agent_reasoning_delta(" and preparing a response".to_string());
 

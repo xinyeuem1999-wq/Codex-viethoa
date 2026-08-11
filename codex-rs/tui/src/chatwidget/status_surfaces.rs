@@ -111,7 +111,7 @@ impl ChatWidget {
                 "items"
             };
             let message = format!(
-                "Ignored invalid status line {label}: {}.",
+                "Đã bỏ qua dòng trạng thái không hợp lệ {label}: {}.",
                 proper_join(invalid_items)
             );
             self.on_warning(message);
@@ -132,7 +132,7 @@ impl ChatWidget {
                 "items"
             };
             let message = format!(
-                "Ignored invalid terminal title {label}: {}.",
+                "Đã bỏ qua tiêu đề terminal không hợp lệ {label}: {}.",
                 proper_join(invalid_items)
             );
             self.on_warning(message);
@@ -907,7 +907,7 @@ impl ChatWidget {
             TerminalTitleStatusKind::Thinking if !self.bottom_pane.is_task_running() => {
                 "Ready".to_string()
             }
-            TerminalTitleStatusKind::Working => "Working".to_string(),
+            TerminalTitleStatusKind::Working => "Đang xử lý".to_string(),
             TerminalTitleStatusKind::WaitingForBackgroundTerminal => "Waiting".to_string(),
             TerminalTitleStatusKind::Thinking => "Thinking".to_string(),
         }

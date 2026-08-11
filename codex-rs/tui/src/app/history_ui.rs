@@ -5,7 +5,7 @@
 
 use super::*;
 
-const DESKTOP_THREAD_OPENED_MESSAGE: &str = "Opened this session in the Desktop app.";
+const DESKTOP_THREAD_OPENED_MESSAGE: &str = "Đã mở phiên này trong Ứng dụng Desktop.";
 
 impl App {
     pub(super) fn insert_history_cell(&mut self, tui: &mut tui::Tui, cell: Box<dyn HistoryCell>) {
@@ -69,12 +69,12 @@ impl App {
     pub(super) fn open_url_in_browser(&mut self, url: String) {
         if let Err(err) = webbrowser::open(&url) {
             self.chat_widget
-                .add_error_message(format!("Failed to open browser for {url}: {err}"));
+                .add_error_message(format!("Không thể mở trình duyệt cho {url}: {err}"));
             return;
         }
 
         self.chat_widget
-            .add_info_message(format!("Opened {url} in your browser."), /*hint*/ None);
+            .add_info_message(format!("Đã mở {url} trong trình duyệt của bạn."), /*hint*/ None);
     }
 
     pub(super) fn open_desktop_thread(&mut self, thread_id: ThreadId) {
@@ -180,7 +180,7 @@ impl App {
 
 fn desktop_thread_open_error_message(err: &str) -> String {
     format!(
-        "Failed to open this session in the Desktop app: {err}. Install or launch the Desktop app and try again."
+        "Không thể mở phiên này trong Ứng dụng Desktop: {err}. Hãy cài đặt hoặc khởi động Ứng dụng Desktop rồi thử lại."
     )
 }
 
@@ -276,7 +276,7 @@ fn powershell_single_quoted_string(value: &str) -> String {
 
 #[cfg(not(any(target_os = "macos", target_os = "windows")))]
 fn open_desktop_thread_url(_url: &str) -> Result<(), String> {
-    Err("The Desktop app is only available on macOS and Windows".to_string())
+    Err("Ứng dụng Desktop chỉ khả dụng trên macOS và Windows".to_string())
 }
 
 #[cfg(test)]

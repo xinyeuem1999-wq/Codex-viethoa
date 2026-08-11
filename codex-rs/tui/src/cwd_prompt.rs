@@ -280,14 +280,14 @@ impl WidgetRef for &CwdPromptScreen {
 
         column.push("");
         column.push(Line::from(vec![
-            "Choose working directory to ".into(),
+            "Chọn thư mục làm việc để ".into(),
             action_verb.bold(),
             " this session".into(),
         ]));
         column.push("");
         column.push(
             Line::from(format!(
-                "Session = latest cwd recorded in the {action_past} session"
+                "Session = cwd mới nhất được ghi trong phiên {action_past}"
             ))
             .dim()
             .inset(Insets::tlbr(
@@ -295,32 +295,32 @@ impl WidgetRef for &CwdPromptScreen {
             )),
         );
         column.push(
-            Line::from("Current = your current working directory".dim()).inset(Insets::tlbr(
+            Line::from("Current = thư mục làm việc hiện tại của bạn".dim()).inset(Insets::tlbr(
                 /*top*/ 0, /*left*/ 2, /*bottom*/ 0, /*right*/ 0,
             )),
         );
         column.push("");
         column.push(selection_option_row(
             /*index*/ 0,
-            format!("Use session directory ({session_cwd})"),
+            format!("Dùng thư mục phiên ({session_cwd})"),
             self.highlighted == CwdSelection::Session,
         ));
         column.push(selection_option_row(
             /*index*/ 1,
-            format!("Use current directory ({current_cwd})"),
+            format!("Dùng thư mục hiện tại ({current_cwd})"),
             self.highlighted == CwdSelection::Current,
         ));
         column.push(selection_option_row(
             /*index*/ 2,
-            "Always use session directory".to_string(),
+            "Luôn dùng thư mục phiên".to_string(),
             self.highlighted == CwdSelection::SessionAndRemember,
         ));
         if self.allow_remember_current {
             let label = if self.remembered_current_cwd == self.current_cwd {
-                "Always use current directory".to_string()
+                "Luôn dùng thư mục hiện tại".to_string()
             } else {
                 format!(
-                    "Always use current directory ({})",
+                    "Luôn dùng thư mục hiện tại ({})",
                     self.remembered_current_cwd
                 )
             };
@@ -333,9 +333,9 @@ impl WidgetRef for &CwdPromptScreen {
         column.push("");
         column.push(
             Line::from(vec![
-                "Press ".dim(),
+                "Nhấn ".dim(),
                 key_hint::plain(KeyCode::Enter).into(),
-                " to continue".dim(),
+                " để tiếp tục".dim(),
             ])
             .inset(Insets::tlbr(
                 /*top*/ 0, /*left*/ 2, /*bottom*/ 0, /*right*/ 0,

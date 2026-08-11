@@ -23,7 +23,7 @@ impl ChatWidget {
     pub(crate) fn open_personality_popup(&mut self) {
         if !self.is_session_configured() {
             self.add_info_message(
-                "Personality selection is disabled until startup completes.".to_string(),
+                "Chọn tính cách bị tắt cho đến khi khởi động hoàn tất.".to_string(),
                 /*hint*/ None,
             );
             return;
@@ -31,7 +31,7 @@ impl ChatWidget {
         if !self.current_model_supports_personality() {
             let current_model = self.current_model();
             self.add_error_message(format!(
-                "Current model ({current_model}) doesn't support personalities. Try /model to pick a different model."
+                "Model hiện tại ({current_model}) không hỗ trợ tính cách. Thử /model để chọn model khác."
             ));
             return;
         }
@@ -80,7 +80,7 @@ impl ChatWidget {
 
         let mut header = ColumnRenderable::new();
         header.push(Line::from("Select Personality".bold()));
-        header.push(Line::from("Choose a communication style for Codex.".dim()));
+        header.push(Line::from("Chọn phong cách giao tiếp cho Codex.".dim()));
 
         self.bottom_pane.show_selection_view(SelectionViewParams {
             header: Box::new(header),
@@ -124,8 +124,8 @@ impl ChatWidget {
     fn personality_description(personality: Personality) -> &'static str {
         match personality {
             Personality::None => "No personality instructions.",
-            Personality::Friendly => "Warm, collaborative, and helpful.",
-            Personality::Pragmatic => "Concise, task-focused, and direct.",
+            Personality::Friendly => "Ấm áp, hợp tác và hữu ích.",
+            Personality::Pragmatic => "Súc tích, tập trung vào tác vụ và trực tiếp.",
         }
     }
 }

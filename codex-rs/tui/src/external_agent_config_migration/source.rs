@@ -160,10 +160,10 @@ impl WidgetRef for &ExternalAgentConfigSourceScreen {
         Clear.render(area, buf);
         let mut column = ColumnRenderable::new();
         column.push("");
-        column.push("Choose an import source".bold());
+        column.push("Chọn nguồn nhập".bold());
         column.push("");
         column.push(
-            Line::from("Select the app whose setup you want to import.".dim()).inset(Insets::tlbr(
+            Line::from("Chọn ứng dụng có thiết lập bạn muốn nhập.".dim()).inset(Insets::tlbr(
                 /*top*/ 0, /*left*/ 2, /*bottom*/ 0, /*right*/ 0,
             )),
         );
@@ -184,9 +184,9 @@ impl WidgetRef for &ExternalAgentConfigSourceScreen {
         column.push("");
         column.push(
             Line::from(vec![
-                "Press ".dim(),
+                "Nhấn ".dim(),
                 key_hint::plain(KeyCode::Enter).into(),
-                " to continue".dim(),
+                " để tiếp tục".dim(),
             ])
             .inset(Insets::tlbr(
                 /*top*/ 0, /*left*/ 2, /*bottom*/ 0, /*right*/ 0,

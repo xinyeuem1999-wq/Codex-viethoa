@@ -34,8 +34,8 @@ impl ReasoningShortcutDirection {
     fn bound_message(self, effort: &ReasoningEffortConfig) -> String {
         let label = ChatWidget::reasoning_effort_sentence_label(effort);
         match self {
-            Self::Lower => format!("Reasoning is already at the lowest level ({label})."),
-            Self::Raise => format!("Reasoning is already at the highest level ({label})."),
+            Self::Lower => format!("Suy luận đã ở mức thấp nhất ({label})."),
+            Self::Raise => format!("Suy luận đã ở mức cao nhất ({label})."),
         }
     }
 }
@@ -80,7 +80,7 @@ impl ChatWidget {
 
         if !self.is_session_configured() {
             self.add_info_message(
-                "Reasoning shortcuts are disabled until startup completes.".to_string(),
+                "Phím tắt suy luận bị tắt cho đến khi khởi động hoàn tất.".to_string(),
                 /*hint*/ None,
             );
             return true;
@@ -89,7 +89,7 @@ impl ChatWidget {
         let current_model = self.current_model().to_string();
         let Some(preset) = self.current_model_preset() else {
             self.add_info_message(
-                format!("Reasoning shortcuts are unavailable for {current_model}."),
+                format!("Phím tắt suy luận không khả dụng cho {current_model}."),
                 /*hint*/ None,
             );
             return true;

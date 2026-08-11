@@ -63,13 +63,13 @@ fn success_message(
     session_name: Option<&str>,
 ) -> String {
     let action = match action {
-        SessionArchiveAction::Archive => "Archived",
-        SessionArchiveAction::Delete(_) => "Deleted",
-        SessionArchiveAction::Unarchive => "Unarchived",
+        SessionArchiveAction::Archive => "Đã lưu trữ",
+        SessionArchiveAction::Delete(_) => "Đã xóa",
+        SessionArchiveAction::Unarchive => "Đã bỏ lưu trữ",
     };
     match session_name {
-        Some(name) => format!("{action} session {name} ({session_id})."),
-        None => format!("{action} session {session_id}."),
+        Some(name) => format!("{action} phiên {name} ({session_id})."),
+        None => format!("{action} phiên {session_id}."),
     }
 }
 
@@ -83,7 +83,7 @@ pub async fn run_session_archive_command(
     target: String,
     options: SessionArchiveCommandOptions,
 ) -> Result<String> {
-    let codex_home = find_codex_home().wrap_err("failed to find Codex home")?;
+    let codex_home = find_codex_home().wrap_err("không tìm thấy Codex home")?;
     let mut app_server =
         start_app_server_for_archive_command(options, codex_home.to_path_buf()).await?;
     run_session_archive_action_with_app_server(
@@ -111,7 +111,7 @@ async fn run_session_archive_action_with_app_server(
             if matches!(confirmation, DeleteConfirmation::Prompt)
                 && !confirm_session_delete(&resolved)?
             {
-                return Ok("Delete cancelled.".to_string());
+                return Ok("Đã hủy xóa.".to_string());
             }
             app_server.thread_delete(resolved.session_id).await?;
             resolved.session_name
@@ -143,7 +143,7 @@ async fn resolve_session_target(
                 .thread_read(session_id, /*include_turns*/ false)
                 .await
                 .with_context(|| {
-                    format!("No active or archived session found matching '{target}'.")
+                    format!("Không tìm thấy phiên đang hoạt động hoặc đã lưu trữ khớp '{target}'.")
                 })?;
             return Ok(ResolvedSessionTarget {
                 session_id,
@@ -169,7 +169,7 @@ async fn resolve_session_target(
         }
     }
     Err(eyre!(
-        "No {search_scope} session found matching '{target}'."
+        "Không tìm thấy phiên {search_scope} khớp '{target}'."
     ))
 }
 
@@ -235,14 +235,14 @@ fn confirm_session_delete(target: &ResolvedSessionTarget) -> Result<bool> {
     match target.session_name.as_deref() {
         Some(name) => writeln!(
             stderr,
-            "Permanently delete session '{name}' ({})?",
+            "Xóa vĩnh viễn phiên '{name}' ({})?",
             target.session_id
         ),
         None => writeln!(stderr, "Permanently delete session {}?", target.session_id),
     }?;
     writeln!(
         stderr,
-        "This cannot be undone. Subagent threads will also be deleted."
+        "Không thể hoàn tác. Các luồng subagent cũng sẽ bị xóa."
     )?;
     write!(stderr, "Continue? [y/N]: ")?;
     stderr.flush()?;
@@ -268,7 +268,7 @@ async fn start_app_server_for_archive_command(
     let overrides_cli = CliConfigOverrides { raw_overrides };
     let cli_kv_overrides = overrides_cli
         .parse_overrides()
-        .map_err(|err| eyre!("failed to parse -c overrides: {err}"))?;
+        .map_err(|err| eyre!("không phân tích được cờ -c: {err}"))?;
     let mut launch_loader_overrides = loader_overrides.clone();
     if let Some(profile_v2) = cli.config_profile_v2.as_ref() {
         launch_loader_overrides.user_config_path = Some(resolve_profile_v2_config_path(

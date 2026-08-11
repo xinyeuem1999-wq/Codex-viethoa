@@ -11,8 +11,8 @@ use codex_app_server_protocol::McpServerStatusUpdatedNotification;
 
 use super::ChatWidget;
 
-const MCP_STARTUP_SINGLE_HEADER_PREFIX: &str = "Booting MCP server:";
-const MCP_STARTUP_MULTI_HEADER_PREFIX: &str = "Starting MCP servers";
+const MCP_STARTUP_SINGLE_HEADER_PREFIX: &str = "Đang khởi động máy chủ MCP:";
+const MCP_STARTUP_MULTI_HEADER_PREFIX: &str = "Đang khởi động các máy chủ MCP";
 
 #[derive(Debug, Clone)]
 pub(crate) enum McpStartupStatus {
@@ -185,7 +185,7 @@ impl ChatWidget {
     pub(super) fn finish_mcp_startup(&mut self, failed: Vec<String>, cancelled: Vec<String>) {
         if !cancelled.is_empty() {
             self.on_warning(format!(
-                "MCP startup interrupted. The following servers were not initialized: {}",
+                "Quá trình khởi động MCP bị gián đoạn. Các máy chủ sau chưa được khởi tạo: {}",
                 cancelled.join(", ")
             ));
         }

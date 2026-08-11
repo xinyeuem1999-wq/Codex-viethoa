@@ -46,7 +46,7 @@ impl ChatWidget {
                     self.reasoning_buffer.clear();
                     self.reasoning_header = None;
                     self.reasoning_summary_parts.clear();
-                    self.set_status_header(String::from("Working"));
+                    self.set_status_header(String::from("Đang xử lý"));
                     self.submit_user_message(user_message);
                 } else {
                     self.queue_user_message(user_message);
@@ -222,7 +222,7 @@ impl ChatWidget {
             && self.active_collaboration_mask.as_ref() != Some(&collaboration_mode)
         {
             self.add_error_message(
-                "Cannot switch collaboration mode while a turn is running.".to_string(),
+                "Không thể chuyển chế độ cộng tác trong khi lượt đang chạy.".to_string(),
             );
             return;
         }

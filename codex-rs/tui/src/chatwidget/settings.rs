@@ -337,7 +337,7 @@ impl ChatWidget {
 
     pub(super) fn image_inputs_not_supported_message(&self) -> String {
         format!(
-            "Model {} does not support image inputs. Remove images or switch models.",
+            "Model {} không hỗ trợ đầu vào hình ảnh. Hãy xóa hình ảnh hoặc đổi model.",
             self.current_model()
         )
     }
@@ -711,7 +711,7 @@ impl ChatWidget {
         if previous_mode != next_mode
             && (previous_model != next_model || previous_effort != next_effort)
         {
-            let mut message = format!("Model changed to {next_model}");
+            let mut message = format!("Đã đổi model thành {next_model}");
             if !next_model.starts_with("codex-auto-") {
                 let reasoning_label = match next_effort.as_ref() {
                     None | Some(ReasoningEffortConfig::None) => "default",

@@ -106,7 +106,7 @@ impl App {
                     Ok(app_server) => app_server,
                     Err(err) => {
                         self.chat_widget.add_error_message(format!(
-                            "Failed to start TUI session picker: {err}"
+                            "Không thể khởi động bộ chọn phiên TUI: {err}"
                         ));
                         self.chat_widget.maybe_send_next_queued_input();
                         return Ok(AppRunControl::Continue);
@@ -185,7 +185,7 @@ impl App {
                     }
                     None => {
                         self.chat_widget.add_error_message(format!(
-                            "No saved chat found matching '{id_or_name}'."
+                            "Không tìm thấy cuộc trò chuyện đã lưu khớp '{id_or_name}'."
                         ));
                     }
                 }
@@ -229,7 +229,7 @@ impl App {
                                         None
                                     }
                                     Err(err) => {
-                                        Some(format!("Failed to name the forked session: {err}"))
+                                        Some(format!("Không thể đặt tên phiên đã fork: {err}"))
                                     }
                                 }
                             } else {
@@ -266,20 +266,20 @@ impl App {
                                 }
                                 Err(err) => {
                                     self.chat_widget.add_error_message(format!(
-                                        "Failed to attach to forked app-server thread: {err}"
+                                        "Không thể đính kèm vào luồng app-server đã fork: {err}"
                                     ));
                                 }
                             }
                         }
                         Err(err) => {
                             self.chat_widget.add_error_message(format!(
-                                "Failed to fork current session through the app server: {err}"
+                                "Không thể fork phiên hiện tại qua app server: {err}"
                             ));
                         }
                     }
                 } else {
                     self.chat_widget.add_error_message(
-                        "A thread must contain at least one turn before it can be forked."
+                        "Một luồng phải có ít nhất một lượt trước khi có thể fork."
                             .to_string(),
                     );
                 }
@@ -472,7 +472,7 @@ impl App {
                         .await);
                 }
                 Err(err) => {
-                    tracing::error!("failed to logout: {err}");
+                    tracing::error!("Không thể đăng xuất: {err}");
                     self.chat_widget
                         .add_error_message(format!("Logout failed: {err}"));
                 }
@@ -502,7 +502,7 @@ impl App {
                         )
                         && self
                             .chat_widget
-                            .handle_turn_start_rejection(format!("Failed to start turn: {err:#}"));
+                            .handle_turn_start_rejection(format!("Không thể bắt đầu lượt: {err:#}"));
                     if !handled {
                         return Err(err);
                     }
@@ -1222,10 +1222,10 @@ impl App {
                     let error = format_config_error(&err);
                     tracing::error!(error = %error, "failed to persist conversation model");
                     self.chat_widget
-                        .add_error_message(format!("Failed to save default model: {error}"));
+                        .add_error_message(format!("Không thể lưu model mặc định: {error}"));
                 } else {
                     self.chat_widget.add_info_message(
-                        format!("Model changed to {model} {effort} for this conversation"),
+                        format!("Đã đổi model thành {model} {effort} cho cuộc trò chuyện này"),
                         /*hint*/ None,
                     );
                 }
@@ -1333,7 +1333,7 @@ impl App {
                         "refusing to set up elevated Windows sandbox mode disallowed by requirements"
                     );
                     self.chat_widget.add_info_message(
-                        "That Windows sandbox option is disallowed by requirements.".to_string(),
+                        "Tùy chọn sandbox Windows đó bị cấm theo yêu cầu.".to_string(),
                         /*hint*/ None,
                     );
                     return Ok(AppRunControl::Continue);
@@ -1351,7 +1351,7 @@ impl App {
                                 "failed to resolve permission profile for elevated Windows sandbox setup"
                             );
                             self.chat_widget.add_error_message(format!(
-                                "Failed to prepare Windows sandbox for the selected permission profile: {err}"
+                                "Không thể chuẩn bị sandbox Windows cho hồ sơ quyền đã chọn: {err}"
                             ));
                             return Ok(AppRunControl::Continue);
                         }
@@ -1452,7 +1452,7 @@ impl App {
                         "refusing to set up unelevated Windows sandbox mode disallowed by requirements"
                     );
                     self.chat_widget.add_info_message(
-                        "That Windows sandbox option is disallowed by requirements.".to_string(),
+                        "Tùy chọn sandbox Windows đó bị cấm theo yêu cầu.".to_string(),
                         /*hint*/ None,
                     );
                     return Ok(AppRunControl::Continue);
@@ -1470,7 +1470,7 @@ impl App {
                                 "failed to resolve permission profile for legacy Windows sandbox setup"
                             );
                             self.chat_widget.add_error_message(format!(
-                                "Failed to prepare Windows sandbox for the selected permission profile: {err}"
+                                "Không thể chuẩn bị sandbox Windows cho hồ sơ quyền đã chọn: {err}"
                             ));
                             return Ok(AppRunControl::Continue);
                         }
@@ -1522,7 +1522,7 @@ impl App {
                 {
                     self.chat_widget
                         .add_to_history(history_cell::new_info_event(
-                            format!("Granting sandbox read access to {path} ..."),
+                            format!("Đang cấp quyền đọc sandbox cho {path} ..."),
                             /*hint*/ None,
                         ));
 
@@ -1569,7 +1569,7 @@ impl App {
                 None => {
                     self.chat_widget
                         .add_to_history(history_cell::new_info_event(
-                            format!("Sandbox read access granted for {}", path.display()),
+                            format!("Đã cấp quyền đọc sandbox cho {}", path.display()),
                             /*hint*/ None,
                         ));
                 }
@@ -1600,7 +1600,7 @@ impl App {
                             "refusing to persist Windows sandbox mode disallowed by requirements"
                         );
                         self.chat_widget.add_info_message(
-                            "That Windows sandbox option is disallowed by requirements."
+                            "Tùy chọn sandbox Windows đó bị cấm theo yêu cầu."
                                 .to_string(),
                             /*hint*/ None,
                         );
@@ -1687,7 +1687,7 @@ impl App {
                                     Line::from(vec!["• ".dim(), "Sandbox ready".into()]),
                                     Line::from(vec![
                                         "  ".into(),
-                                        "Codex can now safely edit files and execute commands in your computer"
+                                        "Codex giờ có thể chỉnh sửa tệp và thực thi lệnh một cách an toàn trên máy tính của bạn"
                                             .dark_gray(),
                                     ]),
                                 ]);
@@ -1720,7 +1720,7 @@ impl App {
                                     Line::from(vec!["• ".dim(), "Sandbox ready".into()]),
                                     Line::from(vec![
                                         "  ".into(),
-                                        "Codex can now safely edit files and execute commands in your computer"
+                                        "Codex giờ có thể chỉnh sửa tệp và thực thi lệnh một cách an toàn trên máy tính của bạn"
                                             .dark_gray(),
                                     ]),
                                 ]);
@@ -1732,7 +1732,7 @@ impl App {
                                 "failed to enable Windows sandbox feature"
                             );
                             self.chat_widget.add_error_message(format!(
-                                "Failed to enable the Windows sandbox feature: {err}"
+                                "Không thể bật tính năng sandbox Windows: {err}"
                             ));
                         }
                     }
@@ -1757,7 +1757,7 @@ impl App {
                             .as_ref()
                             .map(std::string::ToString::to_string)
                             .unwrap_or_else(|| "default".to_string());
-                        tracing::info!("Selected model: {model}, Selected effort: {effort_label}");
+                        tracing::info!("Model đã chọn: {model}, Mức nỗ lực đã chọn: {effort_label}");
                         let mut message = format!("Model changed to {model}");
                         if let Some(label) = Self::reasoning_label_for(&model, effort.as_ref()) {
                             message.push(' ');
@@ -1772,13 +1772,13 @@ impl App {
                             "failed to persist model selection"
                         );
                         self.chat_widget
-                            .add_error_message(format!("Failed to save default model: {error}"));
+                            .add_error_message(format!("Không thể lưu model mặc định: {error}"));
                     }
                 }
             }
             AppEvent::CyberModelAutoReviewNotice => {
                 self.chat_widget.add_warning_message(
-                    "Cyber models default to \"Approve for me\" for safety reasons.".to_string(),
+                    "Các model Cyber mặc định ở chế độ \"Approve for me\" vì lý do an toàn.".to_string(),
                 );
             }
             AppEvent::PluginUninstallLoaded {
@@ -1823,7 +1823,7 @@ impl App {
                 {
                     Ok(_) => {
                         let label = Self::personality_label(personality);
-                        let message = format!("Personality set to {label}");
+                        let message = format!("Đã đặt tính cách thành {label}");
                         self.chat_widget.add_info_message(message, /*hint*/ None);
                     }
                     Err(err) => {
@@ -1832,7 +1832,7 @@ impl App {
                             "failed to persist personality selection"
                         );
                         self.chat_widget.add_error_message(format!(
-                            "Failed to save default personality: {err}"
+                            "Không thể lưu tính cách mặc định: {err}"
                         ));
                     }
                 }
@@ -1850,7 +1850,7 @@ impl App {
                 {
                     Ok(_) => {
                         let message = if let Some(service_tier) = service_tier {
-                            format!("Service tier set to {service_tier}")
+                            format!("Đã đặt hạng dịch vụ thành {service_tier}")
                         } else {
                             "Service tier cleared".to_string()
                         };
@@ -1859,7 +1859,7 @@ impl App {
                     Err(err) => {
                         tracing::error!(error = %err, "failed to persist service tier selection");
                         self.chat_widget.add_error_message(format!(
-                            "Failed to save default service tier: {err}"
+                            "Không thể lưu hạng dịch vụ mặc định: {err}"
                         ));
                     }
                 }
@@ -1869,7 +1869,7 @@ impl App {
                 if !self.try_set_approval_policy_on_config(
                     &mut config,
                     policy,
-                    "Failed to set approval policy",
+                    "Không thể đặt chính sách phê duyệt",
                     "failed to set approval policy on app config",
                 ) {
                     return Ok(AppRunControl::Continue);
@@ -1888,7 +1888,7 @@ impl App {
                     .try_set_builtin_active_permission_profile_on_config(
                         &mut config,
                         active_permission_profile.clone(),
-                        "Failed to set permission profile",
+                        "Không thể đặt hồ sơ quyền",
                         "failed to set active permission profile on app config",
                     )
                 else {
@@ -1911,7 +1911,7 @@ impl App {
                 {
                     tracing::warn!(%err, "failed to set permission profile on chat config");
                     self.chat_widget
-                        .add_error_message(format!("Failed to set permission profile: {err}"));
+                        .add_error_message(format!("Không thể đặt hồ sơ quyền: {err}"));
                     return Ok(AppRunControl::Continue);
                 }
                 self.runtime_permission_profile_override =
@@ -1978,7 +1978,7 @@ impl App {
                         "failed to persist approvals reviewer update"
                     );
                     self.chat_widget
-                        .add_error_message(format!("Failed to save approvals reviewer: {err}"));
+                        .add_error_message(format!("Không thể lưu người xem xét phê duyệt: {err}"));
                 }
             }
             AppEvent::UpdateFeatureFlags { updates } => {
@@ -2024,7 +2024,7 @@ impl App {
                         "failed to persist world-writable warning acknowledgement"
                     );
                     self.chat_widget.add_error_message(format!(
-                        "Failed to save Agent mode warning preference: {err}"
+                        "Không thể lưu tùy chọn cảnh báo chế độ Agent: {err}"
                     ));
                 }
             }
@@ -2039,7 +2039,7 @@ impl App {
                         "failed to persist rate limit switch prompt preference"
                     );
                     self.chat_widget.add_error_message(format!(
-                        "Failed to save rate limit reminder preference: {err}"
+                        "Không thể lưu tùy chọn nhắc nhở giới hạn tốc độ: {err}"
                     ));
                 }
             }
@@ -2064,7 +2064,7 @@ impl App {
                         "failed to persist plan mode reasoning effort"
                     );
                     self.chat_widget.add_error_message(format!(
-                        "Failed to save Plan mode reasoning effort: {err}"
+                        "Không thể lưu mức nỗ lực suy luận của chế độ Plan: {err}"
                     ));
                 }
             }
@@ -2082,7 +2082,7 @@ impl App {
                         "failed to persist model migration prompt acknowledgement"
                     );
                     self.chat_widget.add_error_message(format!(
-                        "Failed to save model migration prompt preference: {err}"
+                        "Không thể lưu tùy chọn nhắc di chuyển model: {err}"
                     ));
                 }
             }
@@ -2131,7 +2131,7 @@ impl App {
                     Err(err) => {
                         let path_display = path.display();
                         self.chat_widget.add_error_message(format!(
-                            "Failed to update skill config for {path_display}: {err}"
+                            "Không thể cập nhật cấu hình skill cho {path_display}: {err}"
                         ));
                     }
                 }
@@ -2166,7 +2166,7 @@ impl App {
                     }
                     Err(err) => {
                         self.chat_widget.add_error_message(format!(
-                            "Failed to update app config for {id}: {err}"
+                            "Không thể cập nhật cấu hình ứng dụng cho {id}: {err}"
                         ));
                     }
                 }
@@ -2316,7 +2316,7 @@ impl App {
                         let error = format_config_error(&err);
                         tracing::error!(error = %error, "failed to persist status line settings; keeping previous selection");
                         self.chat_widget.add_error_message(format!(
-                            "Failed to save status line settings: {error}"
+                            "Không thể lưu cài đặt dòng trạng thái: {error}"
                         ));
                     }
                 }
@@ -2356,7 +2356,7 @@ impl App {
                         tracing::error!(error = %err, "failed to persist terminal title items; keeping previous selection");
                         self.chat_widget.revert_terminal_title_setup_preview();
                         self.chat_widget.add_error_message(format!(
-                            "Failed to save terminal title items: {err}"
+                            "Không thể lưu các mục tiêu đề terminal: {err}"
                         ));
                     }
                 }
@@ -2394,7 +2394,7 @@ impl App {
                         self.refresh_status_line();
                         tracing::error!(error = %err, "failed to persist theme selection");
                         self.chat_widget
-                            .add_error_message(format!("Failed to save theme: {err}"));
+                            .add_error_message(format!("Không thể lưu giao diện: {err}"));
                     }
                 }
             }
@@ -2508,7 +2508,7 @@ impl App {
             Err(err) => {
                 tracing::error!(error = %err, "failed to persist keymap binding");
                 self.chat_widget
-                    .add_error_message(format!("Failed to save shortcut: {err}"));
+                    .add_error_message(format!("Không thể lưu phím tắt: {err}"));
             }
         }
     }
@@ -2535,7 +2535,7 @@ impl App {
             Ok(runtime_keymap) => runtime_keymap,
             Err(err) => {
                 self.chat_widget
-                    .add_error_message(format!("Failed to refresh shortcuts: {err}"));
+                    .add_error_message(format!("Không thể làm mới phím tắt: {err}"));
                 return;
             }
         };
@@ -2556,14 +2556,14 @@ impl App {
                 self.chat_widget
                     .return_to_keymap_picker(&context, &action, &runtime_keymap);
                 self.chat_widget.add_info_message(
-                    format!("Removed custom shortcut for `{context}.{action}`."),
+                    format!("Đã xóa phím tắt tùy chỉnh cho `{context}.{action}`."),
                     /*hint*/ None,
                 );
             }
             Err(err) => {
                 tracing::error!(error = %err, "failed to clear keymap binding");
                 self.chat_widget
-                    .add_error_message(format!("Failed to remove shortcut: {err}"));
+                    .add_error_message(format!("Không thể xóa phím tắt: {err}"));
             }
         }
     }
@@ -2611,12 +2611,12 @@ impl App {
     ) -> AppRunControl {
         let Some(thread_id) = self.active_thread_id.or(self.chat_widget.thread_id()) else {
             self.chat_widget
-                .add_error_message("A thread must start before it can be archived.".to_string());
+                .add_error_message("Một luồng phải bắt đầu trước khi có thể lưu trữ.".to_string());
             return AppRunControl::Continue;
         };
         if self.side_threads.contains_key(&thread_id) {
             self.chat_widget.add_error_message(
-                "'/archive' is unavailable in side conversations. Press Ctrl+C to return to the main thread first."
+                "'/archive' không khả dụng trong cuộc trò chuyện phụ. Nhấn Ctrl+C để quay về luồng chính trước."
                     .to_string(),
             );
             return AppRunControl::Continue;
@@ -2626,7 +2626,7 @@ impl App {
             Ok(()) => AppRunControl::Exit(ExitReason::UserRequested),
             Err(err) => {
                 self.chat_widget
-                    .add_error_message(format!("Failed to archive current thread: {err}"));
+                    .add_error_message(format!("Không thể lưu trữ luồng hiện tại: {err}"));
                 AppRunControl::Continue
             }
         }
@@ -2638,12 +2638,12 @@ impl App {
     ) -> AppRunControl {
         let Some(thread_id) = self.active_thread_id.or(self.chat_widget.thread_id()) else {
             self.chat_widget
-                .add_error_message("A thread must start before it can be deleted.".to_string());
+                .add_error_message("Một luồng phải bắt đầu trước khi có thể xóa.".to_string());
             return AppRunControl::Continue;
         };
         if self.side_threads.contains_key(&thread_id) {
             self.chat_widget.add_error_message(
-                "'/delete' is unavailable in side conversations. Press Ctrl+C to return to the main thread first."
+                "'/delete' không khả dụng trong cuộc trò chuyện phụ. Nhấn Ctrl+C để quay về luồng chính trước."
                     .to_string(),
             );
             return AppRunControl::Continue;
@@ -2653,7 +2653,7 @@ impl App {
             Ok(()) => AppRunControl::Exit(ExitReason::UserRequested),
             Err(err) => {
                 self.chat_widget
-                    .add_error_message(format!("Failed to delete current thread: {err}"));
+                    .add_error_message(format!("Không thể xóa luồng hiện tại: {err}"));
                 AppRunControl::Continue
             }
         }

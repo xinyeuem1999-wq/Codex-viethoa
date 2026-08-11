@@ -33,7 +33,7 @@ use super::scroll_state::ScrollState;
 use super::selection_popup_common::GenericDisplayRow;
 use super::selection_popup_common::render_rows_single_line;
 
-const SEARCH_PLACEHOLDER: &str = "Type to search skills";
+const SEARCH_PLACEHOLDER: &str = "Gõ để tìm kiếm skill";
 const SEARCH_PROMPT_PREFIX: &str = "> ";
 
 pub(crate) struct SkillsToggleItem {
@@ -65,7 +65,7 @@ impl SkillsToggleView {
         let mut header = ColumnRenderable::new();
         header.push(Line::from("Enable/Disable Skills".bold()));
         header.push(Line::from(
-            "Turn skills on or off. Your changes are saved automatically.".dim(),
+            "Bật hoặc tắt skill. Thay đổi của bạn được lưu tự động.".dim(),
         ));
 
         let mut view = Self {
@@ -400,29 +400,29 @@ fn skills_toggle_hint_line(keymap: &ListKeymap) -> Line<'static> {
 
     match (accept, cancel) {
         (Some(accept), Some(cancel)) => Line::from(vec![
-            "Press ".into(),
+            "Nhấn ".into(),
             space.into(),
-            " or ".into(),
+            " hoặc ".into(),
             accept.into(),
-            " to toggle; ".into(),
+            " để bật/tắt; ".into(),
             cancel.into(),
-            " to close".into(),
+            " để đóng".into(),
         ]),
         (Some(accept), None) => Line::from(vec![
-            "Press ".into(),
+            "Nhấn ".into(),
             space.into(),
-            " or ".into(),
+            " hoặc ".into(),
             accept.into(),
-            " to toggle".into(),
+            " để bật/tắt".into(),
         ]),
         (None, Some(cancel)) => Line::from(vec![
-            "Press ".into(),
+            "Nhấn ".into(),
             space.into(),
-            " to toggle; ".into(),
+            " để bật/tắt; ".into(),
             cancel.into(),
-            " to close".into(),
+            " để đóng".into(),
         ]),
-        (None, None) => Line::from(vec!["Press ".into(), space.into(), " to toggle".into()]),
+        (None, None) => Line::from(vec!["Nhấn ".into(), space.into(), " để bật/tắt".into()]),
     }
 }
 

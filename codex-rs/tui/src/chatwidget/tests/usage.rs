@@ -739,7 +739,7 @@ async fn rate_limit_reset_redemption_cannot_be_dismissed_while_in_flight() {
         ConsumeAccountRateLimitResetCreditOutcome::Reset,
     ));
     dismiss_popup(&mut chat);
-    assert!(render_bottom_popup(&chat, /*width*/ 80).contains("Refreshing..."));
+    assert!(render_bottom_popup(&chat, /*width*/ 80).contains("Đang làm mới..."));
 
     assert!(chat.finish_post_consume_reset_credits_refresh(
         request_id,

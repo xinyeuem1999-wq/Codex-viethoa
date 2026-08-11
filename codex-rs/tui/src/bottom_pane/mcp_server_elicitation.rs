@@ -59,7 +59,7 @@ use crate::text_formatting::format_json_compact;
 use crate::text_formatting::truncate_text;
 
 const ANSWER_PLACEHOLDER: &str = "Type your answer";
-const OPTIONAL_ANSWER_PLACEHOLDER: &str = "Type your answer (optional)";
+const OPTIONAL_ANSWER_PLACEHOLDER: &str = "Nhập câu trả lời của bạn (tùy chọn)";
 const FOOTER_SEPARATOR: &str = " | ";
 const MIN_COMPOSER_HEIGHT: u16 = 3;
 const MIN_OVERLAY_HEIGHT: u16 = 8;
@@ -270,9 +270,9 @@ impl McpServerElicitationFormRequest {
             (McpServerElicitationResponseMode::FormContent, Vec::new())
         } else if is_message_only_schema {
             let allow_description = if is_tool_approval_action {
-                "Run the tool and continue."
+                "Chạy công cụ và tiếp tục."
             } else {
-                "Allow this request and continue."
+                "Cho phép yêu cầu này và tiếp tục."
             };
             let mut options = vec![McpServerElicitationOption {
                 label: "Allow".to_string(),
@@ -281,21 +281,21 @@ impl McpServerElicitationFormRequest {
             }];
             if approval_supports_persist_mode(meta, APPROVAL_PERSIST_SESSION_VALUE) {
                 let description = if is_tool_approval_action {
-                    "Run the tool and remember this choice for this session."
+                    "Chạy công cụ và ghi nhớ lựa chọn này cho phiên này."
                 } else {
-                    "Allow this request and remember this choice for this session."
+                    "Cho phép yêu cầu này và ghi nhớ lựa chọn này cho phiên này."
                 };
                 options.push(McpServerElicitationOption {
-                    label: "Allow for this session".to_string(),
+                    label: "Cho phép cho phiên này".to_string(),
                     description: Some(description.to_string()),
                     value: Value::String(APPROVAL_ACCEPT_SESSION_VALUE.to_string()),
                 });
             }
             if approval_supports_persist_mode(meta, APPROVAL_PERSIST_ALWAYS_VALUE) {
                 let description = if is_tool_approval_action {
-                    "Run the tool and remember this choice for future tool calls."
+                    "Chạy công cụ và ghi nhớ lựa chọn này cho các lần gọi công cụ sau."
                 } else {
-                    "Allow this request and remember this choice for future requests."
+                    "Cho phép yêu cầu này và ghi nhớ lựa chọn này cho các yêu cầu sau."
                 };
                 options.push(McpServerElicitationOption {
                     label: "Always allow".to_string(),
@@ -306,14 +306,14 @@ impl McpServerElicitationFormRequest {
             if is_tool_approval_action {
                 options.push(McpServerElicitationOption {
                     label: "Cancel".to_string(),
-                    description: Some("Cancel this tool call".to_string()),
+                    description: Some("Hủy lời gọi công cụ này".to_string()),
                     value: Value::String(APPROVAL_CANCEL_VALUE.to_string()),
                 });
             } else {
                 options.extend([
                     McpServerElicitationOption {
                         label: "Deny".to_string(),
-                        description: Some("Decline this request and continue.".to_string()),
+                        description: Some("Từ chối yêu cầu này và tiếp tục.".to_string()),
                         value: Value::String(APPROVAL_DECLINE_VALUE.to_string()),
                     },
                     McpServerElicitationOption {
@@ -1164,7 +1164,7 @@ impl McpServerElicitationOverlay {
     fn submit_answers(&mut self) {
         self.save_current_draft();
         if let Some(idx) = self.first_required_unanswered_index() {
-            self.validation_error = Some("Answer required fields before submitting.".to_string());
+            self.validation_error = Some("Hãy trả lời các trường bắt buộc trước khi gửi.".to_string());
             self.jump_to_field(idx);
             return;
         }
@@ -1981,12 +1981,12 @@ mod tests {
                         options: vec![
                             McpServerElicitationOption {
                                 label: "Allow".to_string(),
-                                description: Some("Allow this request and continue.".to_string()),
+                                description: Some("Cho phép yêu cầu này và tiếp tục.".to_string()),
                                 value: Value::String(APPROVAL_ACCEPT_ONCE_VALUE.to_string()),
                             },
                             McpServerElicitationOption {
                                 label: "Deny".to_string(),
-                                description: Some("Decline this request and continue.".to_string()),
+                                description: Some("Từ chối yêu cầu này và tiếp tục.".to_string()),
                                 value: Value::String(APPROVAL_DECLINE_VALUE.to_string()),
                             },
                             McpServerElicitationOption {
@@ -2038,12 +2038,12 @@ mod tests {
                         options: vec![
                             McpServerElicitationOption {
                                 label: "Allow".to_string(),
-                                description: Some("Run the tool and continue.".to_string()),
+                                description: Some("Chạy công cụ và tiếp tục.".to_string()),
                                 value: Value::String(APPROVAL_ACCEPT_ONCE_VALUE.to_string()),
                             },
                             McpServerElicitationOption {
                                 label: "Cancel".to_string(),
-                                description: Some("Cancel this tool call".to_string()),
+                                description: Some("Hủy lời gọi công cụ này".to_string()),
                                 value: Value::String(APPROVAL_CANCEL_VALUE.to_string()),
                             },
                         ],

@@ -16,8 +16,8 @@ use codex_app_server_protocol::ThreadGoalStatus;
 use codex_protocol::ThreadId;
 
 const EPHEMERAL_THREAD_GOAL_ERROR_MESSAGE: &str = concat!(
-    "Goals need a saved session. This session is temporary.\n",
-    "Run `codex` to start a saved session, or `codex resume` / `/resume` to reopen one.",
+    "Mục tiêu cần một phiên đã lưu. Phiên này là tạm thời.\n",
+    "Chạy `codex` để bắt đầu phiên đã lưu, hoặc `codex resume` / `/resume` để mở lại một phiên.",
 );
 
 impl App {
@@ -43,7 +43,7 @@ impl App {
         let Some(goal) = response.goal else {
             self.chat_widget.add_info_message(
                 GOAL_USAGE.to_string(),
-                Some("No goal is currently set.".to_string()),
+                Some("Hiện chưa có mục tiêu nào được đặt.".to_string()),
             );
             return;
         };
@@ -272,8 +272,8 @@ impl App {
                         .add_info_message("Goal cleared".to_string(), /*hint*/ None);
                 } else {
                     self.chat_widget.add_info_message(
-                        "No goal to clear".to_string(),
-                        Some("This thread does not currently have a goal.".to_string()),
+                        "Không có mục tiêu để xóa".to_string(),
+                        Some("Luồng này hiện không có mục tiêu.".to_string()),
                     );
                 }
             }
@@ -300,14 +300,14 @@ impl App {
         let items = vec![
             SelectionItem {
                 name: "Replace current goal".to_string(),
-                description: Some("Set the new objective and start it now".to_string()),
+                description: Some("Đặt mục tiêu mới và bắt đầu ngay".to_string()),
                 actions: replace_actions,
                 dismiss_on_select: true,
                 ..Default::default()
             },
             SelectionItem {
                 name: "Cancel".to_string(),
-                description: Some("Keep the current goal".to_string()),
+                description: Some("Giữ mục tiêu hiện tại".to_string()),
                 dismiss_on_select: true,
                 ..Default::default()
             },
@@ -326,10 +326,10 @@ impl App {
 
     fn show_no_thread_goal_to_edit(&mut self) {
         self.chat_widget
-            .add_error_message("No goal is currently set.".to_string());
+            .add_error_message("Hiện chưa có mục tiêu nào được đặt.".to_string());
         self.chat_widget.add_info_message(
             GOAL_USAGE.to_string(),
-            Some("Create a goal before editing it.".to_string()),
+            Some("Hãy tạo mục tiêu trước khi chỉnh sửa nó.".to_string()),
         );
     }
 }
@@ -349,7 +349,7 @@ fn thread_goal_error_message(action: &str, err: &color_eyre::Report) -> String {
     if is_ephemeral_thread_goal_error(err) {
         EPHEMERAL_THREAD_GOAL_ERROR_MESSAGE.to_string()
     } else {
-        format!("Failed to {action} thread goal: {err}")
+        format!("Không thể {action} mục tiêu luồng: {err}")
     }
 }
 
@@ -425,7 +425,7 @@ mod tests {
 
         assert_eq!(
             thread_goal_error_message("read", &err),
-            "Failed to read thread goal: thread/goal/get failed in TUI"
+            "Không thể đọc mục tiêu luồng: thread/goal/get failed in TUI"
         );
     }
 

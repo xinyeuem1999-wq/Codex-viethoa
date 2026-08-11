@@ -428,7 +428,7 @@ impl App {
     ) -> Result<()> {
         let Some(thread_id) = self.active_thread_id else {
             self.chat_widget
-                .add_error_message("No active thread is available.".to_string());
+                .add_error_message("Không có luồng hoạt động nào khả dụng.".to_string());
             return Ok(());
         };
 
@@ -463,7 +463,7 @@ impl App {
         }
 
         self.chat_widget
-            .add_error_message(format!("Not available in TUI yet for thread {thread_id}."));
+            .add_error_message(format!("Chưa khả dụng trong TUI cho luồng {thread_id}."));
         Ok(())
     }
 
@@ -623,7 +623,7 @@ impl App {
                                 let notification =
                                     ServerNotification::Warning(WarningNotification {
                                         thread_id: Some(thread_id.to_string()),
-                                        message: format!("Failed to interrupt turn: {error}"),
+                                        message: format!("Không thể ngắt lượt: {error}"),
                                     });
                                 let should_send = {
                                     let mut store = thread_event_store.lock().await;
@@ -896,7 +896,7 @@ impl App {
             }
             Err(err) => {
                 self.chat_widget.add_error_message(format!(
-                    "Failed to resolve app-server request for thread {thread_id}: {err}"
+                    "Không thể phân giải yêu cầu app-server cho luồng {thread_id}: {err}"
                 ));
                 Ok(false)
             }
@@ -1644,14 +1644,14 @@ impl App {
             if self.active_thread_id == Some(primary_thread_id) {
                 self.chat_widget.add_info_message(
                     format!(
-                        "Agent thread {closed_thread_id} closed. Switched back to main thread."
+                        "Luồng tác tử {closed_thread_id} đã đóng. Đã chuyển về luồng chính."
                     ),
                     /*hint*/ None,
                 );
             } else {
                 self.clear_active_thread().await;
                 self.chat_widget.add_error_message(format!(
-                    "Agent thread {closed_thread_id} closed. Failed to switch back to main thread {primary_thread_id}.",
+                    "Luồng tác tử {closed_thread_id} đã đóng. Không thể chuyển về luồng chính {primary_thread_id}.",
                 ));
             }
             return Ok(());

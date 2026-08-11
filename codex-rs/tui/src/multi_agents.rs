@@ -87,7 +87,7 @@ pub(crate) fn format_agent_picker_item_name(
     is_primary: bool,
 ) -> String {
     if is_primary {
-        return "Main [default]".to_string();
+        return "Chính [default]".to_string();
     }
 
     let agent_nickname = agent_nickname
@@ -110,7 +110,7 @@ pub(crate) fn next_agent_shortcut() -> crate::key_hint::KeyBinding {
     crate::key_hint::alt(KeyCode::Right)
 }
 
-/// Matches the canonical "previous agent" binding plus platform-specific fallbacks that keep agent
+/// Matches the canonical "agent trước" binding plus platform-specific fallbacks that keep agent
 /// navigation working when enhanced key reporting is unavailable.
 pub(crate) fn previous_agent_shortcut_matches(
     key_event: KeyEvent,
@@ -120,7 +120,7 @@ pub(crate) fn previous_agent_shortcut_matches(
         || previous_agent_word_motion_fallback(key_event, allow_word_motion_fallback)
 }
 
-/// Matches the canonical "next agent" binding plus platform-specific fallbacks that keep agent
+/// Matches the canonical "agent tiếp theo" binding plus platform-specific fallbacks that keep agent
 /// navigation working when enhanced key reporting is unavailable.
 pub(crate) fn next_agent_shortcut_matches(
     key_event: KeyEvent,
@@ -252,7 +252,7 @@ pub(crate) fn tool_call_history_cell(
                 resume_end(
                     receiver_thread_id,
                     state,
-                    "Agent resume failed",
+                    "Khôi phục agent thất bại",
                     &mut agent_metadata,
                 )
             }
@@ -315,17 +315,17 @@ pub(crate) fn sub_agent_activity_history_cell(item: &ThreadItem) -> Option<Plain
 
 pub(crate) fn sub_agent_activity_summary(kind: SubAgentActivityKind, agent_path: &str) -> String {
     match kind {
-        SubAgentActivityKind::Started => format!("Started `{agent_path}`"),
-        SubAgentActivityKind::Interacted => format!("Interacted with `{agent_path}`"),
-        SubAgentActivityKind::Interrupted => format!("Interrupted `{agent_path}`"),
+        SubAgentActivityKind::Started => format!("Đã bắt đầu `{agent_path}`"),
+        SubAgentActivityKind::Interacted => format!("Đã tương tác với `{agent_path}`"),
+        SubAgentActivityKind::Interrupted => format!("Đã ngắt `{agent_path}`"),
     }
 }
 
 fn sub_agent_activity_title(kind: SubAgentActivityKind, agent_path: &str) -> Line<'static> {
     let (prefix, path) = match kind {
-        SubAgentActivityKind::Started => ("Started ", agent_path),
-        SubAgentActivityKind::Interacted => ("Interacted with ", agent_path),
-        SubAgentActivityKind::Interrupted => ("Interrupted ", agent_path),
+        SubAgentActivityKind::Started => ("Đã bắt đầu ", agent_path),
+        SubAgentActivityKind::Interacted => ("Đã tương tác với ", agent_path),
+        SubAgentActivityKind::Interrupted => ("Đã ngắt ", agent_path),
     };
     title_spans_line(vec![
         Span::from(prefix).bold(),
@@ -341,11 +341,11 @@ fn spawn_end(
 ) -> PlainHistoryCell {
     let title = match new_thread_id {
         Some(thread_id) => title_with_agent(
-            "Spawned",
+            "Đã tạo",
             agent_label(thread_id, &agent_metadata(thread_id)),
             spawn_request,
         ),
-        None => title_text("Agent spawn failed"),
+        None => title_text("Tạo agent thất bại"),
     };
 
     let mut details = Vec::new();
@@ -361,7 +361,7 @@ fn interaction_end(
     agent_metadata: &mut impl FnMut(ThreadId) -> AgentMetadata,
 ) -> PlainHistoryCell {
     let title = title_with_agent(
-        "Sent input to",
+        "Đã gửi đầu vào tới",
         agent_label(receiver_thread_id, &agent_metadata(receiver_thread_id)),
         /*spawn_request*/ None,
     );
@@ -385,12 +385,12 @@ fn waiting_begin(
 
     let title = match receiver_agents.as_slice() {
         [(thread_id, metadata)] => title_with_agent(
-            "Waiting for",
+            "Đang chờ",
             agent_label(*thread_id, metadata),
             /*spawn_request*/ None,
         ),
-        [] => title_text("Waiting for agents"),
-        _ => title_text(format!("Waiting for {} agents", receiver_agents.len())),
+        [] => title_text("Đang chờ các agent"),
+        _ => title_text(format!("Đang chờ {} agent", receiver_agents.len())),
     };
 
     let details = if receiver_agents.len() > 1 {
@@ -411,7 +411,7 @@ fn waiting_end(
     agent_metadata: &mut impl FnMut(ThreadId) -> AgentMetadata,
 ) -> PlainHistoryCell {
     let details = wait_complete_lines(receiver_thread_ids, agents_states, agent_metadata);
-    collab_event(title_text("Finished waiting"), details)
+    collab_event(title_text("Đã xong việc chờ"), details)
 }
 
 fn close_end(
@@ -420,7 +420,7 @@ fn close_end(
 ) -> PlainHistoryCell {
     collab_event(
         title_with_agent(
-            "Closed",
+            "Đã đóng",
             agent_label(receiver_thread_id, &agent_metadata(receiver_thread_id)),
             /*spawn_request*/ None,
         ),
@@ -434,7 +434,7 @@ fn resume_begin(
 ) -> PlainHistoryCell {
     collab_event(
         title_with_agent(
-            "Resuming",
+            "Đang khôi phục",
             agent_label(receiver_thread_id, &agent_metadata(receiver_thread_id)),
             /*spawn_request*/ None,
         ),
@@ -450,7 +450,7 @@ fn resume_end(
 ) -> PlainHistoryCell {
     collab_event(
         title_with_agent(
-            "Resumed",
+            "Đã khôi phục",
             agent_label(receiver_thread_id, &agent_metadata(receiver_thread_id)),
             /*spawn_request*/ None,
         ),
@@ -587,7 +587,7 @@ fn wait_complete_lines(
     entries.extend(extras);
 
     if entries.is_empty() {
-        vec![Line::from(Span::from("No agents completed yet"))]
+        vec![Line::from(Span::from("Chưa có agent nào hoàn thành"))]
     } else {
         entries
             .into_iter()
@@ -625,13 +625,13 @@ fn status_summary_line(status: Option<&CollabAgentState>, fallback_error: &str) 
 
 fn status_summary_spans(status: &CollabAgentState) -> Vec<Span<'static>> {
     match status.status {
-        CollabAgentStatus::PendingInit => vec![Span::from("Pending init").cyan()],
-        CollabAgentStatus::Running => vec![Span::from("Running").cyan().bold()],
+        CollabAgentStatus::PendingInit => vec![Span::from("Đang chờ khởi tạo").cyan()],
+        CollabAgentStatus::Running => vec![Span::from("Đang chạy").cyan().bold()],
         // Allow `.yellow()`
         #[allow(clippy::disallowed_methods)]
-        CollabAgentStatus::Interrupted => vec![Span::from("Interrupted").yellow()],
+        CollabAgentStatus::Interrupted => vec![Span::from("Đã ngắt").yellow()],
         CollabAgentStatus::Completed => {
-            let mut spans = vec![Span::from("Completed").green()];
+            let mut spans = vec![Span::from("Đã hoàn thành").green()];
             if let Some(message) = status.message.as_ref() {
                 let message_preview = truncate_text(
                     &message.split_whitespace().collect::<Vec<_>>().join(" "),
@@ -645,15 +645,15 @@ fn status_summary_spans(status: &CollabAgentState) -> Vec<Span<'static>> {
             spans
         }
         CollabAgentStatus::Errored => {
-            error_summary_spans(status.message.as_deref().unwrap_or("Agent errored"))
+            error_summary_spans(status.message.as_deref().unwrap_or("Agent gặp lỗi"))
         }
-        CollabAgentStatus::Shutdown => vec![Span::from("Shutdown")],
-        CollabAgentStatus::NotFound => vec![Span::from("Not found").red()],
+        CollabAgentStatus::Shutdown => vec![Span::from("Đã tắt")],
+        CollabAgentStatus::NotFound => vec![Span::from("Không tìm thấy").red()],
     }
 }
 
 fn error_summary_spans(error: &str) -> Vec<Span<'static>> {
-    let mut spans = vec![Span::from("Error").red()];
+    let mut spans = vec![Span::from("Lỗi").red()];
     let error_preview = truncate_text(
         &error.split_whitespace().collect::<Vec<_>>().join(" "),
         COLLAB_AGENT_ERROR_PREVIEW_GRAPHEMES,

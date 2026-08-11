@@ -108,12 +108,12 @@ impl WidgetRef for &TrustDirectoryWidget {
 
         column.push(
             Line::from(vec![
-                "Press ".dim(),
+                "Nhấn ".dim(),
                 keys::CONFIRM[0].into(),
                 if self.show_windows_create_sandbox_hint {
-                    " to continue and create a sandbox...".dim()
+                    " để tiếp tục và tạo sandbox...".dim()
                 } else {
-                    " to continue".dim()
+                    " để tiếp tục".dim()
                 },
             ])
             .inset(Insets::tlbr(

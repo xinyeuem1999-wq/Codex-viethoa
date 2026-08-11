@@ -32,7 +32,7 @@ impl HistoryCell for FinalMessageSeparator {
             .filter(|seconds| *seconds > 60)
             .map(crate::status_indicator_widget::fmt_elapsed_compact)
         {
-            label_parts.push(format!("Worked for {elapsed_seconds}"));
+            label_parts.push(format!("Đã làm việc trong {elapsed_seconds}"));
         }
         if let Some(metrics_label) = self.runtime_metrics.and_then(runtime_metrics_label) {
             label_parts.push(metrics_label);
@@ -60,7 +60,7 @@ impl HistoryCell for FinalMessageSeparator {
             .filter(|seconds| *seconds > 60)
             .map(crate::status_indicator_widget::fmt_elapsed_compact)
         {
-            label_parts.push(format!("Worked for {elapsed_seconds}"));
+            label_parts.push(format!("Đã làm việc trong {elapsed_seconds}"));
         }
         if let Some(metrics_label) = self.runtime_metrics.and_then(runtime_metrics_label) {
             label_parts.push(metrics_label);
@@ -79,7 +79,7 @@ pub(crate) fn runtime_metrics_label(summary: RuntimeMetricsSummary) -> Option<St
         let duration = format_duration_ms(summary.tool_calls.duration_ms);
         let calls = pluralize(summary.tool_calls.count, "call", "calls");
         parts.push(format!(
-            "Local tools: {} {calls} ({duration})",
+            "Công cụ cục bộ: {} {calls} ({duration})",
             summary.tool_calls.count
         ));
     }
@@ -94,14 +94,14 @@ pub(crate) fn runtime_metrics_label(summary: RuntimeMetricsSummary) -> Option<St
     if summary.websocket_calls.count > 0 {
         let duration = format_duration_ms(summary.websocket_calls.duration_ms);
         parts.push(format!(
-            "WebSocket: {} events send ({duration})",
+            "WebSocket: gửi {} sự kiện ({duration})",
             summary.websocket_calls.count
         ));
     }
     if summary.streaming_events.count > 0 {
         let duration = format_duration_ms(summary.streaming_events.duration_ms);
-        let stream_label = pluralize(summary.streaming_events.count, "Stream", "Streams");
-        let events = pluralize(summary.streaming_events.count, "event", "events");
+        let stream_label = pluralize(summary.streaming_events.count, "Luồng", "Luồng");
+        let events = pluralize(summary.streaming_events.count, "sự kiện", "sự kiện");
         parts.push(format!(
             "{stream_label}: {} {events} ({duration})",
             summary.streaming_events.count
@@ -116,11 +116,11 @@ pub(crate) fn runtime_metrics_label(summary: RuntimeMetricsSummary) -> Option<St
     }
     if summary.responses_api_overhead_ms > 0 {
         let duration = format_duration_ms(summary.responses_api_overhead_ms);
-        parts.push(format!("Responses API overhead: {duration}"));
+        parts.push(format!("Chi phí Responses API: {duration}"));
     }
     if summary.responses_api_inference_time_ms > 0 {
         let duration = format_duration_ms(summary.responses_api_inference_time_ms);
-        parts.push(format!("Responses API inference: {duration}"));
+        parts.push(format!("Suy luận Responses API: {duration}"));
     }
     if summary.responses_api_engine_iapi_ttft_ms > 0
         || summary.responses_api_engine_service_ttft_ms > 0

@@ -9,7 +9,7 @@ pub(crate) fn extract_version_from_latest_tag(latest_tag_name: &str) -> anyhow::
     latest_tag_name
         .strip_prefix("rust-v")
         .map(str::to_owned)
-        .ok_or_else(|| anyhow::anyhow!("Failed to parse latest tag name '{latest_tag_name}'"))
+        .ok_or_else(|| anyhow::anyhow!("Không phân tích được tên tag mới nhất '{latest_tag_name}'"))
 }
 
 pub(crate) fn is_source_build_version(version: &str) -> bool {

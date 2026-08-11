@@ -106,8 +106,8 @@ impl RuntimeChordKeymap {
                 if let Some((prefix, completion)) = raw.split_once(' ') {
                     let invalid_binding = || {
                         format!(
-                            "Invalid `{}` = `{raw}`. Use a single key such as `ctrl-a` \
-or a two-stroke chord such as `ctrl-x ctrl-t`.",
+                            "Không hợp lệ `{}` = `{raw}`. Hãy dùng một phím đơn như `ctrl-a` \
+hoặc một hợp âm hai phím như `ctrl-x ctrl-t`.",
                             action.config_path()
                         )
                     };
@@ -371,8 +371,8 @@ pub(super) fn validate_chord_conflicts(keymap: &RuntimeKeymap) -> Result<(), Str
             })
         {
             return Err(format!(
-                "Ambiguous `{}` = `{}`: its prefix shadows `{}`. \
-Unbind or remap the existing shortcut before using it as a chord prefix.",
+                "Không rõ ràng `{}` = `{}`: tiền tố của nó che khuất `{}`. \
+Hãy bỏ gán hoặc gán lại phím tắt hiện có trước khi dùng nó làm tiền tố hợp âm.",
                 binding.action.config_path(),
                 binding.spec,
                 conflict.id.config_path(),
@@ -385,8 +385,8 @@ Unbind or remap the existing shortcut before using it as a chord prefix.",
                 && previous.chord == binding.chord
             {
                 return Err(format!(
-                    "Ambiguous `{}` = `{}`: the same chord is already assigned to `{}`. \
-Choose a unique chord and retry.",
+                    "Không rõ ràng `{}` = `{}`: hợp âm này đã được gán cho `{}`. \
+Hãy chọn một hợp âm khác và thử lại.",
                     binding.action.config_path(),
                     binding.spec,
                     previous.action.config_path(),
@@ -407,8 +407,8 @@ fn validate_binding_shape(binding: &RuntimeChordBinding) -> Result<(), String> {
         && !binding.action.context.allows_plain_chord_prefix()
     {
         return Err(format!(
-            "Invalid `{path}` = `{}`: a ctrl-alt character prefix may be AltGr text input on \
-Windows. Choose a different chord and retry.",
+            "Không hợp lệ `{path}` = `{}`: tiền tố ký tự ctrl-alt có thể là đầu vào văn bản AltGr trên \
+Windows. Hãy chọn một hợp âm khác và thử lại.",
             binding.spec
         ));
     }
@@ -418,8 +418,8 @@ Windows. Choose a different chord and retry.",
         && !binding.action.context.allows_plain_chord_prefix()
     {
         return Err(format!(
-            "Invalid `{path}` = `{}`: a chord prefix outside Vim must use ctrl, \
-alt, or a non-character key so ordinary text input is not intercepted.",
+            "Không hợp lệ `{path}` = `{}`: tiền tố hợp âm ngoài Vim phải dùng ctrl, \
+alt hoặc phím không phải ký tự để không chặn đầu vào văn bản thông thường.",
             binding.spec
         ));
     }
@@ -436,7 +436,7 @@ fn validate_reserved_strokes(binding: &RuntimeChordBinding) -> Result<(), String
 
     if strokes.contains(&(KeyCode::Esc, KeyModifiers::NONE)) {
         return Err(format!(
-            "Ambiguous `{path}` = `{}`: plain `esc` is reserved for cancelling a pending chord.",
+            "Không rõ ràng `{path}` = `{}`: phím `esc` đơn được dành riêng để hủy hợp âm đang chờ.",
             binding.spec
         ));
     }
@@ -444,8 +444,8 @@ fn validate_reserved_strokes(binding: &RuntimeChordBinding) -> Result<(), String
     #[cfg(unix)]
     if strokes.contains(&crate::key_hint::ctrl(KeyCode::Char('z')).parts()) {
         return Err(format!(
-            "Ambiguous `{path}` = `{}`: `ctrl-z` is reserved for suspending the terminal on Unix. \
-Choose a different chord and retry.",
+            "Không rõ ràng `{path}` = `{}`: `ctrl-z` được dành riêng để tạm dừng terminal trên Unix. \
+Hãy chọn một hợp âm khác và thử lại.",
             binding.spec
         ));
     }

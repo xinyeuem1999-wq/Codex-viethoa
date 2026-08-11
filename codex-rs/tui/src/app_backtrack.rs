@@ -50,9 +50,9 @@ use crossterm::event::KeyCode;
 use crossterm::event::KeyEvent;
 use crossterm::event::KeyEventKind;
 
-const NO_PREVIOUS_MESSAGE_TO_EDIT: &str = "No previous message to edit.";
+const NO_PREVIOUS_MESSAGE_TO_EDIT: &str = "Không có tin nhắn trước đó để chỉnh sửa.";
 pub(crate) const SIDE_EDIT_PREVIOUS_UNAVAILABLE_MESSAGE: &str =
-    "Editing previous prompts is unavailable in side conversations.";
+    "Không thể chỉnh sửa lời nhắc trước đó trong cuộc trò chuyện phụ.";
 
 /// Aggregates all backtrack-related state used by the App.
 #[derive(Default)]

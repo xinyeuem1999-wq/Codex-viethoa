@@ -38,7 +38,7 @@ impl ChatWidget {
             SelectionItem {
                 name: "List skills".to_string(),
                 description: Some(format!(
-                    "Tip: press {list_shortcut} to open this list directly."
+                    "Mẹo: nhấn {list_shortcut} để mở trực tiếp danh sách này."
                 )),
                 actions: vec![Box::new(|tx| {
                     tx.send(AppEvent::OpenSkillsList);
@@ -48,7 +48,7 @@ impl ChatWidget {
             },
             SelectionItem {
                 name: "Enable/Disable Skills".to_string(),
-                description: Some("Enable or disable skills.".to_string()),
+                description: Some("Bật hoặc tắt skills.".to_string()),
                 actions: vec![Box::new(|tx| {
                     tx.send(AppEvent::OpenManageSkillsPopup);
                 })],

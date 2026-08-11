@@ -99,13 +99,13 @@ pub(crate) fn grant_read_root_non_elevated(
     read_root: &Path,
 ) -> anyhow::Result<PathBuf> {
     if !read_root.is_absolute() {
-        anyhow::bail!("path must be absolute: {}", read_root.display());
+        anyhow::bail!("đường dẫn phải là đường dẫn tuyệt đối: {}", read_root.display());
     }
     if !read_root.exists() {
-        anyhow::bail!("path does not exist: {}", read_root.display());
+        anyhow::bail!("đường dẫn không tồn tại: {}", read_root.display());
     }
     if !read_root.is_dir() {
-        anyhow::bail!("path must be a directory: {}", read_root.display());
+        anyhow::bail!("đường dẫn phải là một thư mục: {}", read_root.display());
     }
 
     let canonical_root = dunce::canonicalize(read_root)?;

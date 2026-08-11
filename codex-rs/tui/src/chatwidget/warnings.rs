@@ -2,7 +2,7 @@ use std::collections::HashSet;
 
 const FALLBACK_MODEL_METADATA_WARNING_PREFIX: &str = "Model metadata for `";
 const FALLBACK_MODEL_METADATA_WARNING_SUFFIX: &str =
-    "` not found. Defaulting to fallback metadata; this can degrade performance and cause issues.";
+    "` không tìm thấy. Đang dùng siêu dữ liệu dự phòng; điều này có thể làm giảm hiệu suất và gây sự cố.";
 
 #[derive(Default)]
 pub(super) struct WarningDisplayState {

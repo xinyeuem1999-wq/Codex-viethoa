@@ -39,7 +39,7 @@ impl ChatWidget {
                 self.bottom_pane.show_selection_view(params);
             }
             Err(err) => {
-                self.add_error_message(format!("Invalid `tui.keymap` configuration: {err}"));
+                self.add_error_message(format!("Cấu hình `tui.keymap` không hợp lệ: {err}"));
             }
         }
     }

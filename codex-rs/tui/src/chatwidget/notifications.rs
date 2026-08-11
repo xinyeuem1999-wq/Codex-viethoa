@@ -47,7 +47,7 @@ impl Notification {
             }
             Notification::EditApprovalRequested { cwd, changes } => {
                 format!(
-                    "Codex wants to edit {}",
+                    "Codex muốn chỉnh sửa {}",
                     if changes.len() == 1 {
                         #[allow(clippy::unwrap_used)]
                         display_path_for(changes.first().unwrap(), cwd)
@@ -57,10 +57,10 @@ impl Notification {
                 )
             }
             Notification::ElicitationRequested { server_name } => {
-                format!("Approval requested by {server_name}")
+                format!("Yêu cầu phê duyệt bởi {server_name}")
             }
             Notification::PlanModePrompt { title } => {
-                format!("Plan mode prompt: {title}")
+                format!("Lời nhắc chế độ Plan: {title}")
             }
         }
     }

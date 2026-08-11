@@ -51,8 +51,8 @@ impl MigrationMenuOption {
 
     fn label(self) -> &'static str {
         match self {
-            Self::TryNewModel => "Try new model",
-            Self::UseExistingModel => "Use existing model",
+            Self::TryNewModel => "Dùng thử model mới",
+            Self::UseExistingModel => "Dùng model hiện có",
         }
     }
 }
@@ -82,7 +82,7 @@ pub(crate) fn migration_copy_for_models(
     }
 
     let heading_text = Span::from(format!(
-        "Codex just got an upgrade. Introducing {target_display_name}."
+        "Codex vừa được nâng cấp. Giới thiệu {target_display_name}."
     ))
     .bold();
     let description_line: Line<'static>;
@@ -94,7 +94,7 @@ pub(crate) fn migration_copy_for_models(
             .map(Line::from)
             .unwrap_or_else(|| {
                 Line::from(format!(
-                    "{target_display_name} is recommended for better performance and reliability."
+                    "{target_display_name} được khuyến nghị vì hiệu suất và độ tin cậy tốt hơn."
                 ))
             });
     }
@@ -102,14 +102,14 @@ pub(crate) fn migration_copy_for_models(
     let mut content = vec![];
     if migration_copy.is_none() {
         content.push(Line::from(format!(
-            "We recommend switching from {current_model} to {target_model}."
+            "Chúng tôi khuyên bạn nên chuyển từ {current_model} sang {target_model}."
         )));
         content.push(Line::from(""));
     }
 
     if let Some(model_link) = model_link {
         content.push(Line::from(vec![
-            format!("{description_line} Learn more about {target_display_name} at ").into(),
+            format!("{description_line} Tìm hiểu thêm về {target_display_name} tại ").into(),
             model_link.cyan().underlined(),
         ]));
         content.push(Line::from(""));
@@ -120,10 +120,10 @@ pub(crate) fn migration_copy_for_models(
 
     if can_opt_out {
         content.push(Line::from(format!(
-            "You can continue using {current_model} if you prefer."
+            "Bạn có thể tiếp tục dùng {current_model} nếu muốn."
         )));
     } else {
-        content.push(Line::from("Press enter to continue".dim()));
+        content.push(Line::from("Nhấn Enter để tiếp tục".dim()));
     }
 
     ModelMigrationCopy {
@@ -342,7 +342,7 @@ impl ModelMigrationScreen {
     fn render_menu(&self, column: &mut ColumnRenderable) {
         column.push(Line::from(""));
         column.push(
-            Paragraph::new("Choose how you'd like Codex to proceed.")
+            Paragraph::new("Chọn cách bạn muốn Codex tiếp tục.")
                 .wrap(Wrap { trim: false })
                 .inset(Insets::tlbr(
                     /*top*/ 0, /*left*/ 2, /*bottom*/ 0, /*right*/ 0,
@@ -361,13 +361,13 @@ impl ModelMigrationScreen {
         column.push(Line::from(""));
         column.push(
             Line::from(vec![
-                "Use ".dim(),
+                "Dùng ".dim(),
                 key_hint::plain(KeyCode::Up).into(),
                 "/".dim(),
                 key_hint::plain(KeyCode::Down).into(),
-                " to move, press ".dim(),
+                " để di chuyển, nhấn ".dim(),
                 key_hint::plain(KeyCode::Enter).into(),
-                " to confirm".dim(),
+                " để xác nhận".dim(),
             ])
             .inset(Insets::tlbr(
                 /*top*/ 0, /*left*/ 2, /*bottom*/ 0, /*right*/ 0,

@@ -27,9 +27,9 @@ impl HistoryCell for UnifiedExecInteractionCell {
         let waited_only = self.stdin.is_empty();
 
         let mut header_spans = if waited_only {
-            vec!["• Waited for background terminal".bold()]
+            vec!["• Đã chờ terminal nền".bold()]
         } else {
-            vec!["↳ ".dim(), "Interacted with background terminal".bold()]
+            vec!["↳ ".dim(), "Đã tương tác với terminal nền".bold()]
         };
         if let Some(command) = &self.command_display
             && !command.is_empty()
@@ -72,10 +72,10 @@ impl HistoryCell for UnifiedExecInteractionCell {
                 .filter(|command| !command.is_empty())
             {
                 out.push(Line::from(format!(
-                    "Waited for background terminal: {command}"
+                    "Đã chờ terminal nền: {command}"
                 )));
             } else {
-                out.push(Line::from("Waited for background terminal"));
+                out.push(Line::from("Đã chờ terminal nền"));
             }
             return out;
         }
@@ -86,10 +86,10 @@ impl HistoryCell for UnifiedExecInteractionCell {
             .filter(|command| !command.is_empty())
         {
             out.push(Line::from(format!(
-                "Interacted with background terminal: {command}"
+                "Đã tương tác với terminal nền: {command}"
             )));
         } else {
-            out.push(Line::from("Interacted with background terminal"));
+            out.push(Line::from("Đã tương tác với terminal nền"));
         }
         out.extend(raw_lines_from_source(&self.stdin));
         out
@@ -212,7 +212,7 @@ impl HistoryCell for UnifiedExecProcessesCell {
 
         let remaining = self.processes.len().saturating_sub(shown);
         if remaining > 0 {
-            let more_text = format!("... and {remaining} more running");
+            let more_text = format!("... và {remaining} tiến trình khác đang chạy");
             if wrap_width <= prefix_width {
                 out.push(Line::from(prefix.dim()));
             } else {

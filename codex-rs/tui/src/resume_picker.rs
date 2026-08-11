@@ -129,8 +129,8 @@ pub enum SessionPickerLaunchContext {
 impl SessionPickerAction {
     fn title(self) -> &'static str {
         match self {
-            SessionPickerAction::Resume => "Resume a previous session",
-            SessionPickerAction::Fork => "Fork a previous session",
+            SessionPickerAction::Resume => "Tiếp tục phiên trước",
+            SessionPickerAction::Fork => "Fork phiên trước",
         }
     }
 
@@ -574,7 +574,7 @@ fn picker_provider_filter(config: &Config, uses_remote_workspace: bool) -> Provi
 
 fn picker_runtime_keymap(config: &Config) -> Result<RuntimeKeymap> {
     RuntimeKeymap::from_config(&config.tui_keymap)
-        .map_err(|err| color_eyre::eyre::eyre!("invalid keymap configuration: {err}"))
+        .map_err(|err| color_eyre::eyre::eyre!("cấu hình keymap không hợp lệ: {err}"))
 }
 
 fn picker_cwd_filter(
@@ -651,7 +651,7 @@ fn spawn_app_server_page_loader(
             }
         }
         if let Err(err) = app_server.shutdown().await {
-            warn!(%err, "Failed to shut down app-server picker session");
+            warn!(%err, "Không tắt được phiên chọn máy chủ ứng dụng");
         }
     });
 
@@ -663,9 +663,9 @@ fn spawn_app_server_page_loader(
 /// Returns the human-readable column header for the given sort key.
 fn sort_key_label(sort_key: ThreadSortKey) -> &'static str {
     match sort_key {
-        ThreadSortKey::CreatedAt => "Created",
+        ThreadSortKey::CreatedAt => "Đã tạo",
         ThreadSortKey::UpdatedAt | ThreadSortKey::RecencyAt | ThreadSortKey::SectionPosition => {
-            "Updated"
+            "Đã cập nhật"
         }
     }
 }
@@ -1149,7 +1149,7 @@ impl PickerState {
             return;
         };
         let Some(thread_id) = row.thread_id else {
-            self.inline_error = Some("No transcript available for this session".to_string());
+            self.inline_error = Some("Không có transcript cho phiên này".to_string());
             self.request_frame();
             return;
         };
@@ -1288,10 +1288,10 @@ impl PickerState {
                     }
                     self.inline_error = Some(match path {
                         Some(path) => {
-                            format!("Failed to read session metadata from {}", path.display())
+                            format!("Không đọc được siêu dữ liệu phiên từ {}", path.display())
                         }
                         None => {
-                            String::from("Failed to read session metadata from selected session")
+                            String::from("Không đọc được siêu dữ liệu phiên từ phiên đã chọn")
                         }
                     });
                     self.request_frame();
@@ -1518,7 +1518,7 @@ impl PickerState {
                         self.pending_transcript_cancellation = None;
                         self.pending_transcript_open = None;
                         self.transcript_loading_frame_shown = false;
-                        self.inline_error = Some("Could not load transcript preview".to_string());
+                        self.inline_error = Some("Không tải được bản xem trước transcript".to_string());
                     }
                     self.request_frame();
                 }
@@ -1832,7 +1832,7 @@ impl PickerState {
         self.ensure_selected_visible();
         if let Err(err) = self.persist_density().await {
             warn!(error = %err, "failed to persist session picker view mode");
-            self.inline_error = Some(format!("Failed to save view mode: {err}"));
+            self.inline_error = Some(format!("Không lưu được chế độ xem: {err}"));
         }
         self.request_frame();
     }
@@ -1846,7 +1846,7 @@ impl PickerState {
             .set_session_picker_view(SessionPickerViewMode::from(self.density))
             .apply()
             .await
-            .map_err(|err| color_eyre::eyre::eyre!("failed to write config.toml: {err}"))?;
+            .map_err(|err| color_eyre::eyre::eyre!("không ghi được config.toml: {err}"))?;
 
         Ok(())
     }
@@ -1965,7 +1965,7 @@ fn row_from_app_server_thread(thread: Thread) -> Option<Row> {
     Some(Row {
         path: thread.path,
         preview: if preview.is_empty() {
-            String::from("(no message yet)")
+            String::from("(chưa có tin nhắn)")
         } else {
             preview.to_string()
         },
@@ -2079,9 +2079,9 @@ fn search_line(state: &PickerState, width: u16) -> Line<'_> {
         return Line::from(error.red());
     }
     let search = if state.query.is_empty() {
-        "Type to search".dim()
+        "Gõ để tìm kiếm".dim()
     } else {
-        format!("Search: {}", state.query).into()
+        format!("Tìm kiếm: {}", state.query).into()
     };
     let mut toolbar = toolbar_line(state, /*compact*/ false);
     if toolbar.width() as u16 > width.saturating_sub(2) {
@@ -2123,7 +2123,7 @@ fn sort_control_spans(state: &PickerState, compact: bool) -> Vec<Span<'static>> 
     let sort_focused = state.toolbar_focus == ToolbarControl::Sort;
     if compact {
         return vec![
-            "Sort:".dim(),
+            "Sắp xếp:".dim(),
             toolbar_value(
                 sort_key_label(state.sort_key),
                 /*active*/ true,
@@ -2132,7 +2132,7 @@ fn sort_control_spans(state: &PickerState, compact: bool) -> Vec<Span<'static>> 
         ];
     }
     vec![
-        "Sort: ".dim(),
+        "Sắp xếp: ".dim(),
         toolbar_value(
             sort_key_label(ThreadSortKey::UpdatedAt),
             state.sort_key == ThreadSortKey::UpdatedAt,
@@ -2150,7 +2150,7 @@ fn filter_control_spans(state: &PickerState, compact: bool) -> Vec<Span<'static>
     let filter_focused = state.toolbar_focus == ToolbarControl::Filter;
     if compact || state.filter_cwd.is_none() {
         return vec![
-            "Filter:".dim(),
+            "Lọc:".dim(),
             toolbar_value(
                 filter_mode_label(state.filter_mode),
                 /*active*/ true,
@@ -2159,7 +2159,7 @@ fn filter_control_spans(state: &PickerState, compact: bool) -> Vec<Span<'static>
         ];
     }
     vec![
-        "Filter: ".dim(),
+        "Lọc: ".dim(),
         toolbar_value(
             filter_mode_label(SessionFilterMode::Cwd),
             state.filter_mode == SessionFilterMode::Cwd,
@@ -2189,7 +2189,7 @@ fn toolbar_value(label: &'static str, active: bool, focused: bool) -> Span<'stat
 fn filter_mode_label(filter_mode: SessionFilterMode) -> &'static str {
     match filter_mode {
         SessionFilterMode::Cwd => "Cwd",
-        SessionFilterMode::All => "All",
+        SessionFilterMode::All => "Tất cả",
     }
 }
 
@@ -2318,15 +2318,15 @@ fn footer_hint_lines(state: &PickerState, width: u16) -> Vec<Line<'static>> {
     if state.is_transcript_loading() {
         let hints = [
             PickerFooterHint {
-                key: "loading".to_string(),
+                key: "đang tải".to_string(),
                 wide_label: String::from("transcript"),
                 compact_label: String::from("transcript"),
                 priority: 0,
             },
             PickerFooterHint {
                 key: "ctrl+c".to_string(),
-                wide_label: String::from("quit"),
-                compact_label: String::from("quit"),
+                wide_label: String::from("thoát"),
+                compact_label: String::from("thoát"),
                 priority: 1,
             },
         ];
@@ -2340,23 +2340,23 @@ fn footer_hint_lines(state: &PickerState, width: u16) -> Vec<Line<'static>> {
     let action_label = state.action.action_label();
     let (esc_label, esc_compact_label) = if state.query.is_empty() {
         match state.launch_context {
-            SessionPickerLaunchContext::Startup => ("start new", "new"),
-            SessionPickerLaunchContext::ExistingSession => ("exit", "exit"),
+            SessionPickerLaunchContext::Startup => ("bắt đầu mới", "mới"),
+            SessionPickerLaunchContext::ExistingSession => ("thoát", "thoát"),
         }
     } else {
-        ("clear search", "clear")
+        ("xóa tìm kiếm", "xóa")
     };
     let ctrl_c_label = match state.launch_context {
-        SessionPickerLaunchContext::Startup => "quit",
-        SessionPickerLaunchContext::ExistingSession => "exit",
+        SessionPickerLaunchContext::Startup => "thoát",
+        SessionPickerLaunchContext::ExistingSession => "thoát",
     };
     let density_label = match state.density {
-        SessionListDensity::Comfortable => "dense view",
-        SessionListDensity::Dense => "comfortable view",
+        SessionListDensity::Comfortable => "chế độ xem dày",
+        SessionListDensity::Dense => "chế độ xem thoải mái",
     };
     let density_compact_label = match state.density {
-        SessionListDensity::Comfortable => "dense",
-        SessionListDensity::Dense => "comfy",
+        SessionListDensity::Comfortable => "dày",
+        SessionListDensity::Dense => "thoải mái",
     };
     let mut first_row_hints = Vec::new();
     if let Some(accept) = state.list_keymap.primary_hint(ListAction::Accept) {
@@ -2384,8 +2384,8 @@ fn footer_hint_lines(state: &PickerState, width: u16) -> Vec<Line<'static>> {
         },
         PickerFooterHint {
             key: "tab".to_string(),
-            wide_label: String::from("focus sort/filter"),
-            compact_label: String::from("focus"),
+            wide_label: String::from("tập trung sắp xếp/lọc"),
+            compact_label: String::from("tập trung"),
             priority: 7,
         },
     ]);
@@ -2398,8 +2398,8 @@ fn footer_hint_lines(state: &PickerState, width: u16) -> Vec<Line<'static>> {
     if !option_keys.is_empty() {
         first_row_hints.push(PickerFooterHint {
             key: option_keys,
-            wide_label: String::from("change option"),
-            compact_label: String::from("option"),
+            wide_label: String::from("đổi tùy chọn"),
+            compact_label: String::from("tùy chọn"),
             priority: 8,
         });
     }
@@ -2413,12 +2413,12 @@ fn footer_hint_lines(state: &PickerState, width: u16) -> Vec<Line<'static>> {
         PickerFooterHint {
             key: "ctrl+t".to_string(),
             wide_label: String::from("transcript"),
-            compact_label: String::from("preview"),
+            compact_label: String::from("xem trước"),
             priority: 4,
         },
         PickerFooterHint {
             key: "ctrl+e".to_string(),
-            wide_label: String::from("expand"),
+            wide_label: String::from("mở rộng"),
             compact_label: String::from("exp"),
             priority: 6,
         },
@@ -2432,8 +2432,8 @@ fn footer_hint_lines(state: &PickerState, width: u16) -> Vec<Line<'static>> {
     if !browse_keys.is_empty() {
         second_row_hints.push(PickerFooterHint {
             key: browse_keys,
-            wide_label: String::from("browse"),
-            compact_label: String::from("browse"),
+            wide_label: String::from("duyệt"),
+            compact_label: String::from("duyệt"),
             priority: 5,
         });
     }
@@ -2673,7 +2673,7 @@ fn render_list(frame: &mut crate::custom_terminal::Frame, area: Rect, state: &Pi
     }
 
     if state.pagination.is_loading() && y < content_area.y.saturating_add(content_area.height) {
-        let loading_line: Line = vec!["  ".into(), "Loading older sessions…".italic().dim()].into();
+        let loading_line: Line = vec!["  ".into(), "Đang tải các phiên cũ hơn…".italic().dim()].into();
         let rect = Rect::new(area.x, y, area.width, 1);
         frame.render_widget_ref(&loading_line, rect);
     }
@@ -2965,8 +2965,8 @@ impl FooterPart {
         match self {
             FooterPart::Date(text) => text,
             FooterPart::Branch(Some(text)) | FooterPart::Cwd(Some(text)) => text,
-            FooterPart::Branch(None) => "no branch",
-            FooterPart::Cwd(None) => "no cwd",
+            FooterPart::Branch(None) => "không có nhánh",
+            FooterPart::Cwd(None) => "không có thư mục",
         }
     }
 
@@ -3122,12 +3122,12 @@ fn render_transcript_preview_lines(
     };
     let preview_lines = match state.transcript_previews.get(&thread_id) {
         Some(TranscriptPreviewState::Loading) => {
-            vec![vec!["  │ ".dim(), "Loading recent transcript...".italic().dim()].into()]
+            vec![vec!["  │ ".dim(), "Đang tải transcript gần đây...".italic().dim()].into()]
         }
         Some(TranscriptPreviewState::Failed) => vec![
             vec![
                 "  │ ".dim(),
-                "Could not load transcript preview".italic().red(),
+                "Không tải được bản xem trước transcript".italic().red(),
             ]
             .into(),
         ],
@@ -3161,21 +3161,21 @@ fn render_expanded_session_details(
         .git_branch
         .as_ref()
         .map(|branch| format!("{SESSION_META_BRANCH_ICON} {branch}"))
-        .unwrap_or_else(|| format!("{SESSION_META_BRANCH_ICON} no branch"));
+        .unwrap_or_else(|| format!("{SESSION_META_BRANCH_ICON} không có nhánh"));
 
     vec![
-        expanded_detail_line("Session:", &session, width),
-        expanded_time_detail_line("Created:", reference, row.created_at, width),
+        expanded_detail_line("Phiên:", &session, width),
+        expanded_time_detail_line("Đã tạo:", reference, row.created_at, width),
         expanded_time_detail_line(
-            "Updated:",
+            "Đã cập nhật:",
             reference,
             row.updated_at.or(row.created_at),
             width,
         ),
-        expanded_detail_line("Directory:", &directory, width),
-        expanded_detail_line("Branch:", &branch, width),
+        expanded_detail_line("Thư mục:", &directory, width),
+        expanded_detail_line("Nhánh:", &branch, width),
         vec!["  │".dim()].into(),
-        vec!["  │ ".dim(), "Conversation:".dim()].into(),
+        vec!["  │ ".dim(), "Cuộc trò chuyện:".dim()].into(),
     ]
 }
 
@@ -3187,7 +3187,7 @@ fn render_conversation_preview_lines(
         return vec![
             vec![
                 "  └ ".dim(),
-                "No transcript preview available".italic().dim(),
+                "Không có bản xem trước transcript".italic().dim(),
             ]
             .into(),
         ];
@@ -3320,47 +3320,47 @@ fn format_relative_time(reference: DateTime<Utc>, ts: Option<DateTime<Utc>>) -> 
     };
     let seconds = (reference - ts).num_seconds().max(0);
     if seconds == 0 {
-        return "now".to_string();
+        return "bây giờ".to_string();
     }
     if seconds < 60 {
-        return format!("{seconds}s ago");
+        return format!("{seconds} giây trước");
     }
     let minutes = seconds / 60;
     if minutes < 60 {
-        return format!("{minutes}m ago");
+        return format!("{minutes} phút trước");
     }
     let hours = minutes / 60;
     if hours < 24 {
-        return format!("{hours}h ago");
+        return format!("{hours} giờ trước");
     }
     let days = hours / 24;
-    format!("{days}d ago")
+    format!("{days} ngày trước")
 }
 
 fn format_relative_time_long(reference: DateTime<Utc>, ts: DateTime<Utc>) -> String {
     let seconds = (reference - ts).num_seconds().max(0);
     if seconds == 0 {
-        return "now".to_string();
+        return "bây giờ".to_string();
     }
     if seconds < 60 {
-        return plural_time(seconds, "second");
+        return plural_time(seconds, "giây");
     }
     let minutes = seconds / 60;
     if minutes < 60 {
-        return plural_time(minutes, "minute");
+        return plural_time(minutes, "phút");
     }
     let hours = minutes / 60;
     if hours < 24 {
-        return plural_time(hours, "hour");
+        return plural_time(hours, "giờ");
     }
-    plural_time(hours / 24, "day")
+    plural_time(hours / 24, "ngày")
 }
 
 fn plural_time(value: i64, unit: &str) -> String {
     if value == 1 {
-        format!("1 {unit} ago")
+        format!("1 {unit} trước")
     } else {
-        format!("{value} {unit}s ago")
+        format!("{value} {unit} trước")
     }
 }
 
@@ -3377,22 +3377,22 @@ fn render_empty_state_line(state: &PickerState) -> Line<'static> {
         }
         if state.pagination.reached_scan_cap {
             let msg = format!(
-                "Search scanned first {} sessions; more may exist",
+                "Tìm kiếm đã quét {} phiên đầu tiên; có thể còn nhiều phiên khác",
                 state.pagination.num_scanned_files
             );
             return vec![Span::from(msg).italic().dim()].into();
         }
-        return vec!["No results for your search".italic().dim()].into();
+        return vec!["Không có kết quả cho tìm kiếm của bạn".italic().dim()].into();
     }
 
     if state.pagination.is_loading() {
         if state.all_rows.is_empty() && state.pagination.num_scanned_files == 0 {
-            return vec!["Loading sessions…".italic().dim()].into();
+            return vec!["Đang tải phiên…".italic().dim()].into();
         }
-        return vec!["Loading older sessions…".italic().dim()].into();
+        return vec!["Đang tải các phiên cũ hơn…".italic().dim()].into();
     }
 
-    vec!["No sessions yet".italic().dim()].into()
+    vec!["Chưa có phiên nào".italic().dim()].into()
 }
 
 #[cfg(test)]
@@ -3739,7 +3739,7 @@ mod tests {
             .expect("valid timestamp")
             .with_timezone(&Utc);
 
-        assert_eq!(format_relative_time(reference, Some(reference)), "now");
+        assert_eq!(format_relative_time(reference, Some(reference)), "bây giờ");
         assert_eq!(
             format_relative_time(reference, Some(reference - Duration::seconds(1))),
             "1s ago"
@@ -3752,7 +3752,7 @@ mod tests {
             .expect("valid timestamp")
             .with_timezone(&Utc);
 
-        assert_eq!(format_relative_time_long(reference, reference), "now");
+        assert_eq!(format_relative_time_long(reference, reference), "bây giờ");
         assert_eq!(
             format_relative_time_long(reference, reference - Duration::minutes(20)),
             "20 minutes ago"
@@ -3803,7 +3803,7 @@ mod tests {
         assert!(rendered.contains("Updated:    now · 2026-05-02 14:48:19"));
         assert!(rendered.contains(&format!("Directory:  {expected_directory}")));
         assert!(rendered.contains("Branch:      codex/raw-scrollback-mode"));
-        assert!(rendered.contains("Conversation:"));
+        assert!(rendered.contains("Cuộc trò chuyện:"));
     }
 
     #[test]
@@ -4205,7 +4205,7 @@ mod tests {
         );
         state.list_keymap.move_left.clear();
         state.list_keymap.move_right.clear();
-        assert!(!footer_lines_text(&state, /*width*/ 220).contains("change option"));
+        assert!(!footer_lines_text(&state, /*width*/ 220).contains("đổi tùy chọn"));
 
         state.density = SessionListDensity::Dense;
 
@@ -4232,7 +4232,7 @@ mod tests {
         assert!(rendered.contains("ctrl+o dense"));
         assert!(rendered.contains("ctrl+t preview"));
         assert!(rendered.contains("ctrl+e exp"));
-        assert!(!rendered.contains("focus sort/filter"));
+        assert!(!rendered.contains("tập trung sắp xếp/lọc"));
     }
 
     #[test]
@@ -4507,7 +4507,7 @@ mod tests {
         );
         state.filtered_rows = vec![Row {
             path: None,
-            preview: String::from("preview"),
+            preview: String::from("xem trước"),
             thread_id: Some(thread_id),
             thread_name: None,
             created_at: None,
@@ -4744,7 +4744,7 @@ mod tests {
         );
         state.filtered_rows = vec![Row {
             path: None,
-            preview: String::from("preview"),
+            preview: String::from("xem trước"),
             thread_id: Some(thread_id),
             thread_name: None,
             created_at: None,
@@ -4774,7 +4774,7 @@ mod tests {
         );
         state.filtered_rows = vec![Row {
             path: Some(PathBuf::from("/tmp/a.jsonl")),
-            preview: String::from("preview"),
+            preview: String::from("xem trước"),
             thread_id: None,
             thread_name: None,
             created_at: None,
@@ -4790,7 +4790,7 @@ mod tests {
 
         assert_eq!(
             state.inline_error.as_deref(),
-            Some("No transcript available for this session")
+            Some("Không có transcript cho phiên này")
         );
     }
 
@@ -4850,7 +4850,7 @@ mod tests {
         );
         state.filtered_rows = vec![Row {
             path: None,
-            preview: String::from("preview"),
+            preview: String::from("xem trước"),
             thread_id: Some(thread_id),
             thread_name: None,
             created_at: None,
@@ -4907,7 +4907,7 @@ mod tests {
         assert_eq!(
             contents,
             r#"[tui]
-session_picker_view = "dense"
+session_picker_view = "dày"
 "#
         );
     }
@@ -5014,7 +5014,7 @@ session_picker_view = "dense"
         );
         state.filtered_rows = vec![Row {
             path: None,
-            preview: String::from("preview"),
+            preview: String::from("xem trước"),
             thread_id: Some(thread_id),
             thread_name: None,
             created_at: None,
@@ -5053,7 +5053,7 @@ session_picker_view = "dense"
         );
         state.filtered_rows = vec![Row {
             path: None,
-            preview: String::from("preview"),
+            preview: String::from("xem trước"),
             thread_id: Some(thread_id),
             thread_name: None,
             created_at: None,
@@ -5617,7 +5617,7 @@ session_picker_view = "dense"
         state.ingest_page(page(
             vec![
                 make_row("/tmp/a.jsonl", "2025-01-03T00:00:00Z", "third"),
-                make_row("/tmp/b.jsonl", "2025-01-02T00:00:00Z", "second"),
+                make_row("/tmp/b.jsonl", "2025-01-02T00:00:00Z", "giây"),
             ],
             Some("2025-01-02T00:00:00Z"),
             /*num_scanned_files*/ 2,
@@ -5646,7 +5646,7 @@ session_picker_view = "dense"
             .iter()
             .map(|row| row.preview.as_str())
             .collect();
-        assert_eq!(previews, vec!["third", "second", "first", "very old"]);
+        assert_eq!(previews, vec!["third", "giây", "first", "very old"]);
 
         let unique_paths = state
             .filtered_rows
@@ -6227,7 +6227,7 @@ session_picker_view = "dense"
             session_id: thread_id.to_string(),
             forked_from_id: None,
             parent_thread_id: None,
-            preview: String::from("preview"),
+            preview: String::from("xem trước"),
             ephemeral: false,
             section: None,
             section_entered_at: None,
@@ -6306,7 +6306,7 @@ session_picker_view = "dense"
             session_id: thread_id.to_string(),
             forked_from_id: None,
             parent_thread_id: None,
-            preview: String::from("preview"),
+            preview: String::from("xem trước"),
             ephemeral: false,
             section: None,
             section_entered_at: None,
@@ -6378,7 +6378,7 @@ session_picker_view = "dense"
             session_id: thread_id.to_string(),
             forked_from_id: None,
             parent_thread_id: None,
-            preview: String::from("preview"),
+            preview: String::from("xem trước"),
             ephemeral: false,
             section: None,
             section_entered_at: None,

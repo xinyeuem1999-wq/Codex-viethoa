@@ -39,7 +39,7 @@ fn format_warning(additional_dirs: &[PathBuf]) -> String {
         .collect::<Vec<_>>()
         .join(", ");
     format!(
-        "Ignoring --add-dir ({joined_paths}) because the effective permissions do not allow additional writable roots. Switch to workspace-write or danger-full-access to allow them."
+        "Bỏ qua --add-dir ({joined_paths}) vì quyền hiện tại không cho phép thêm thư mục ghi bổ sung. Chuyển sang workspace-write hoặc danger-full-access để cho phép."
     )
 }
 

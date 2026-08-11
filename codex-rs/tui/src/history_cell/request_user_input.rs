@@ -119,7 +119,7 @@ impl HistoryCell for RequestUserInputResultCell {
                     .is_some_and(|answer| !answer.answers.is_empty())
             })
             .count();
-        let mut lines = vec![Line::from(format!("Questions {answered}/{total} answered"))];
+        let mut lines = vec![Line::from(format!("Đã trả lời {answered}/{total} câu hỏi"))];
         if self.interrupted {
             lines.push(Line::from("(interrupted)"));
         }

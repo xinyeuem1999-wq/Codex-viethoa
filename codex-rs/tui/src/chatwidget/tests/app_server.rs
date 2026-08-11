@@ -601,7 +601,7 @@ async fn live_app_server_turn_completed_clears_working_status_after_answer_item(
         .bottom_pane
         .status_widget()
         .expect("status indicator should be visible");
-    assert_eq!(status.header(), "Working");
+    assert_eq!(status.header(), "Đang xử lý");
 
     let item = AppServerThreadItem::AgentMessage {
         id: "msg-1".to_string(),
@@ -1273,7 +1273,7 @@ async fn live_app_server_stream_recovery_restores_previous_status_header() {
         .bottom_pane
         .status_widget()
         .expect("status indicator should be visible");
-    assert_eq!(status.header(), "Working");
+    assert_eq!(status.header(), "Đang xử lý");
     assert_eq!(status.details(), None);
     assert!(chat.status_state.retry_status_header.is_none());
 }

@@ -36,24 +36,24 @@ impl ChatWidget {
                 (true, Some(available_count)) if available_count > 0 => (
                     true,
                     format!(
-                        "You have {available_count} {} available.",
+                        "Bạn có {available_count} {} khả dụng.",
                         reset_label(available_count)
                     ),
                 ),
                 (true, None) => (true, "Check reset availability.".to_string()),
                 (true, Some(_)) | (false, _) => {
-                    (false, "No usage limit resets available.".to_string())
+                    (false, "Không có lượt đặt lại hạn mức nào khả dụng.".to_string())
                 }
             };
         SelectionViewParams {
             view_id: Some(USAGE_MENU_VIEW_ID),
             title: Some("Usage".to_string()),
-            subtitle: Some("View account usage or redeem an earned reset.".to_string()),
+            subtitle: Some("Xem mức sử dụng tài khoản hoặc dùng lượt đặt lại đã đạt được.".to_string()),
             footer_hint: Some(standard_popup_hint_line()),
             items: vec![
                 SelectionItem {
                     name: "Show usage".to_string(),
-                    description: Some("View recent account token usage.".to_string()),
+                    description: Some("Xem mức sử dụng token tài khoản gần đây.".to_string()),
                     actions: vec![Box::new(|tx| {
                         tx.send(AppEvent::OpenTokenActivity);
                     })],
@@ -61,7 +61,7 @@ impl ChatWidget {
                     ..Default::default()
                 },
                 SelectionItem {
-                    name: "Redeem usage limit reset".to_string(),
+                    name: "Dùng lượt đặt lại hạn mức".to_string(),
                     description: Some(reset_description),
                     is_disabled: !reset_action_enabled,
                     actions: vec![Box::new(|tx| {
@@ -109,9 +109,9 @@ impl ChatWidget {
         self.bottom_pane.show_selection_view(SelectionViewParams {
             view_id: Some(RATE_LIMIT_RESET_VIEW_ID),
             title: Some("Usage limit resets".to_string()),
-            subtitle: Some("Checking your available resets...".to_string()),
+            subtitle: Some("Đang kiểm tra các lượt đặt lại khả dụng...".to_string()),
             items: vec![SelectionItem {
-                name: "Loading...".to_string(),
+                name: "Đang tải...".to_string(),
                 is_disabled: true,
                 ..Default::default()
             }],
@@ -144,14 +144,14 @@ impl ChatWidget {
                     self.rate_limit_reset_picker_params(request_id, &response)
                 } else {
                     Self::rate_limit_reset_message_params(
-                        "You don't have any usage limit resets available.",
+                        "Bạn không có lượt đặt lại hạn mức nào khả dụng.",
                     )
                 };
                 self.available_rate_limit_reset_credits = Some(available_count);
                 params
             }
             Err(_) => {
-                Self::reset_refresh_params("Couldn't load usage limit resets. Please try again.")
+                Self::reset_refresh_params("Không thể tải các lượt đặt lại hạn mức. Vui lòng thử lại.")
             }
         };
         let replaced = self
@@ -265,7 +265,7 @@ impl ChatWidget {
                 },
                 SelectionItem {
                     name: "No, go back".to_string(),
-                    description: Some("Choose a different reset.".to_string()),
+                    description: Some("Chọn lượt đặt lại khác.".to_string()),
                     actions: vec![Box::new(move |_| {
                         no_confirmation_gate.store(true, Ordering::Release);
                     })],
@@ -383,18 +383,18 @@ impl ChatWidget {
                 self.pending_rate_limit_reset_request_id = None;
                 let message = match response.outcome {
                     ConsumeAccountRateLimitResetCreditOutcome::NothingToReset => {
-                        "Your usage does not need a reset right now."
+                        "Mức sử dụng của bạn hiện không cần đặt lại."
                     }
                     ConsumeAccountRateLimitResetCreditOutcome::NoCredit if credit_id.is_some() => {
                         self.available_rate_limit_reset_credits = None;
                         self.replace_rate_limit_reset_popup(Self::reset_refresh_params(
-                            "That reset is no longer available. Refresh to see your current resets.",
+                            "Lượt đặt lại đó không còn khả dụng. Làm mới để xem các lượt đặt lại hiện tại.",
                         ));
                         return false;
                     }
                     ConsumeAccountRateLimitResetCreditOutcome::NoCredit => {
                         self.available_rate_limit_reset_credits = Some(0);
-                        "No usage limit resets are available."
+                        "Không có lượt đặt lại hạn mức nào khả dụng."
                     }
                     ConsumeAccountRateLimitResetCreditOutcome::Reset
                     | ConsumeAccountRateLimitResetCreditOutcome::AlreadyRedeemed => unreachable!(),
@@ -408,7 +408,7 @@ impl ChatWidget {
                 self.replace_rate_limit_reset_popup(SelectionViewParams {
                     view_id: Some(RATE_LIMIT_RESET_VIEW_ID),
                     title: Some("Usage limit resets".to_string()),
-                    subtitle: Some("Couldn't reset usage. Please try again.".to_string()),
+                    subtitle: Some("Không thể đặt lại mức sử dụng. Vui lòng thử lại.".to_string()),
                     items: vec![
                         SelectionItem {
                             name: "Try again".to_string(),
@@ -453,7 +453,7 @@ impl ChatWidget {
                 let available_count = response.available_count;
                 self.available_rate_limit_reset_credits = Some(available_count);
                 format!(
-                    "Usage reset. You have {available_count} {} left.",
+                    "Đã đặt lại mức sử dụng. Bạn còn {available_count} {}.",
                     reset_label(available_count)
                 )
             }
@@ -467,9 +467,9 @@ impl ChatWidget {
         SelectionViewParams {
             view_id: Some(RATE_LIMIT_RESET_VIEW_ID),
             title: Some("Usage limit resets".to_string()),
-            subtitle: Some("Usage reset. Checking your remaining resets...".to_string()),
+            subtitle: Some("Đã đặt lại mức sử dụng. Đang kiểm tra các lượt đặt lại còn lại...".to_string()),
             items: vec![SelectionItem {
-                name: "Refreshing...".to_string(),
+                name: "Đang làm mới...".to_string(),
                 is_disabled: true,
                 ..Default::default()
             }],
@@ -558,7 +558,7 @@ impl ChatWidget {
         }
         self.pending_rate_limit_reset_hint = Some(history_cell::new_info_event(
             format!(
-                "You have {available_count} {} available. Run /usage to use one.",
+                "Bạn có {available_count} {} khả dụng. Chạy /usage để dùng một lượt.",
                 reset_label(available_count)
             ),
             /*hint*/ None,

@@ -104,7 +104,7 @@ impl ChatWidget {
     /// Cancellation is intentionally side-effect free for config state; the existing configuration
     /// remains active and no persistence is attempted.
     pub(crate) fn cancel_status_line_setup(&self) {
-        tracing::info!("Status line setup canceled by user");
+        tracing::info!("Thiết lập dòng trạng thái bị hủy bởi người dùng");
     }
 
     /// Applies status-line item selection from the setup view to in-memory config.
@@ -144,7 +144,7 @@ impl ChatWidget {
 
     /// Dismisses the terminal-title setup UI and reverts to the pre-setup config.
     pub(crate) fn cancel_terminal_title_setup(&mut self) {
-        tracing::info!("Terminal title setup canceled by user");
+        tracing::info!("Thiết lập tiêu đề terminal bị hủy bởi người dùng");
         self.revert_terminal_title_setup_preview();
     }
 

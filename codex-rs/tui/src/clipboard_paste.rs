@@ -14,8 +14,8 @@ impl std::fmt::Display for PasteImageError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             PasteImageError::ClipboardUnavailable(msg) => write!(f, "clipboard unavailable: {msg}"),
-            PasteImageError::NoImage(msg) => write!(f, "no image on clipboard: {msg}"),
-            PasteImageError::EncodeFailed(msg) => write!(f, "could not encode image: {msg}"),
+            PasteImageError::NoImage(msg) => write!(f, "không có hình ảnh trên clipboard: {msg}"),
+            PasteImageError::EncodeFailed(msg) => write!(f, "không thể mã hóa hình ảnh: {msg}"),
             PasteImageError::IoError(msg) => write!(f, "io error: {msg}"),
         }
     }
@@ -112,7 +112,7 @@ pub fn paste_image_as_png() -> Result<(Vec<u8>, PastedImageInfo), PasteImageErro
 #[cfg(target_os = "android")]
 pub fn paste_image_as_png() -> Result<(Vec<u8>, PastedImageInfo), PasteImageError> {
     Err(PasteImageError::ClipboardUnavailable(
-        "clipboard image paste is unsupported on Android".into(),
+        "Dán hình ảnh từ clipboard không được hỗ trợ trên Android".into(),
     ))
 }
 
@@ -232,7 +232,7 @@ fn try_dump_windows_clipboard_image() -> Option<String> {
 pub fn paste_image_to_temp_png() -> Result<(PathBuf, PastedImageInfo), PasteImageError> {
     // Keep error consistent with paste_image_as_png.
     Err(PasteImageError::ClipboardUnavailable(
-        "clipboard image paste is unsupported on Android".into(),
+        "Dán hình ảnh từ clipboard không được hỗ trợ trên Android".into(),
     ))
 }
 

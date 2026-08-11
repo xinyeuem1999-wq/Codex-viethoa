@@ -258,10 +258,10 @@ impl ApprovalOverlay {
                     approval_keymap,
                 ),
                 request.network_approval_context.as_ref().map_or_else(
-                    || "Would you like to run the following command?".to_string(),
+                    || "Bạn có muốn chạy lệnh sau không?".to_string(),
                     |network_approval_context| {
                         format!(
-                            "Do you want to approve network access to \"{}\"?",
+                            "Bạn có muốn phê duyệt quyền truy cập mạng tới \"{}\" không?",
                             network_approval_context.host
                         )
                     },
@@ -269,11 +269,11 @@ impl ApprovalOverlay {
             ),
             ApprovalRequest::Permissions(_) => (
                 permissions_options(approval_keymap),
-                "Would you like to grant these permissions?".to_string(),
+                "Bạn có muốn cấp các quyền này không?".to_string(),
             ),
             ApprovalRequest::ApplyPatch(_) => (
                 patch_options(approval_keymap),
-                "Would you like to make the following edits?".to_string(),
+                "Bạn có muốn thực hiện các chỉnh sửa sau không?".to_string(),
             ),
             ApprovalRequest::McpElicitation(request) => (
                 elicitation_options(approval_keymap),
@@ -415,13 +415,13 @@ impl ApprovalOverlay {
         );
         if request.thread_label().is_none() {
             let message = if granted_permissions.is_empty() {
-                "You did not grant additional permissions"
+                "Bạn chưa cấp quyền bổ sung"
             } else if strict_auto_review {
-                "You granted additional permissions with strict auto review"
+                "Bạn đã cấp quyền bổ sung với chế độ tự động xem xét nghiêm ngặt"
             } else if matches!(scope, PermissionGrantScope::Session) {
-                "You granted additional permissions for this session"
+                "Bạn đã cấp quyền bổ sung cho phiên này"
             } else {
-                "You granted additional permissions"
+                "Bạn đã cấp quyền bổ sung"
             };
             self.app_event_tx.send(AppEvent::InsertHistoryCell(Box::new(
                 crate::history_cell::PlainHistoryCell::new(vec![message.into()]),
@@ -625,9 +625,9 @@ fn approval_footer_hint(
 ) -> Line<'static> {
     let mut spans = accept_cancel_hint_line(
         list_keymap.primary_hint(ListAction::Accept),
-        "to confirm",
+        "để xác nhận",
         list_keymap.primary_hint(ListAction::Cancel),
-        "to cancel",
+        "để hủy",
     )
     .spans;
     if request.thread_label().is_some()
@@ -635,11 +635,11 @@ fn approval_footer_hint(
             approval_keymap.primary_hint("open_thread", &approval_keymap.open_thread)
     {
         if !spans.is_empty() {
-            spans.push(" or ".into());
+            spans.push(" hoặc ".into());
         } else {
-            spans.push("Press ".into());
+            spans.push("Nhấn ".into());
         }
-        spans.extend([open_thread.into(), " to open thread".into()]);
+        spans.extend([open_thread.into(), " để mở luồng".into()]);
     }
     Line::from(spans)
 }
@@ -841,9 +841,9 @@ fn exec_options(
         .filter_map(|decision| match decision {
             CommandExecutionApprovalDecision::Accept => Some(ApprovalOption {
                 label: if network_approval_context.is_some() {
-                    "Yes, just this once".to_string()
+                    "Có, chỉ lần này".to_string()
                 } else {
-                    "Yes, proceed".to_string()
+                    "Có, tiếp tục".to_string()
                 },
                 decision: ApprovalDecision::Command(CommandExecutionApprovalDecision::Accept),
                 shortcuts: keymap.approve.clone(),
@@ -858,7 +858,7 @@ fn exec_options(
 
                 Some(ApprovalOption {
                     label: format!(
-                        "Yes, and don't ask again for commands that start with `{rendered_prefix}`"
+                        "Có, và đừng hỏi lại cho các lệnh bắt đầu bằng `{rendered_prefix}`"
                     ),
                     decision: ApprovalDecision::Command(
                         CommandExecutionApprovalDecision::AcceptWithExecpolicyAmendment {
@@ -870,11 +870,11 @@ fn exec_options(
             }
             CommandExecutionApprovalDecision::AcceptForSession => Some(ApprovalOption {
                 label: if network_approval_context.is_some() {
-                    "Yes, and allow this host for this conversation".to_string()
+                    "Có, và cho phép máy chủ này cho cuộc trò chuyện này".to_string()
                 } else if additional_permissions.is_some() {
-                    "Yes, and allow these permissions for this session".to_string()
+                    "Có, và cho phép các quyền này cho phiên này".to_string()
                 } else {
-                    "Yes, and don't ask again for this command in this session".to_string()
+                    "Có, và đừng hỏi lại cho lệnh này trong phiên này".to_string()
                 },
                 decision: ApprovalDecision::Command(
                     CommandExecutionApprovalDecision::AcceptForSession,
@@ -886,11 +886,11 @@ fn exec_options(
             } => {
                 let (label, shortcuts) = match network_policy_amendment.action {
                     NetworkPolicyRuleAction::Allow => (
-                        "Yes, and allow this host in the future".to_string(),
+                        "Có, và cho phép máy chủ này trong tương lai".to_string(),
                         keymap.approve_for_prefix.clone(),
                     ),
                     NetworkPolicyRuleAction::Deny => (
-                        "No, and block this host in the future".to_string(),
+                        "Không, và chặn máy chủ này trong tương lai".to_string(),
                         keymap.deny.clone(),
                     ),
                 };
@@ -905,12 +905,12 @@ fn exec_options(
                 })
             }
             CommandExecutionApprovalDecision::Decline => Some(ApprovalOption {
-                label: "No, continue without running it".to_string(),
+                label: "Không, tiếp tục mà không chạy nó".to_string(),
                 decision: ApprovalDecision::Command(CommandExecutionApprovalDecision::Decline),
                 shortcuts: keymap.deny.clone(),
             }),
             CommandExecutionApprovalDecision::Cancel => Some(ApprovalOption {
-                label: "No, and tell Codex what to do differently".to_string(),
+                label: "Không, và nói cho Codex biết nên làm khác đi như thế nào".to_string(),
                 decision: ApprovalDecision::Command(CommandExecutionApprovalDecision::Cancel),
                 shortcuts: keymap.decline.clone(),
             }),
@@ -1016,17 +1016,17 @@ fn path_label(base: &str, subpath: &Option<LegacyAppPathString>) -> String {
 fn patch_options(keymap: &ApprovalKeymap) -> Vec<ApprovalOption> {
     vec![
         ApprovalOption {
-            label: "Yes, proceed".to_string(),
+            label: "Có, tiếp tục".to_string(),
             decision: ApprovalDecision::FileChange(FileChangeApprovalDecision::Accept),
             shortcuts: keymap.approve.clone(),
         },
         ApprovalOption {
-            label: "Yes, and don't ask again for these files".to_string(),
+            label: "Có, và đừng hỏi lại cho các tệp này".to_string(),
             decision: ApprovalDecision::FileChange(FileChangeApprovalDecision::AcceptForSession),
             shortcuts: keymap.approve_for_session.clone(),
         },
         ApprovalOption {
-            label: "No, and tell Codex what to do differently".to_string(),
+            label: "Không, và nói cho Codex biết nên làm khác đi như thế nào".to_string(),
             decision: ApprovalDecision::FileChange(FileChangeApprovalDecision::Cancel),
             shortcuts: keymap.decline.clone(),
         },
@@ -1043,24 +1043,24 @@ fn permissions_options(keymap: &ApprovalKeymap) -> Vec<ApprovalOption> {
 
     vec![
         ApprovalOption {
-            label: "Yes, grant these permissions for this turn".to_string(),
+            label: "Có, cấp các quyền này cho lượt này".to_string(),
             decision: ApprovalDecision::Permissions(PermissionsDecision::GrantForTurn),
             shortcuts: keymap.approve.clone(),
         },
         ApprovalOption {
-            label: "Yes, grant for this turn with strict auto review".to_string(),
+            label: "Có, cấp cho lượt này với chế độ tự động xem xét nghiêm ngặt".to_string(),
             decision: ApprovalDecision::Permissions(
                 PermissionsDecision::GrantForTurnWithStrictAutoReview,
             ),
             shortcuts: vec![key_hint::plain(KeyCode::Char('r'))],
         },
         ApprovalOption {
-            label: "Yes, grant these permissions for this session".to_string(),
+            label: "Có, cấp các quyền này cho phiên này".to_string(),
             decision: ApprovalDecision::Permissions(PermissionsDecision::GrantForSession),
             shortcuts: keymap.approve_for_session.clone(),
         },
         ApprovalOption {
-            label: "No, continue without permissions".to_string(),
+            label: "Không, tiếp tục mà không có quyền".to_string(),
             decision: ApprovalDecision::Permissions(PermissionsDecision::Deny),
             shortcuts: deny_shortcuts,
         },
@@ -1091,12 +1091,12 @@ fn elicitation_options(keymap: &ApprovalKeymap) -> Vec<ApprovalOption> {
 
     vec![
         ApprovalOption {
-            label: "Yes, provide the requested info".to_string(),
+            label: "Có, cung cấp thông tin được yêu cầu".to_string(),
             decision: ApprovalDecision::McpElicitation(McpServerElicitationAction::Accept),
             shortcuts: keymap.approve.clone(),
         },
         ApprovalOption {
-            label: "No, but continue without it".to_string(),
+            label: "Không, nhưng tiếp tục mà không có nó".to_string(),
             decision: ApprovalDecision::McpElicitation(McpServerElicitationAction::Decline),
             shortcuts: decline_shortcuts,
         },
@@ -1285,7 +1285,7 @@ mod tests {
             let approval = params
                 .items
                 .iter()
-                .find(|item| item.name == "Yes, proceed")
+                .find(|item| item.name == "Có, tiếp tục")
                 .expect("approval selection");
 
             assert_eq!(approval.display_shortcut, Some(expected_shortcut));
@@ -1780,10 +1780,10 @@ mod tests {
         assert_eq!(
             labels,
             vec![
-                "Yes, just this once".to_string(),
-                "Yes, and allow this host for this conversation".to_string(),
-                "Yes, and allow this host in the future".to_string(),
-                "No, and tell Codex what to do differently".to_string(),
+                "Có, chỉ lần này".to_string(),
+                "Có, và cho phép máy chủ này cho cuộc trò chuyện này".to_string(),
+                "Có, và cho phép máy chủ này trong tương lai".to_string(),
+                "Không, và nói cho Codex biết nên làm khác đi như thế nào".to_string(),
             ]
         );
     }
@@ -1806,9 +1806,9 @@ mod tests {
         assert_eq!(
             labels,
             vec![
-                "Yes, proceed".to_string(),
-                "Yes, and don't ask again for this command in this session".to_string(),
-                "No, and tell Codex what to do differently".to_string(),
+                "Có, tiếp tục".to_string(),
+                "Có, và đừng hỏi lại cho lệnh này trong phiên này".to_string(),
+                "Không, và nói cho Codex biết nên làm khác đi như thế nào".to_string(),
             ]
         );
     }
@@ -1840,8 +1840,8 @@ mod tests {
         assert_eq!(
             labels,
             vec![
-                "Yes, proceed".to_string(),
-                "No, and tell Codex what to do differently".to_string(),
+                "Có, tiếp tục".to_string(),
+                "Không, và nói cho Codex biết nên làm khác đi như thế nào".to_string(),
             ]
         );
     }
@@ -1856,10 +1856,10 @@ mod tests {
         assert_eq!(
             labels,
             vec![
-                "Yes, grant these permissions for this turn".to_string(),
-                "Yes, grant for this turn with strict auto review".to_string(),
-                "Yes, grant these permissions for this session".to_string(),
-                "No, continue without permissions".to_string(),
+                "Có, cấp các quyền này cho lượt này".to_string(),
+                "Có, cấp cho lượt này với chế độ tự động xem xét nghiêm ngặt".to_string(),
+                "Có, cấp các quyền này cho phiên này".to_string(),
+                "Không, tiếp tục mà không có quyền".to_string(),
             ]
         );
     }

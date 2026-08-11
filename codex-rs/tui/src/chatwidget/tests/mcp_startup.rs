@@ -139,7 +139,7 @@ async fn mcp_startup_complete_does_not_clear_running_task() {
 
     assert!(chat.bottom_pane.is_task_running());
     assert!(chat.bottom_pane.status_indicator_visible());
-    assert_eq!(chat.status_state.current_status.header, "Working");
+    assert_eq!(chat.status_state.current_status.header, "Đang xử lý");
 }
 
 #[tokio::test]
@@ -312,7 +312,7 @@ async fn turn_start_preserves_active_mcp_startup_header() {
 
     notify_mcp_status(&mut chat, "schaltwerk", McpServerStartupState::Ready);
 
-    assert_eq!(chat.status_state.current_status.header, "Working");
+    assert_eq!(chat.status_state.current_status.header, "Đang xử lý");
 }
 
 #[tokio::test]
@@ -332,7 +332,7 @@ async fn turn_start_replaces_idle_completed_mcp_startup_header() {
     handle_turn_started(&mut chat, "turn-1");
 
     assert!(chat.bottom_pane.is_task_running());
-    assert_eq!(chat.status_state.current_status.header, "Working");
+    assert_eq!(chat.status_state.current_status.header, "Đang xử lý");
 }
 
 #[tokio::test]
@@ -432,7 +432,7 @@ async fn mcp_startup_failure_restores_running_status_header() {
 
     assert!(chat.bottom_pane.is_task_running());
     assert!(chat.bottom_pane.status_indicator_visible());
-    assert_eq!(chat.status_state.current_status.header, "Working");
+    assert_eq!(chat.status_state.current_status.header, "Đang xử lý");
 }
 
 #[tokio::test]

@@ -44,7 +44,7 @@ impl StatusSurfacePreviewItem {
             StatusSurfacePreviewItem::ProjectName => "my-project",
             StatusSurfacePreviewItem::ProjectRoot => "my-project",
             StatusSurfacePreviewItem::CurrentDir => "~/my-project/subdir",
-            StatusSurfacePreviewItem::Status => "Working",
+            StatusSurfacePreviewItem::Status => "Đang xử lý",
             StatusSurfacePreviewItem::ThreadTitle => "thread title",
             StatusSurfacePreviewItem::GitBranch => "feat/awesome-feature",
             StatusSurfacePreviewItem::PullRequestNumber => "PR #123",
@@ -244,37 +244,37 @@ fn rate_limit_preview_copy(value: &str) -> Option<RateLimitPreviewCopy> {
     if value.starts_with("secondary usage ") {
         Some(RateLimitPreviewCopy {
             name: "secondary-usage-limit",
-            description: "Remaining usage on the secondary usage limit (omitted when unavailable)",
+            description: "Lượng sử dụng còn lại trên giới hạn sử dụng phụ (bỏ qua khi không khả dụng)",
         })
     } else if value.starts_with("usage ") {
         Some(RateLimitPreviewCopy {
             name: "usage-limit",
-            description: "Remaining usage on the primary usage limit (omitted when unavailable)",
+            description: "Lượng sử dụng còn lại trên giới hạn sử dụng chính (bỏ qua khi không khả dụng)",
         })
     } else if value.starts_with("5h ") {
         Some(RateLimitPreviewCopy {
             name: "five-hour-limit",
-            description: "Remaining usage on the 5-hour usage limit (omitted when unavailable)",
+            description: "Lượng sử dụng còn lại trên giới hạn sử dụng 5 giờ (bỏ qua khi không khả dụng)",
         })
     } else if value.starts_with("daily ") {
         Some(RateLimitPreviewCopy {
             name: "daily-limit",
-            description: "Remaining usage on the daily usage limit (omitted when unavailable)",
+            description: "Lượng sử dụng còn lại trên giới hạn sử dụng hàng ngày (bỏ qua khi không khả dụng)",
         })
     } else if value.starts_with("weekly ") {
         Some(RateLimitPreviewCopy {
             name: "weekly-limit",
-            description: "Remaining usage on the weekly usage limit (omitted when unavailable)",
+            description: "Lượng sử dụng còn lại trên giới hạn sử dụng hàng tuần (bỏ qua khi không khả dụng)",
         })
     } else if value.starts_with("monthly ") {
         Some(RateLimitPreviewCopy {
             name: "monthly-limit",
-            description: "Remaining usage on the monthly usage limit (omitted when unavailable)",
+            description: "Lượng sử dụng còn lại trên giới hạn sử dụng hàng tháng (bỏ qua khi không khả dụng)",
         })
     } else if value.starts_with("annual ") {
         Some(RateLimitPreviewCopy {
             name: "annual-limit",
-            description: "Remaining usage on the annual usage limit (omitted when unavailable)",
+            description: "Lượng sử dụng còn lại trên giới hạn sử dụng hàng năm (bỏ qua khi không khả dụng)",
         })
     } else {
         None

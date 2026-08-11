@@ -161,7 +161,7 @@ impl AppLinkViewParams {
             app_id,
             title,
             description: None,
-            instructions: "Sign in to this app in your browser, then return here.".to_string(),
+            instructions: "Đăng nhập vào ứng dụng này trong trình duyệt, rồi quay lại đây.".to_string(),
             url: url.to_string(),
             is_installed: true,
             is_enabled: true,
@@ -187,7 +187,7 @@ impl AppLinkViewParams {
             app_id: elicitation_id.to_string(),
             title: "Action required".to_string(),
             description: Some(format!("Server: {server_name}")),
-            instructions: "Complete the requested action in your browser, then return here."
+            instructions: "Hoàn tất hành động được yêu cầu trong trình duyệt, rồi quay lại đây."
                 .to_string(),
             url: url.to_string(),
             is_installed: true,
@@ -319,7 +319,7 @@ impl AppLinkView {
                     vec!["Install on ChatGPT", "Back"]
                 }
             }
-            AppLinkScreen::InstallConfirmation => vec!["I already Installed it", "Back"],
+            AppLinkScreen::InstallConfirmation => vec!["Tôi đã cài đặt rồi", "Back"],
         }
     }
 
@@ -508,7 +508,7 @@ impl AppLinkView {
         }
         let is_browser_action_suggestion = self.is_browser_action_suggestion();
         if self.is_installed && !is_browser_action_suggestion {
-            for line in wrap("Use $ to insert this app into the prompt.", usable_width) {
+            for line in wrap("Dùng $ để chèn ứng dụng này vào lời nhắc.", usable_width) {
                 lines.push(Line::from(line.into_owned()));
             }
             lines.push(Line::from(""));
@@ -529,14 +529,14 @@ impl AppLinkView {
             }
             if !is_browser_action_suggestion {
                 for line in wrap(
-                    "Newly installed apps can take a few minutes to appear in /apps.",
+                    "Ứng dụng mới cài có thể mất vài phút để xuất hiện trong /apps.",
                     usable_width,
                 ) {
                     lines.push(Line::from(line.into_owned()));
                 }
                 if !self.is_installed {
                     for line in wrap(
-                        "After installed, use $ to insert this app into the prompt.",
+                        "Sau khi cài đặt, dùng $ để chèn ứng dụng này vào lời nhắc.",
                         usable_width,
                     ) {
                         lines.push(Line::from(line.into_owned()));
@@ -563,7 +563,7 @@ impl AppLinkView {
         lines.push(Line::from(
             if is_auth_suggestion {
                 if is_codex_apps_auth {
-                    "Finish App Sign In"
+                    "Hoàn tất Đăng nhập Ứng dụng"
                 } else {
                     "Finish Authentication"
                 }
@@ -579,39 +579,39 @@ impl AppLinkView {
         if is_auth_suggestion {
             for line in wrap(
                 if is_codex_apps_auth {
-                    "Sign in to the app on ChatGPT in the browser window that just opened."
+                    "Đăng nhập vào ứng dụng trên ChatGPT trong cửa sổ trình duyệt vừa mở."
                 } else {
-                    "Complete authentication in the browser window that just opened."
+                    "Hoàn tất xác thực trong cửa sổ trình duyệt vừa mở."
                 },
                 usable_width,
             ) {
                 lines.push(Line::from(line.into_owned()));
             }
             for line in wrap(
-                "Then return here and select \"I already signed in\".",
+                "Sau đó quay lại đây và chọn \"Tôi đã đăng nhập\".",
                 usable_width,
             ) {
                 lines.push(Line::from(line.into_owned()));
             }
         } else if is_external_action_suggestion {
             for line in wrap(
-                "Complete the requested action in the browser window that just opened.",
+                "Hoàn tất hành động được yêu cầu trong cửa sổ trình duyệt vừa mở.",
                 usable_width,
             ) {
                 lines.push(Line::from(line.into_owned()));
             }
-            for line in wrap("Then return here and select \"I finished\".", usable_width) {
+            for line in wrap("Sau đó quay lại đây và chọn \"Tôi đã xong\".", usable_width) {
                 lines.push(Line::from(line.into_owned()));
             }
         } else {
             for line in wrap(
-                "Complete app setup on ChatGPT in the browser window that just opened.",
+                "Hoàn tất thiết lập ứng dụng trên ChatGPT trong cửa sổ trình duyệt vừa mở.",
                 usable_width,
             ) {
                 lines.push(Line::from(line.into_owned()));
             }
             for line in wrap(
-                "Sign in there if needed, then return here and select \"I already Installed it\".",
+                "Đăng nhập ở đó nếu cần, rồi quay lại đây và chọn \"Tôi đã cài đặt rồi\".",
                 usable_width,
             ) {
                 lines.push(Line::from(line.into_owned()));
@@ -964,7 +964,7 @@ mod tests {
                 app_id: "payment-123".to_string(),
                 title: "Action required".to_string(),
                 description: Some("Server: payments".to_string()),
-                instructions: "Complete the requested action in your browser, then return here."
+                instructions: "Hoàn tất hành động được yêu cầu trong trình duyệt, rồi quay lại đây."
                     .to_string(),
                 url: "https://payments.example/checkout/123".to_string(),
                 is_installed: true,
@@ -1645,7 +1645,7 @@ mod tests {
                 app_id: "connector_google_calendar".to_string(),
                 title: "Google Calendar".to_string(),
                 description: None,
-                instructions: "Sign in to this app in your browser, then return here.".to_string(),
+                instructions: "Đăng nhập vào ứng dụng này trong trình duyệt, rồi quay lại đây.".to_string(),
                 url: "https://chatgpt.com/apps/google-calendar/connector_google_calendar"
                     .to_string(),
                 is_installed: true,

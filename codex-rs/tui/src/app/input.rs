@@ -90,7 +90,7 @@ impl App {
             Err(external_editor::EditorError::MissingEditor) => {
                 self.chat_widget
                     .add_to_history(history_cell::new_error_event(
-                    "Cannot open external editor: set $VISUAL or $EDITOR before starting Codex."
+                    "Không thể mở trình soạn thảo ngoài: hãy đặt $VISUAL hoặc $EDITOR trước khi khởi động Codex."
                         .to_string(),
                 ));
                 self.reset_external_editor_state(tui);
@@ -99,7 +99,7 @@ impl App {
             Err(err) => {
                 self.chat_widget
                     .add_to_history(history_cell::new_error_event(format!(
-                        "Failed to open editor: {err}",
+                        "Không thể mở trình soạn thảo: {err}",
                     )));
                 self.reset_external_editor_state(tui);
                 return;
@@ -121,7 +121,7 @@ impl App {
             Err(err) => {
                 self.chat_widget
                     .add_to_history(history_cell::new_error_event(format!(
-                        "Failed to open editor: {err}",
+                        "Không thể mở trình soạn thảo: {err}",
                     )));
             }
         }
@@ -228,7 +228,7 @@ impl App {
         {
             if let Err(err) = self.toggle_side_conversation(tui, app_server).await {
                 self.chat_widget
-                    .add_error_message(format!("Failed to switch side conversation: {err}"));
+                    .add_error_message(format!("Không thể chuyển cuộc trò chuyện phụ: {err}"));
             }
             return;
         }

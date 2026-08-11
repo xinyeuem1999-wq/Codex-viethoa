@@ -957,7 +957,7 @@ impl BottomPane {
         self.request_redraw();
     }
 
-    /// Update the status indicator header (defaults to "Working") and details below it.
+    /// Update the status indicator header (defaults to "Đang xử lý") and details below it.
     ///
     /// Passing `None` clears any existing details. Returns whether the active status indicator
     /// was updated and requested a redraw.
@@ -1495,7 +1495,7 @@ impl BottomPane {
         self.pause_status_timer_for_modal();
         self.set_composer_input_enabled(
             /*enabled*/ false,
-            Some("Answer the questions to continue.".to_string()),
+            Some("Trả lời các câu hỏi để tiếp tục.".to_string()),
         );
         self.push_view(Box::new(modal));
     }
@@ -1536,10 +1536,10 @@ impl BottomPane {
                     description: None,
                     instructions: match suggestion_type {
                         AppLinkSuggestionType::Install => {
-                            "Install this app in your browser, then return here.".to_string()
+                            "Cài đặt ứng dụng này trong trình duyệt, rồi quay lại đây.".to_string()
                         }
                         AppLinkSuggestionType::Enable => {
-                            "Enable this app to use it for the current request.".to_string()
+                            "Bật ứng dụng này để dùng cho yêu cầu hiện tại.".to_string()
                         }
                         AppLinkSuggestionType::Auth => unreachable!(
                             "auth uses URL mode elicitation, not tool suggestion forms"
@@ -1565,7 +1565,7 @@ impl BottomPane {
             self.pause_status_timer_for_modal();
             self.set_composer_input_enabled(
                 /*enabled*/ false,
-                Some("Respond to the tool suggestion to continue.".to_string()),
+                Some("Phản hồi đề xuất công cụ để tiếp tục.".to_string()),
             );
             self.push_view(Box::new(view));
             return;
@@ -1582,7 +1582,7 @@ impl BottomPane {
         self.pause_status_timer_for_modal();
         self.set_composer_input_enabled(
             /*enabled*/ false,
-            Some("Respond to the MCP server request to continue.".to_string()),
+            Some("Phản hồi yêu cầu máy chủ MCP để tiếp tục.".to_string()),
         );
         self.push_view(Box::new(modal));
     }
@@ -2114,7 +2114,7 @@ mod tests {
             r0.push(buf[(x, 0)].symbol().chars().next().unwrap_or(' '));
         }
         assert!(
-            !r0.contains("Working"),
+            !r0.contains("Đang xử lý"),
             "overlay should not render above modal"
         );
     }
@@ -2381,7 +2381,7 @@ mod tests {
             row0.push(buf[(x, 0)].symbol().chars().next().unwrap_or(' '));
         }
         assert!(
-            row0.contains("Working"),
+            row0.contains("Đang xử lý"),
             "expected Working header after denial on row 0: {row0:?}"
         );
 
@@ -2530,7 +2530,7 @@ mod tests {
 
         pane.set_task_running(/*running*/ true);
         pane.update_status(
-            "Working".to_string(),
+            "Đang xử lý".to_string(),
             Some("First detail line\nSecond detail line".to_string()),
             StatusDetailsCapitalization::CapitalizeFirst,
             STATUS_DETAILS_DEFAULT_MAX_LINES,

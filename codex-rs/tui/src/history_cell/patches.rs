@@ -39,7 +39,7 @@ pub(crate) fn new_patch_apply_failure(stderr: String) -> PlainHistoryCell {
     let mut lines: Vec<Line<'static>> = Vec::new();
 
     // Failure title
-    lines.push(Line::from("✘ Failed to apply patch".magenta().bold()));
+    lines.push(Line::from("✘ Không áp được bản vá".magenta().bold()));
 
     if !stderr.trim().is_empty() {
         let output = output_lines(

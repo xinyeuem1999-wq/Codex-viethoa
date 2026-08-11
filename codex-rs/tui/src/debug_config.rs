@@ -126,7 +126,7 @@ fn render_debug_config_lines(
     let mut lines = vec!["/debug-config".magenta().into(), "".into()];
 
     lines.push(
-        "Config layer stack (lowest precedence first):"
+        "Ngăn xếp lớp cấu hình (thứ tự ưu tiên thấp nhất trước):"
             .bold()
             .into(),
     );
@@ -512,7 +512,7 @@ fn requirement_line(
     let source = source
         .map(ToString::to_string)
         .unwrap_or_else(|| "<unspecified>".to_string());
-    format!("  - {name}: {value} (source: {source})").into()
+    format!("  - {name}: {value} (nguồn: {source})").into()
 }
 
 fn join_or_empty(values: Vec<String>) -> String {

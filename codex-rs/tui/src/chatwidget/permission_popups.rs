@@ -61,7 +61,7 @@ impl ChatWidget {
                 preset.label.to_string()
             };
             let base_description =
-                Some(preset.description.replace(" (Identical to Agent mode)", ""));
+                Some(preset.description.replace(" (Giống chế độ Agent)", ""));
             let approval_disabled_reason = match self
                 .config
                 .permissions
@@ -142,7 +142,7 @@ impl ChatWidget {
 
         let footer_note = show_elevate_sandbox_hint.then(|| {
             vec![
-                "The non-admin sandbox protects your files and prevents network access under most circumstances. However, it carries greater risk if prompt injected. To upgrade to the default sandbox, run ".dim(),
+                "Sandbox không phải quản trị viên bảo vệ file của bạn và chặn truy cập mạng trong hầu hết trường hợp. Tuy nhiên, nó tiềm ẩn rủi ro lớn hơn nếu bị prompt injection. Để nâng cấp lên sandbox mặc định, chạy ".dim(),
                 "/setup-default-sandbox".cyan(),
                 ".".dim(),
             ]
@@ -162,13 +162,13 @@ impl ChatWidget {
     pub(crate) fn open_auto_review_denials_popup(&mut self) {
         if self.review.recent_auto_review_denials.is_empty() {
             self.add_info_message(
-                "No recent auto-review denials in this thread.".to_string(),
-                Some("Denials are recorded after auto-review rejects an action.".to_string()),
+                "Không có lượt từ chối tự động đánh giá gần đây trong chuỗi hội thoại này.".to_string(),
+                Some("Các lượt từ chối được ghi lại sau khi tính năng tự động đánh giá bác bỏ một hành động.".to_string()),
             );
             return;
         }
         let Some(thread_id) = self.thread_id() else {
-            self.add_error_message("That thread is no longer available.".to_string());
+            self.add_error_message("Chuỗi hội thoại đó không còn khả dụng.".to_string());
             return;
         };
 
@@ -189,7 +189,7 @@ impl ChatWidget {
                     let rationale = event
                         .rationale
                         .as_deref()
-                        .unwrap_or("Auto-review did not include a rationale.");
+                        .unwrap_or("Tự động đánh giá không kèm lý do.");
                     SelectionItem {
                         name: summary.clone(),
                         description: Some(rationale.to_string()),
@@ -209,7 +209,7 @@ impl ChatWidget {
 
         self.bottom_pane.show_selection_view(SelectionViewParams {
             title: Some("Auto-review Denials".to_string()),
-            subtitle: Some("Select a denied action to approve.".to_string()),
+            subtitle: Some("Chọn một hành động bị từ chối để phê duyệt.".to_string()),
             footer_hint: Some(standard_popup_hint_line()),
             items,
             is_searchable: true,
@@ -221,7 +221,7 @@ impl ChatWidget {
 
     pub(crate) fn approve_recent_auto_review_denial(&mut self, thread_id: ThreadId, id: String) {
         let Some(event) = self.review.recent_auto_review_denials.take(&id) else {
-            self.add_error_message("That auto-review denial is no longer available.".to_string());
+            self.add_error_message("Lượt từ chối tự động đánh giá đó không còn khả dụng.".to_string());
             return;
         };
 
@@ -230,9 +230,9 @@ impl ChatWidget {
             op: AppCommand::approve_guardian_denied_action(event),
         });
         self.add_info_message(
-            "Approval recorded for one retry of the selected auto-review denial.".to_string(),
+            "Đã ghi nhận phê duyệt cho một lần thử lại của lượt từ chối tự động đánh giá đã chọn.".to_string(),
             Some(
-                "The model will see the approval context; the retry still goes through auto-review."
+                "Model sẽ thấy ngữ cảnh phê duyệt; lượt thử lại vẫn trải qua tự động đánh giá."
                     .to_string(),
             ),
         );
@@ -267,7 +267,7 @@ impl ChatWidget {
             tx.send(AppEvent::UpdateApprovalsReviewer(approvals_reviewer));
             tx.send(AppEvent::InsertHistoryCell(Box::new(
                 history_cell::new_info_event(
-                    format!("Permissions updated to {label}"),
+                    format!("Quyền đã cập nhật thành {label}"),
                     /*hint*/ None,
                 ),
             )));
@@ -416,27 +416,27 @@ impl ChatWidget {
         let title_line = Line::from("Enable full access?").bold();
         let info_lines = if is_cyber_model {
             let recommendation = if auto_review_available(&self.config) {
-                "We strongly recommend selecting \"Approve for me\" instead, and customizing the reviewer policy for your use case."
+                "Chúng tôi khuyên bạn nên chọn \"Phê duyệt giúp tôi\" thay vào đó và tùy chỉnh chính sách người đánh giá theo nhu cầu của bạn."
             } else {
-                "We strongly recommend selecting \"Ask for approval\" instead."
+                "Chúng tôi khuyên bạn nên chọn \"Hỏi xin phê duyệt\" thay vào đó."
             };
             vec![
                 Line::default(),
                 Line::from(
-                    "When Codex runs with full access, it can edit any file on your computer and run commands with network, without your approval.",
+                    "Khi Codex chạy với toàn quyền truy cập, nó có thể chỉnh sửa mọi file trên máy tính và chạy lệnh có mạng mà không cần sự phê duyệt của bạn.",
                 ),
                 Line::default(),
                 Line::from(vec![
-                    "Cyber models carry a higher risk of dangerous actions.".red(),
-                    " Ensure proper safeguards are in place before granting full access. ".into(),
+                    "Các model Cyber tiềm ẩn rủi ro hành động nguy hiểm cao hơn.".red(),
+                    " Hãy đảm bảo có biện pháp bảo vệ phù hợp trước khi cấp toàn quyền truy cập. ".into(),
                     recommendation.into(),
                 ]),
             ]
         } else {
             vec![Line::from(vec![
-                "When Codex runs with full access, it can edit any file on your computer and run commands with network, without your approval. "
+                "Khi Codex chạy với toàn quyền truy cập, nó có thể chỉnh sửa mọi file trên máy tính và chạy lệnh có mạng mà không cần sự phê duyệt của bạn. "
                     .into(),
-                "Exercise caution when enabling full access. This significantly increases the risk of data loss, leaks, or unexpected behavior."
+                "Hãy thận trọng khi bật toàn quyền truy cập. Điều này làm tăng đáng kể rủi ro mất dữ liệu, rò rỉ hoặc hành vi bất ngờ."
                     .red(),
             ])]
         };
@@ -471,7 +471,7 @@ impl ChatWidget {
         let items = vec![
             SelectionItem {
                 name: "Yes, continue anyway".to_string(),
-                description: Some("Apply full access for this session".to_string()),
+                description: Some("Áp dụng toàn quyền truy cập cho phiên này".to_string()),
                 actions: accept_actions,
                 dismiss_on_select: true,
                 ..Default::default()

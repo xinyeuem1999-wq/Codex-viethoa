@@ -93,9 +93,9 @@ impl WidgetRef for &WelcomeWidget {
         }
         lines.push(Line::from(vec![
             "  ".into(),
-            "Welcome to ".into(),
+            "Chào mừng đến với ".into(),
             "Codex".bold(),
-            ", OpenAI's command-line coding agent".into(),
+            ", trợ lý lập trình dòng lệnh của OpenAI".into(),
         ]));
 
         Paragraph::new(lines)
@@ -148,7 +148,7 @@ mod tests {
         let frame_lines = widget.animation.current_frame().lines().count() as u16;
         (&widget).render_ref(area, &mut buf);
 
-        let welcome_row = row_containing(&buf, "Welcome");
+        let welcome_row = row_containing(&buf, "Chào mừng");
         assert_eq!(welcome_row, Some(frame_lines + 1));
     }
 
@@ -163,7 +163,7 @@ mod tests {
         let mut buf = Buffer::empty(area);
         (&widget).render_ref(area, &mut buf);
 
-        let welcome_row = row_containing(&buf, "Welcome");
+        let welcome_row = row_containing(&buf, "Chào mừng");
         assert_eq!(welcome_row, Some(0));
     }
 

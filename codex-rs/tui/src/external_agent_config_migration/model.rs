@@ -40,7 +40,7 @@ pub(crate) fn external_agent_config_migration_groups(
     if !tools_and_setup.is_empty() {
         groups.push(ExternalAgentConfigMigrationGroupModel {
             label: "Tools & setup".to_string(),
-            description: "Settings, instructions, integrations, agents, commands, and skills",
+            description: "Cài đặt, hướng dẫn, tích hợp, tác tử, lệnh và skills",
             item_indices: tools_and_setup,
         });
     }
@@ -56,7 +56,7 @@ pub(crate) fn external_agent_config_migration_groups(
             } else {
                 format!("Projects ({project_count})")
             },
-            description: "Add Codex files alongside your existing project files",
+            description: "Thêm các tệp Codex bên cạnh các tệp dự án hiện có của bạn",
             item_indices: projects,
         });
     }
@@ -67,8 +67,8 @@ pub(crate) fn external_agent_config_migration_groups(
             .map(|details| details.sessions.len())
             .sum::<usize>();
         groups.push(ExternalAgentConfigMigrationGroupModel {
-            label: format!("Chat sessions ({session_count})"),
-            description: "Last 30 days of chats",
+            label: format!("Phiên trò chuyện ({session_count})"),
+            description: "30 ngày trò chuyện gần nhất",
             item_indices: chat_sessions,
         });
     }

@@ -52,17 +52,17 @@ use codex_protocol::user_input::TextElement;
 use unicode_width::UnicodeWidthStr;
 
 const NOTES_PLACEHOLDER: &str = "Add notes";
-const ANSWER_PLACEHOLDER: &str = "Type your answer (optional)";
+const ANSWER_PLACEHOLDER: &str = "Nhập câu trả lời của bạn (tùy chọn)";
 // Keep in sync with ChatComposer's minimum composer height.
 const MIN_COMPOSER_HEIGHT: u16 = 3;
-const SELECT_OPTION_PLACEHOLDER: &str = "Select an option to add notes";
+const SELECT_OPTION_PLACEHOLDER: &str = "Chọn một tùy chọn để thêm ghi chú";
 pub(super) const TIP_SEPARATOR: &str = " | ";
 pub(super) const DESIRED_SPACERS_BETWEEN_SECTIONS: u16 = 2;
-const OTHER_OPTION_LABEL: &str = "None of the above";
-const OTHER_OPTION_DESCRIPTION: &str = "Optionally, add details in notes (tab).";
-const UNANSWERED_CONFIRM_TITLE: &str = "Submit with unanswered questions?";
+const OTHER_OPTION_LABEL: &str = "Không tùy chọn nào ở trên";
+const OTHER_OPTION_DESCRIPTION: &str = "Tùy chọn, thêm chi tiết vào ghi chú (tab).";
+const UNANSWERED_CONFIRM_TITLE: &str = "Gửi với các câu hỏi chưa được trả lời?";
 const UNANSWERED_CONFIRM_GO_BACK: &str = "Go back";
-const UNANSWERED_CONFIRM_GO_BACK_DESC: &str = "Return to the first unanswered question.";
+const UNANSWERED_CONFIRM_GO_BACK_DESC: &str = "Quay lại câu hỏi chưa trả lời đầu tiên.";
 const UNANSWERED_CONFIRM_SUBMIT: &str = "Proceed";
 const UNANSWERED_CONFIRM_SUBMIT_DESC_SINGULAR: &str = "question";
 const UNANSWERED_CONFIRM_SUBMIT_DESC_PLURAL: &str = "questions";
@@ -989,7 +989,7 @@ impl RequestUserInputOverlay {
         } else {
             UNANSWERED_CONFIRM_SUBMIT_DESC_PLURAL
         };
-        format!("Submit with {count} unanswered {suffix}.")
+        format!("Gửi với {count} {suffix} chưa trả lời.")
     }
 
     fn first_unanswered_index(&self) -> Option<usize> {
@@ -1689,7 +1689,7 @@ mod tests {
                     description: "Select this when you specifically want to verify that navigating downward will keep the currently highlighted option visible, even when previous options consume many wrapped lines and would otherwise push the selection out of the viewport.".to_string(),
                 },
                 ToolRequestUserInputOption {
-                    label: "None of the above".to_string(),
+                    label: "Không tùy chọn nào ở trên".to_string(),
                     description:
                         "Use this only if the previous long-form options do not apply.".to_string(),
                 },
@@ -3250,7 +3250,7 @@ mod tests {
 
         let rows = overlay.option_rows();
         let other_row = rows.last().expect("expected none-of-the-above row");
-        assert_eq!(other_row.name, "  4. None of the above");
+        assert_eq!(other_row.name, "  4. Không tùy chọn nào ở trên");
         assert_eq!(
             other_row.description.as_deref(),
             Some(OTHER_OPTION_DESCRIPTION)
@@ -3752,7 +3752,7 @@ mod tests {
           Question 1/1 (1 unanswered)
           Share details.
 
-          › Type your answer (optional)
+          › Nhập câu trả lời của bạn (tùy chọn)
 
 
 

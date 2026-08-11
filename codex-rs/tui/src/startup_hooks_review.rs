@@ -54,7 +54,7 @@ pub(crate) async fn load_startup_hooks_review_entry(
     let response = match fetch_hooks_list(request_handle, cwd.clone()).await {
         Ok(response) => response,
         Err(err) => {
-            tracing::warn!("failed to load startup hook review state: {err:#}");
+            tracing::warn!("không tải được trạng thái xem xét hook khởi động: {err:#}");
             return HooksListEntry {
                 cwd,
                 hooks: Vec::new(),
@@ -161,7 +161,7 @@ async fn run_startup_hooks_review_app(
                         .await
                         .map(|_| ())
                         .map_err(|err| {
-                            format!("Failed to trust hooks: {}", format_config_error(&err))
+                            format!("Không tin tưởng được các hook: {}", format_config_error(&err))
                         });
                         match result {
                             Ok(()) => return Ok(StartupHooksReviewOutcome::Continue),
@@ -221,27 +221,27 @@ fn selection_view_params(
 ) -> SelectionViewParams {
     let count = review_needed_count(entry);
     let count_line = match count {
-        1 => "1 hook is new or changed.".to_string(),
-        count => format!("{count} hooks are new or changed."),
+        1 => "1 hook mới hoặc đã thay đổi.".to_string(),
+        count => format!("{count} hook mới hoặc đã thay đổi."),
     };
     let mut header = ColumnRenderable::new();
-    header.push(Line::from("Hooks need review".bold()));
+    header.push(Line::from("Cần xem xét các hook".bold()));
     header.push(Line::from(count_line).yellow());
     header.push(Line::from(
-        "Hooks can run outside the sandbox after you trust them.".dim(),
+        "Các hook có thể chạy bên ngoài sandbox sau khi bạn tin tưởng chúng.".dim(),
     ));
     if let Some(error) = trust_all_error {
         header.push(Paragraph::new(Line::from(error.to_string()).red()).wrap(Wrap { trim: false }));
     } else if trusting_all {
-        header.push(Line::from("Trusting hooks...".dim()));
+        header.push(Line::from("Đang tin tưởng các hook...".dim()));
     }
 
     SelectionViewParams {
         footer_hint: Some(standard_popup_hint_line_for_keymap(&keymap.list)),
         items: vec![
-            selection_item("Review hooks", trusting_all),
-            selection_item("Trust all and continue", trusting_all),
-            selection_item("Continue without trusting (hooks won't run)", trusting_all),
+            selection_item("Xem xét các hook", trusting_all),
+            selection_item("Tin tưởng tất cả và tiếp tục", trusting_all),
+            selection_item("Tiếp tục mà không tin tưởng (hook sẽ không chạy)", trusting_all),
         ],
         header: Box::new(header),
         ..Default::default()

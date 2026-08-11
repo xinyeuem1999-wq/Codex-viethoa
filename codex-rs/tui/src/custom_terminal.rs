@@ -158,13 +158,13 @@ where
     fn drop(&mut self) {
         // Attempt to restore the cursor state
         if let Err(err) = self.reset_cursor_style() {
-            eprintln!("Failed to reset the cursor style: {err}");
+            eprintln!("Không thể đặt lại kiểu con trỏ: {err}");
         }
 
         if self.hidden_cursor
             && let Err(err) = self.show_cursor()
         {
-            eprintln!("Failed to show the cursor: {err}");
+            eprintln!("Không thể hiển thị con trỏ: {err}");
         }
     }
 }
@@ -1049,7 +1049,7 @@ mod tests {
                 Paragraph::new(vec![
                     Line::from(vec!["  ".into(), auth_url.as_str().cyan().underlined()]),
                     "".into(),
-                    "  Press Esc to cancel".into(),
+                    "  Nhấn Esc để hủy".into(),
                 ])
                 .wrap(Wrap { trim: false })
                 .render(area, frame.buffer_mut());

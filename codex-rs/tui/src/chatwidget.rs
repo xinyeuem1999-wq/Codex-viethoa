@@ -182,25 +182,25 @@ use tracing::debug;
 use tracing::warn;
 
 const DEFAULT_MODEL_DISPLAY_NAME: &str = "loading";
-const MULTI_AGENT_ENABLE_TITLE: &str = "Enable subagents?";
-const MULTI_AGENT_ENABLE_YES: &str = "Yes, enable";
-const MULTI_AGENT_ENABLE_NO: &str = "Not now";
-const MULTI_AGENT_ENABLE_NOTICE: &str = "Subagents will be enabled in the next session.";
-const TRUSTED_ACCESS_FOR_CYBER_VERIFICATION_WARNING: &str = "Your conversations have multiple flags for possible cybersecurity risk. Responses may take longer because extra safety checks are on. To get authorized for security work, join the Trusted Access for Cyber program: https://chatgpt.com/cyber";
+const MULTI_AGENT_ENABLE_TITLE: &str = "Bật subagents?";
+const MULTI_AGENT_ENABLE_YES: &str = "Có, bật";
+const MULTI_AGENT_ENABLE_NO: &str = "Để sau";
+const MULTI_AGENT_ENABLE_NOTICE: &str = "Subagents sẽ được bật trong phiên tiếp theo.";
+const TRUSTED_ACCESS_FOR_CYBER_VERIFICATION_WARNING: &str = "Cuộc trò chuyện của bạn có nhiều cờ về nguy cơ an ninh mạng tiềm ẩn. Phản hồi có thể mất nhiều thời gian hơn vì các kiểm tra an toàn bổ sung đang bật. Để được cấp quyền làm việc bảo mật, hãy tham gia chương trình Trusted Access for Cyber: https://chatgpt.com/cyber";
 const MEMORIES_DOC_URL: &str = "https://developers.openai.com/codex/memories";
-const MEMORIES_ENABLE_TITLE: &str = "Enable memories?";
-const MEMORIES_ENABLE_YES: &str = "Yes, enable";
-const MEMORIES_ENABLE_NO: &str = "Not now";
-const MEMORIES_ENABLE_NOTICE: &str = "Memories will be enabled in the next session.";
-const PLAN_MODE_REASONING_SCOPE_TITLE: &str = "Apply reasoning change";
-const PLAN_MODE_REASONING_SCOPE_PLAN_ONLY: &str = "Apply to Plan mode override";
-const PLAN_MODE_REASONING_SCOPE_ALL_MODES: &str = "Apply to global default and Plan mode override";
+const MEMORIES_ENABLE_TITLE: &str = "Bật memories?";
+const MEMORIES_ENABLE_YES: &str = "Có, bật";
+const MEMORIES_ENABLE_NO: &str = "Để sau";
+const MEMORIES_ENABLE_NOTICE: &str = "Memories sẽ được bật trong phiên tiếp theo.";
+const PLAN_MODE_REASONING_SCOPE_TITLE: &str = "Áp dụng thay đổi suy luận";
+const PLAN_MODE_REASONING_SCOPE_PLAN_ONLY: &str = "Áp dụng cho ghi đè chế độ Plan";
+const PLAN_MODE_REASONING_SCOPE_ALL_MODES: &str = "Áp dụng cho mặc định toàn cục và ghi đè chế độ Plan";
 const CONNECTORS_SELECTION_VIEW_ID: &str = "connectors-selection";
 const PET_SELECTION_LOADING_VIEW_ID: &str = "pet-selection-loading";
 const AMBIENT_PET_WRAP_GAP_COLUMNS: u16 = 2;
-const TUI_STUB_MESSAGE: &str = "Not available in TUI yet.";
+const TUI_STUB_MESSAGE: &str = "Chưa khả dụng trong TUI.";
 const PARENT_OWNED_INPUT_MESSAGE: &str =
-    "This sub-agent is controlled by its parent. Direct input is disabled.";
+    "Sub-agent này được kiểm soát bởi sub-agent cha. Đầu vào trực tiếp bị tắt.";
 
 /// Choose the keybinding used to edit the most-recently queued message.
 ///
@@ -483,11 +483,11 @@ use codex_utils_approval_presets::builtin_approval_presets;
 use strum::IntoEnumIterator;
 use unicode_segmentation::UnicodeSegmentation;
 
-const USER_SHELL_COMMAND_HELP_TITLE: &str = "Prefix a command with ! to run it locally";
+const USER_SHELL_COMMAND_HELP_TITLE: &str = "Thêm tiền tố ! vào lệnh để chạy cục bộ";
 const USER_SHELL_COMMAND_HELP_HINT: &str = "Example: !ls";
 const ASK_FOR_APPROVAL_LABEL: &str = "Ask for approval";
 const APPROVE_FOR_ME_LABEL: &str = "Approve for me";
-const AUTO_REVIEW_DESCRIPTION: &str = "Only ask for actions detected as potentially unsafe.";
+const AUTO_REVIEW_DESCRIPTION: &str = "Chỉ hỏi cho các hành động được phát hiện là có khả năng không an toàn.";
 const DEFAULT_OPENAI_BASE_URL: &str = "https://api.openai.com/v1";
 const DEFAULT_STATUS_LINE_ITEMS: [&str; 2] = ["model-with-reasoning", "current-dir"];
 
@@ -1056,7 +1056,7 @@ impl ChatWidget {
             SelectionItem {
                 name: MULTI_AGENT_ENABLE_YES.to_string(),
                 description: Some(
-                    "Save the setting now. You will need a new session to use it.".to_string(),
+                    "Lưu cài đặt ngay bây giờ. Bạn sẽ cần một phiên mới để sử dụng.".to_string(),
                 ),
                 actions: vec![Box::new(|tx| {
                     tx.send(AppEvent::UpdateFeatureFlags {
@@ -1079,7 +1079,7 @@ impl ChatWidget {
 
         self.bottom_pane.show_selection_view(SelectionViewParams {
             title: Some(MULTI_AGENT_ENABLE_TITLE.to_string()),
-            subtitle: Some("Subagents are currently disabled in your config.".to_string()),
+            subtitle: Some("Subagents hiện đang bị tắt trong cấu hình của bạn.".to_string()),
             footer_hint: Some(standard_popup_hint_line()),
             items,
             ..Default::default()
@@ -1106,7 +1106,7 @@ impl ChatWidget {
             SelectionItem {
                 name: MEMORIES_ENABLE_YES.to_string(),
                 description: Some(
-                    "Save the setting now. You will need a new session to use it.".to_string(),
+                    "Lưu cài đặt ngay bây giờ. Bạn sẽ cần một phiên mới để sử dụng.".to_string(),
                 ),
                 actions: vec![Box::new(|tx| {
                     tx.send(AppEvent::UpdateFeatureFlags {
@@ -1126,7 +1126,7 @@ impl ChatWidget {
 
         self.bottom_pane.show_selection_view(SelectionViewParams {
             title: Some(MEMORIES_ENABLE_TITLE.to_string()),
-            subtitle: Some("Memories are currently disabled in your config.".to_string()),
+            subtitle: Some("Memories hiện đang bị tắt trong cấu hình của bạn.".to_string()),
             footer_note: Some(Line::from(vec![
                 "Learn more: ".dim(),
                 MEMORIES_DOC_URL.cyan().underlined(),
@@ -1258,7 +1258,7 @@ impl ChatWidget {
             self.bottom_pane.set_task_running(/*running*/ true);
         }
         self.review.is_review_mode = true;
-        let banner = format!(">> Code review started: {hint} <<");
+        let banner = format!(">> Đã bắt đầu đánh giá code: {hint} <<");
         self.add_to_history(history_cell::new_review_status_line(banner));
         self.request_redraw();
     }
@@ -1429,7 +1429,7 @@ impl ChatWidget {
         self.unified_exec_processes.clear();
         self.sync_unified_exec_footer();
         self.add_info_message(
-            "Stopping all background terminals.".to_string(),
+            "Đang dừng tất cả terminal nền.".to_string(),
             /*hint*/ None,
         );
     }
@@ -1521,11 +1521,11 @@ impl ChatWidget {
     fn rename_confirmation_cell(name: &str, thread_id: Option<ThreadId>) -> PlainHistoryCell {
         let mut line = vec![
             "• ".into(),
-            "Session renamed to ".into(),
+            "Đã đổi tên phiên thành ".into(),
             name.to_string().cyan(),
         ];
         if let Some(hint) = resume_hint(Some(name), thread_id) {
-            line.extend([". To resume this session run ".into(), hint.cyan()]);
+            line.extend([". Để tiếp tục phiên này, chạy ".into(), hint.cyan()]);
         }
         PlainHistoryCell::new(vec![line.into()])
     }
@@ -1617,9 +1617,9 @@ impl ChatWidget {
 
     pub(crate) fn raw_output_mode_notice(enabled: bool) -> &'static str {
         if enabled {
-            "Raw output mode on: transcript text is shown for clean terminal selection."
+            "Chế độ đầu ra thô đang bật: văn bản phiên được hiển thị để chọn terminal sạch."
         } else {
-            "Raw output mode off: rich transcript rendering restored."
+            "Chế độ đầu ra thô đã tắt: hiển thị phiên phong phú đã được khôi phục."
         }
     }
 
@@ -1980,17 +1980,17 @@ const PLACEHOLDERS: [&str; 8] = [
     "Explain this codebase",
     "Summarize recent commits",
     "Implement {feature}",
-    "Find and fix a bug in @filename",
-    "Write tests for @filename",
-    "Improve documentation in @filename",
-    "Run /review on my current changes",
-    "Use /skills to list available skills",
+    "Tìm và sửa lỗi trong @filename",
+    "Viết test cho @filename",
+    "Cải thiện tài liệu trong @filename",
+    "Chạy /review trên các thay đổi hiện tại của tôi",
+    "Dùng /skills để liệt kê các skill khả dụng",
 ];
 
 const SIDE_PLACEHOLDERS: [&str; 3] = [
-    "Check recently modified functions for compatibility",
-    "How many files have been modified?",
-    "Will this algorithm scale well?",
+    "Kiểm tra các hàm được sửa gần đây về tính tương thích",
+    "Có bao nhiêu tệp đã được sửa?",
+    "Thuật toán này có mở rộng tốt không?",
 ];
 
 // Extract the first bold (Markdown) element in the form **...** from `s`.

@@ -278,24 +278,24 @@ fn gutter() -> Span<'static> {
 fn feedback_title_and_placeholder(category: FeedbackCategory) -> (String, String) {
     match category {
         FeedbackCategory::BadResult => (
-            "Tell us more (bad result)".to_string(),
-            "(optional) Write a short description to help us further".to_string(),
+            "Kể thêm cho chúng tôi (kết quả tệ)".to_string(),
+            "(tùy chọn) Viết mô tả ngắn để giúp chúng tôi tốt hơn".to_string(),
         ),
         FeedbackCategory::GoodResult => (
-            "Tell us more (good result)".to_string(),
-            "(optional) Write a short description to help us further".to_string(),
+            "Kể thêm cho chúng tôi (kết quả tốt)".to_string(),
+            "(tùy chọn) Viết mô tả ngắn để giúp chúng tôi tốt hơn".to_string(),
         ),
         FeedbackCategory::Bug => (
-            "Tell us more (bug)".to_string(),
-            "(optional) Write a short description to help us further".to_string(),
+            "Kể thêm cho chúng tôi (lỗi)".to_string(),
+            "(tùy chọn) Viết mô tả ngắn để giúp chúng tôi tốt hơn".to_string(),
         ),
         FeedbackCategory::SafetyCheck => (
-            "Tell us more (safety check)".to_string(),
-            "(optional) Share what was refused and why it should have been allowed".to_string(),
+            "Kể thêm cho chúng tôi (kiểm tra an toàn)".to_string(),
+            "(tùy chọn) Chia sẻ điều gì đã bị từ chối và vì sao nó nên được cho phép".to_string(),
         ),
         FeedbackCategory::Other => (
-            "Tell us more (other)".to_string(),
-            "(optional) Write a short description to help us further".to_string(),
+            "Kể thêm cho chúng tôi (khác)".to_string(),
+            "(tùy chọn) Viết mô tả ngắn để giúp chúng tôi tốt hơn".to_string(),
         ),
     }
 }
@@ -324,10 +324,10 @@ pub(crate) fn feedback_success_cell(
     let issue_url = issue_url_for_category(category, thread_id, feedback_audience);
     let mut lines = vec![Line::from(match issue_url.as_ref() {
         Some(_) if feedback_audience == FeedbackAudience::OpenAiEmployee => {
-            format!("{prefix} Please report this in #codex-feedback:")
+            format!("{prefix} Vui lòng báo cáo điều này trong #codex-feedback:")
         }
-        Some(_) => format!("{prefix} Please open an issue using the following URL:"),
-        None => format!("{prefix} Thanks for the feedback!"),
+        Some(_) => format!("{prefix} Vui lòng mở một issue bằng URL sau:"),
+        None => format!("{prefix} Cảm ơn phản hồi của bạn!"),
     })];
     match issue_url {
         Some(url) if feedback_audience == FeedbackAudience::OpenAiEmployee => {
@@ -335,7 +335,7 @@ pub(crate) fn feedback_success_cell(
                 "".into(),
                 Line::from(vec!["  ".into(), url.cyan().underlined()]),
                 "".into(),
-                Line::from("  Share this and add some info about your problem:"),
+                Line::from("  Chia sẻ điều này và thêm một số thông tin về vấn đề của bạn:"),
                 Line::from(vec![
                     "    ".into(),
                     format!("https://go/codex-feedback/{thread_id}").bold(),
@@ -404,13 +404,13 @@ pub(crate) fn feedback_selection_params(
             make_feedback_item(
                 app_event_tx.clone(),
                 "bug",
-                "Crash, error message, hang, or broken UI/behavior.",
+                "Sự cố, thông báo lỗi, treo, hoặc UI/hành vi hỏng.",
                 FeedbackCategory::Bug,
             ),
             make_feedback_item(
                 app_event_tx.clone(),
                 "bad result",
-                "Output was off-target, incorrect, incomplete, or unhelpful.",
+                "Đầu ra lệch mục tiêu, sai, chưa đầy đủ hoặc không hữu ích.",
                 FeedbackCategory::BadResult,
             ),
             make_feedback_item(
@@ -422,13 +422,13 @@ pub(crate) fn feedback_selection_params(
             make_feedback_item(
                 app_event_tx.clone(),
                 "safety check",
-                "Benign usage blocked due to safety checks or refusals.",
+                "Sử dụng lành tính bị chặn do kiểm tra an toàn hoặc từ chối.",
                 FeedbackCategory::SafetyCheck,
             ),
             make_feedback_item(
                 app_event_tx,
                 "other",
-                "Slowness, feature suggestion, UX feedback, or anything else.",
+                "Chậm, gợi ý tính năng, phản hồi UX hoặc bất kỳ điều gì khác.",
                 FeedbackCategory::Other,
             ),
         ],
@@ -439,8 +439,8 @@ pub(crate) fn feedback_selection_params(
 /// Build the selection popup params shown when feedback is disabled.
 pub(crate) fn feedback_disabled_params() -> super::SelectionViewParams {
     super::SelectionViewParams {
-        title: Some("Sending feedback is disabled".to_string()),
-        subtitle: Some("This action is disabled by configuration.".to_string()),
+        title: Some("Gửi phản hồi bị tắt".to_string()),
+        subtitle: Some("Hành động này bị tắt theo cấu hình.".to_string()),
         footer_hint: Some(standard_popup_hint_line()),
         items: vec![super::SelectionItem {
             name: "Close".to_string(),
@@ -505,7 +505,7 @@ pub(crate) fn feedback_upload_consent_params(
     let mut header_lines: Vec<Box<dyn crate::render::renderable::Renderable>> = vec![
         Line::from("Upload logs?".bold()).into(),
         Line::from("").into(),
-        Line::from("The following files will be sent:".dim()).into(),
+        Line::from("Các tệp sau sẽ được gửi:".dim()).into(),
         Line::from(vec!["  • ".into(), "codex-logs.log".into()]).into(),
         Line::from(vec![
             "  • ".into(),
@@ -567,7 +567,7 @@ pub(crate) fn feedback_upload_consent_params(
             super::SelectionItem {
                 name: "Yes".to_string(),
                 description: Some(
-                    "Share the current Codex session logs and diagnostics with the team for troubleshooting."
+                    "Chia sẻ nhật ký phiên Codex hiện tại và thông tin chẩn đoán với nhóm để xử lý sự cố."
                         .to_string(),
                 ),
                 actions: vec![yes_action],
@@ -901,7 +901,7 @@ mod tests {
         );
         assert_eq!(
             rendered,
-            "• Feedback uploaded. Please report this in #codex-feedback:\n\n  http://go/codex-feedback-internal\n\n  Share this and add some info about your problem:\n    https://go/codex-feedback/thread-2"
+            "• Feedback uploaded. Please report this in #codex-feedback:\n\n  http://go/codex-feedback-internal\n\n  Chia sẻ điều này và thêm một số thông tin về vấn đề của bạn:\n    https://go/codex-feedback/thread-2"
         );
     }
 

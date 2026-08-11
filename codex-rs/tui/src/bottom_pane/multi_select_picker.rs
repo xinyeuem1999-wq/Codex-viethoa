@@ -826,9 +826,9 @@ impl MultiSelectPickerBuilder {
 
         let instructions = if self.instructions.is_empty() {
             let mut spans = vec![
-                "Press ".into(),
+                "Nhấn ".into(),
                 key_hint::plain(KeyCode::Char(' ')).into(),
-                " to toggle".into(),
+                " để bật/tắt".into(),
             ];
             if self.ordering_enabled
                 && let (Some(move_left), Some(move_right)) = (
@@ -840,17 +840,17 @@ impl MultiSelectPickerBuilder {
                 spans.push(move_left.into());
                 spans.push("/".into());
                 spans.push(move_right.into());
-                spans.push(" to move".into());
+                spans.push(" để di chuyển".into());
             }
             if let Some(accept) = self.keymap.primary_hint(ListAction::Accept) {
                 spans.push("; ".into());
                 spans.push(accept.into());
-                spans.push(" to confirm and close".into());
+                spans.push(" để xác nhận và đóng".into());
             }
             if let Some(cancel) = self.keymap.primary_hint(ListAction::Cancel) {
                 spans.push("; ".into());
                 spans.push(cancel.into());
-                spans.push(" to close".into());
+                spans.push(" để đóng".into());
             }
             spans
         } else {

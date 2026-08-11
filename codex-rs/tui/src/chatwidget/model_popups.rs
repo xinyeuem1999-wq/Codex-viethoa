@@ -13,7 +13,7 @@ impl ChatWidget {
     pub(crate) fn open_model_popup(&mut self) {
         if !self.is_session_configured() {
             self.add_info_message(
-                "Model selection is disabled until startup completes.".to_string(),
+                "Việc chọn model bị tắt cho đến khi khởi động hoàn tất.".to_string(),
                 /*hint*/ None,
             );
             return;
@@ -23,7 +23,7 @@ impl ChatWidget {
             Ok(models) => models,
             Err(_) => {
                 self.add_info_message(
-                    "Models are being updated; please try /model again in a moment.".to_string(),
+                    "Các model đang được cập nhật; vui lòng thử /model lại sau giây lát.".to_string(),
                     /*hint*/ None,
                 );
                 return;
@@ -47,7 +47,7 @@ impl ChatWidget {
     fn model_menu_warning_line(&self) -> Option<Line<'static>> {
         let base_url = self.custom_openai_base_url()?;
         let warning = format!(
-            "Warning: OpenAI base URL is overridden to {base_url}. Selecting models may not be supported or work properly."
+            "Cảnh báo: URL cơ sở OpenAI bị ghi đè thành {base_url}. Việc chọn model có thể không được hỗ trợ hoặc hoạt động đúng."
         );
         Some(Line::from(warning.red()))
     }
@@ -148,7 +148,7 @@ impl ChatWidget {
 
             let is_current = !items.iter().any(|item| item.is_current);
             let description = Some(format!(
-                "Choose a specific model and reasoning level (current: {current_label})"
+                "Chọn một model cụ thể và mức suy luận (hiện tại: {current_label})"
             ));
 
             items.push(SelectionItem {
@@ -163,7 +163,7 @@ impl ChatWidget {
 
         let header = self.model_menu_header(
             "Select Model",
-            "Pick a quick auto mode or browse all models.",
+            "Chọn chế độ tự động nhanh hoặc duyệt tất cả model.",
         );
         self.bottom_pane.show_selection_view(SelectionViewParams {
             footer_hint: Some(standard_popup_hint_line()),
@@ -189,7 +189,7 @@ impl ChatWidget {
     pub(crate) fn open_all_models_popup(&mut self, presets: Vec<ModelPreset>) {
         if presets.is_empty() {
             self.add_info_message(
-                "No additional models are available right now.".to_string(),
+                "Hiện không có model bổ sung nào khả dụng.".to_string(),
                 /*hint*/ None,
             );
             return;
@@ -221,8 +221,8 @@ impl ChatWidget {
         }
 
         let header = self.model_menu_header(
-            "Select Model and Effort",
-            "Access legacy models by running codex -m <model_name> or in your config.toml",
+            "Chọn Model và Mức nỗ lực",
+            "Truy cập các model cũ bằng cách chạy codex -m <model_name> hoặc trong config.toml của bạn",
         );
         self.bottom_pane.show_selection_view(SelectionViewParams {
             footer_hint: Some(self.bottom_pane.standard_popup_hint_line()),
@@ -303,7 +303,7 @@ impl ChatWidget {
             }
             None => "the selected reasoning".to_string(),
         };
-        let plan_only_description = format!("Always use {reasoning_phrase} in Plan mode.");
+        let plan_only_description = format!("Luôn dùng {reasoning_phrase} trong chế độ Plan.");
         let plan_reasoning_source = if let Some(plan_override) =
             self.config.plan_mode_reasoning_effort.as_ref()
         {
@@ -322,15 +322,15 @@ impl ChatWidget {
                     "built-in Plan default ({})",
                     Self::reasoning_effort_sentence_label(plan_effort)
                 ),
-                None => "built-in Plan default (no reasoning)".to_string(),
+                None => "mặc định Plan tích hợp (không suy luận)".to_string(),
             }
         } else {
             "built-in Plan default".to_string()
         };
         let all_modes_description = format!(
-            "Set the global default reasoning level and the Plan mode override. This replaces the current {plan_reasoning_source}."
+            "Đặt mức suy luận mặc định toàn cục và ghi đè chế độ Plan. Thao tác này thay thế {plan_reasoning_source} hiện tại."
         );
-        let subtitle = format!("Choose where to apply {reasoning_phrase}.");
+        let subtitle = format!("Chọn nơi áp dụng {reasoning_phrase}.");
         let warning = effort
             .as_ref()
             .and_then(|effort| self.ultra_reasoning_concurrency_warning(effort));
@@ -554,7 +554,7 @@ impl ChatWidget {
 
         let mut header = ColumnRenderable::new();
         header.push(Line::from(
-            format!("Select Reasoning Level for {model_slug}").bold(),
+            format!("Chọn Mức suy luận cho {model_slug}").bold(),
         ));
 
         self.bottom_pane.show_selection_view(SelectionViewParams {
@@ -598,7 +598,7 @@ impl ChatWidget {
                 ReasoningEffortConfig::Ultra => {
                     "For demanding work using multiple agents · highest usage"
                 }
-                _ => unreachable!("advanced choices are limited to Max and Ultra"),
+                _ => unreachable!("các lựa chọn nâng cao chỉ giới hạn ở Max và Ultra"),
             };
             let should_prompt_plan_mode_scope = self
                 .should_prompt_plan_mode_reasoning_scope(model_slug.as_str(), Some(effort.clone()));

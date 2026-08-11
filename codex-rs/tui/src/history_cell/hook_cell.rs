@@ -465,7 +465,7 @@ impl HookRunCell {
                 let header_text = if let Some(first_line) =
                     system_message_lines.as_mut().and_then(Iterator::next)
                 {
-                    format!("{label} ({status_text}) says: {first_line}")
+                    format!("{label} ({status_text}) nói: {first_line}")
                 } else {
                     format!("{label} hook ({status_text})")
                 };

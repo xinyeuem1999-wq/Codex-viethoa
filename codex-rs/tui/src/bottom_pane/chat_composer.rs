@@ -321,7 +321,7 @@ const LARGE_PASTE_CHAR_THRESHOLD: usize = 1000;
 
 fn user_input_too_large_message(actual_chars: usize) -> String {
     format!(
-        "Message exceeds the maximum length of {MAX_USER_INPUT_TEXT_CHARS} characters ({actual_chars} provided)."
+        "Tin nhắn vượt quá độ dài tối đa {MAX_USER_INPUT_TEXT_CHARS} ký tự (đã nhập {actual_chars})."
     )
 }
 
@@ -1854,7 +1854,7 @@ impl ChatComposer {
     }
 
     fn next_large_paste_placeholder(&self, char_count: usize) -> String {
-        let base = format!("[Pasted Content {char_count} chars]");
+        let base = format!("[Nội dung đã dán {char_count} ký tự]");
         let prefix = format!("{base} #");
         let mut max_suffix = 0usize;
 
@@ -2922,7 +2922,7 @@ impl ChatComposer {
                 .validate_submission(&text, input_starts_with_space)
         {
             let message = format!(
-                r#"Unrecognized command '/{name}'. Type "/" for a list of supported commands."#
+                r#"Không nhận diện được lệnh '/{name}'. Gõ "/" để xem danh sách lệnh được hỗ trợ."#
             );
             self.app_event_tx.send(AppEvent::InsertHistoryCell(Box::new(
                 history_cell::new_info_event(message, /*hint*/ None),
@@ -3244,7 +3244,7 @@ impl ChatComposer {
             return false;
         }
         let message = format!(
-            "'/{}' is disabled while a task is in progress.",
+            "'/{}' bị tắt trong khi tác vụ đang chạy.",
             command.command()
         );
         self.app_event_tx.send(AppEvent::InsertHistoryCell(Box::new(
@@ -6128,7 +6128,7 @@ mod tests {
         let large = "x".repeat(LARGE_PASTE_CHAR_THRESHOLD + 5);
         composer.handle_paste(large.clone());
         let char_count = large.chars().count();
-        let placeholder = format!("[Pasted Content {char_count} chars]");
+        let placeholder = format!("[Nội dung đã dán {char_count} ký tự]");
         assert_eq!(composer.draft.textarea.text(), placeholder);
         assert_eq!(
             composer.draft.pending_pastes,

@@ -69,7 +69,7 @@ const REMOTE_LOADING_TAB_ID_PREFIX: &str = "remote-loading:";
 const REMOTE_EMPTY_TAB_ID_PREFIX: &str = "remote-empty:";
 const REMOTE_ERROR_TAB_ID_PREFIX: &str = "remote-error:";
 const OPENAI_CURATED_LOADING_DESCRIPTION: &str =
-    "This updates when OpenAI Curated plugins finish loading.";
+    "Danh sách này được cập nhật khi các plugin OpenAI Curated tải xong.";
 const WORKSPACE_SECTION_TAB_ORDER: u8 = 0;
 const SHARED_WITH_ME_SECTION_TAB_ORDER: u8 = 1;
 const SHARED_WITH_ME_LINK_SECTION_TAB_ORDER: u8 = 2;
@@ -131,7 +131,7 @@ impl MarketplaceProduct {
             Self::OpenAiCurated => Some("OpenAI Curated"),
             Self::Workspace => Some("Workspace"),
             Self::SharedWithMe => Some("Shared with me"),
-            Self::SharedWithMeLink => Some("Shared with me (link)"),
+            Self::SharedWithMeLink => Some("Được chia sẻ với tôi (liên kết)"),
             Self::Local => Some("Local"),
             Self::Other => None,
         }
@@ -170,18 +170,18 @@ const REMOTE_MARKETPLACE_SECTIONS: [RemoteMarketplaceSection; 2] = [
         id: "workspace",
         label: "Workspace",
         loading_tab_id: "workspace-loading",
-        loading_item_description: "This updates when workspace plugins finish loading.",
+        loading_item_description: "Danh sách này được cập nhật khi các plugin workspace tải xong.",
         marketplace_names: &[REMOTE_WORKSPACE_MARKETPLACE_NAME],
         show_empty_tab: true,
         empty_item_name: "No workspace plugins available",
-        empty_item_description: "No workspace directory plugins are available.",
+        empty_item_description: "Không có plugin thư mục workspace nào khả dụng.",
         tab_order: WORKSPACE_SECTION_TAB_ORDER,
     },
     RemoteMarketplaceSection {
         id: "shared-with-me",
         label: "Shared with me",
         loading_tab_id: "shared-with-me-loading",
-        loading_item_description: "This updates when shared plugins finish loading.",
+        loading_item_description: "Danh sách này được cập nhật khi các plugin được chia sẻ tải xong.",
         marketplace_names: &[
             REMOTE_WORKSPACE_SHARED_WITH_ME_MARKETPLACE_NAME,
             REMOTE_WORKSPACE_SHARED_WITH_ME_PRIVATE_MARKETPLACE_NAME,
@@ -189,7 +189,7 @@ const REMOTE_MARKETPLACE_SECTIONS: [RemoteMarketplaceSection; 2] = [
         ],
         show_empty_tab: false,
         empty_item_name: "No shared plugins available",
-        empty_item_description: "No plugins have been shared with you.",
+        empty_item_description: "Chưa có plugin nào được chia sẻ với bạn.",
         tab_order: SHARED_WITH_ME_SECTION_TAB_ORDER,
     },
 ];
@@ -345,11 +345,11 @@ impl ChatWidget {
                 self.frame_requester.clone(),
                 self.config.animations,
                 "Loading available plugins...".to_string(),
-                Some("This updates when the marketplace list is ready.".to_string()),
+                Some("Danh sách này được cập nhật khi danh sách marketplace sẵn sàng.".to_string()),
             )),
             items: vec![SelectionItem {
                 name: "Loading plugins...".to_string(),
-                description: Some("This updates when the marketplace list is ready.".to_string()),
+                description: Some("Danh sách này được cập nhật khi danh sách marketplace sẵn sàng.".to_string()),
                 is_disabled: true,
                 ..Default::default()
             }],
@@ -369,7 +369,7 @@ impl ChatWidget {
             items: vec![SelectionItem {
                 name: "Adding marketplace...".to_string(),
                 description: Some(
-                    "This updates when marketplace installation completes.".to_string(),
+                    "Danh sách này được cập nhật khi việc cài đặt marketplace hoàn tất.".to_string(),
                 ),
                 is_disabled: true,
                 ..Default::default()
@@ -387,10 +387,10 @@ impl ChatWidget {
         let mut header = ColumnRenderable::new();
         header.push(Line::from("Plugins".bold()));
         header.push(Line::from(
-            format!("Remove {marketplace_display_name} marketplace?").dim(),
+            format!("Xóa marketplace {marketplace_display_name}?").dim(),
         ));
         header.push(Line::from(
-            "This removes the configured marketplace from Codex.".dim(),
+            "Điều này xóa marketplace đã cấu hình khỏi Codex.".dim(),
         ));
 
         let cwd_for_remove = self.config.cwd.to_path_buf();
@@ -412,10 +412,10 @@ impl ChatWidget {
                 SelectionItem {
                     name: "Remove marketplace".to_string(),
                     description: Some(
-                        "Remove this marketplace from the available plugin list.".to_string(),
+                        "Xóa marketplace này khỏi danh sách plugin khả dụng.".to_string(),
                     ),
                     selected_description: Some(
-                        "Remove this marketplace from the available plugin list.".to_string(),
+                        "Xóa marketplace này khỏi danh sách plugin khả dụng.".to_string(),
                     ),
                     actions: vec![Box::new(move |tx| {
                         tx.send(AppEvent::OpenMarketplaceRemoveLoading {
@@ -431,8 +431,8 @@ impl ChatWidget {
                 },
                 SelectionItem {
                     name: "Back to plugins".to_string(),
-                    description: Some("Keep this marketplace installed.".to_string()),
-                    selected_description: Some("Keep this marketplace installed.".to_string()),
+                    description: Some("Giữ marketplace này được cài đặt.".to_string()),
+                    selected_description: Some("Giữ marketplace này được cài đặt.".to_string()),
                     actions: vec![Box::new(move |tx| {
                         tx.send(AppEvent::OpenPluginsList {
                             cwd: cwd_for_cancel.clone(),
@@ -459,7 +459,7 @@ impl ChatWidget {
         let mut header = ColumnRenderable::new();
         header.push(Line::from("Plugins".bold()));
         header.push(Line::from(
-            format!("Removing {marketplace_display_name}...").dim(),
+            format!("Đang xóa {marketplace_display_name}...").dim(),
         ));
 
         SelectionViewParams {
@@ -467,7 +467,7 @@ impl ChatWidget {
             header: Box::new(header),
             items: vec![SelectionItem {
                 name: "Removing marketplace...".to_string(),
-                description: Some("This updates when marketplace removal completes.".to_string()),
+                description: Some("Danh sách này được cập nhật khi việc xóa marketplace hoàn tất.".to_string()),
                 is_disabled: true,
                 ..Default::default()
             }],
@@ -492,7 +492,7 @@ impl ChatWidget {
             )),
             items: vec![SelectionItem {
                 name: loading_text,
-                description: Some("This updates when marketplace upgrade completes.".to_string()),
+                description: Some("Danh sách này được cập nhật khi việc nâng cấp marketplace hoàn tất.".to_string()),
                 is_disabled: true,
                 ..Default::default()
             }],
@@ -509,12 +509,12 @@ impl ChatWidget {
             header: Box::new(DelayedLoadingHeader::new(
                 self.frame_requester.clone(),
                 self.config.animations,
-                format!("Loading details for {plugin_display_name}..."),
+                format!("Đang tải chi tiết cho {plugin_display_name}..."),
                 /*note*/ None,
             )),
             items: vec![SelectionItem {
                 name: "Loading plugin details...".to_string(),
-                description: Some("This updates when plugin details load.".to_string()),
+                description: Some("Danh sách này được cập nhật khi chi tiết plugin được tải.".to_string()),
                 is_disabled: true,
                 ..Default::default()
             }],
@@ -529,7 +529,7 @@ impl ChatWidget {
         let mut header = ColumnRenderable::new();
         header.push(Line::from("Plugins".bold()));
         header.push(Line::from(
-            format!("Installing {plugin_display_name}...").dim(),
+            format!("Đang cài đặt {plugin_display_name}...").dim(),
         ));
 
         SelectionViewParams {
@@ -537,7 +537,7 @@ impl ChatWidget {
             header: Box::new(header),
             items: vec![SelectionItem {
                 name: "Installing plugin...".to_string(),
-                description: Some("This updates when plugin installation completes.".to_string()),
+                description: Some("Danh sách này được cập nhật khi việc cài đặt plugin hoàn tất.".to_string()),
                 is_disabled: true,
                 ..Default::default()
             }],
@@ -552,7 +552,7 @@ impl ChatWidget {
         let mut header = ColumnRenderable::new();
         header.push(Line::from("Plugins".bold()));
         header.push(Line::from(
-            format!("Uninstalling {plugin_display_name}...").dim(),
+            format!("Đang gỡ cài đặt {plugin_display_name}...").dim(),
         ));
 
         SelectionViewParams {
@@ -560,7 +560,7 @@ impl ChatWidget {
             header: Box::new(header),
             items: vec![SelectionItem {
                 name: "Uninstalling plugin...".to_string(),
-                description: Some("This updates when the plugin removal completes.".to_string()),
+                description: Some("Danh sách này được cập nhật khi việc xóa plugin hoàn tất.".to_string()),
                 is_disabled: true,
                 ..Default::default()
             }],
@@ -571,7 +571,7 @@ impl ChatWidget {
     pub(super) fn plugins_error_popup_params(&self, err: &str) -> SelectionViewParams {
         let mut header = ColumnRenderable::new();
         header.push(Line::from("Plugins".bold()));
-        header.push(Line::from("Failed to load plugins.".dim()));
+        header.push(Line::from("Không thể tải plugin.".dim()));
 
         SelectionViewParams {
             view_id: Some(PLUGINS_SELECTION_VIEW_ID),
@@ -589,21 +589,21 @@ impl ChatWidget {
     pub(super) fn marketplace_add_error_popup_params(&self) -> SelectionViewParams {
         let mut header = ColumnRenderable::new();
         header.push(Line::from("Plugins".bold()));
-        header.push(Line::from("Failed to add marketplace.".dim()));
+        header.push(Line::from("Không thể thêm marketplace.".dim()));
 
         let mut items = vec![
             SelectionItem {
                 name: "Marketplace add failed".to_string(),
                 description: Some(
-                    "Failed to add marketplace from the provided source.".to_string(),
+                    "Không thể thêm marketplace từ nguồn đã cung cấp.".to_string(),
                 ),
                 is_disabled: true,
                 ..Default::default()
             },
             SelectionItem {
                 name: "Try again".to_string(),
-                description: Some("Enter a marketplace source.".to_string()),
-                selected_description: Some("Enter a marketplace source.".to_string()),
+                description: Some("Nhập nguồn marketplace.".to_string()),
+                selected_description: Some("Nhập nguồn marketplace.".to_string()),
                 actions: vec![Box::new(|tx| {
                     tx.send(AppEvent::OpenMarketplaceAddPrompt);
                 })],
@@ -615,8 +615,8 @@ impl ChatWidget {
             let cwd = self.config.cwd.to_path_buf();
             items.push(SelectionItem {
                 name: "Back to plugins".to_string(),
-                description: Some("Return to the plugin list.".to_string()),
-                selected_description: Some("Return to the plugin list.".to_string()),
+                description: Some("Quay lại danh sách plugin.".to_string()),
+                selected_description: Some("Quay lại danh sách plugin.".to_string()),
                 actions: vec![Box::new(move |tx| {
                     tx.send(AppEvent::OpenPluginsList {
                         cwd: cwd.clone(),
@@ -643,21 +643,21 @@ impl ChatWidget {
     ) -> SelectionViewParams {
         let mut header = ColumnRenderable::new();
         header.push(Line::from("Plugins".bold()));
-        header.push(Line::from("Failed to remove marketplace.".dim()));
+        header.push(Line::from("Không thể xóa marketplace.".dim()));
 
         let marketplace_name = marketplace_name.to_string();
         let marketplace_display_name = marketplace_display_name.to_string();
         let mut items = vec![
             SelectionItem {
                 name: "Marketplace removal failed".to_string(),
-                description: Some("Failed to remove the selected marketplace.".to_string()),
+                description: Some("Không thể xóa marketplace đã chọn.".to_string()),
                 is_disabled: true,
                 ..Default::default()
             },
             SelectionItem {
                 name: "Try again".to_string(),
-                description: Some("Review the confirmation prompt again.".to_string()),
-                selected_description: Some("Review the confirmation prompt again.".to_string()),
+                description: Some("Xem lại lời nhắc xác nhận.".to_string()),
+                selected_description: Some("Xem lại lời nhắc xác nhận.".to_string()),
                 actions: vec![Box::new(move |tx| {
                     tx.send(AppEvent::OpenMarketplaceRemoveConfirm {
                         marketplace_name: marketplace_name.clone(),
@@ -672,8 +672,8 @@ impl ChatWidget {
             let cwd = self.config.cwd.to_path_buf();
             items.push(SelectionItem {
                 name: "Back to plugins".to_string(),
-                description: Some("Return to the plugin list.".to_string()),
-                selected_description: Some("Return to the plugin list.".to_string()),
+                description: Some("Quay lại danh sách plugin.".to_string()),
+                selected_description: Some("Quay lại danh sách plugin.".to_string()),
                 actions: vec![Box::new(move |tx| {
                     tx.send(AppEvent::OpenPluginsList {
                         cwd: cwd.clone(),
@@ -700,7 +700,7 @@ impl ChatWidget {
     ) -> SelectionViewParams {
         let mut header = ColumnRenderable::new();
         header.push(Line::from("Plugins".bold()));
-        header.push(Line::from("Failed to load plugin details.".dim()));
+        header.push(Line::from("Không thể tải chi tiết plugin.".dim()));
 
         let mut items = vec![SelectionItem {
             name: "Plugin detail unavailable".to_string(),
@@ -712,8 +712,8 @@ impl ChatWidget {
             let cwd = self.config.cwd.to_path_buf();
             items.push(SelectionItem {
                 name: "Back to plugins".to_string(),
-                description: Some("Return to the plugin list.".to_string()),
-                selected_description: Some("Return to the plugin list.".to_string()),
+                description: Some("Quay lại danh sách plugin.".to_string()),
+                selected_description: Some("Quay lại danh sách plugin.".to_string()),
                 actions: vec![Box::new(move |tx| {
                     tx.send(AppEvent::OpenPluginsList {
                         cwd: cwd.clone(),
@@ -768,15 +768,15 @@ impl ChatWidget {
             &preferred_local_sources,
             /*include_marketplace_names*/ true,
             "No marketplace plugins available",
-            "No plugins are available in the discovered marketplaces.",
+            "Không có plugin nào khả dụng trong các marketplace đã phát hiện.",
         );
 
         tabs.push(SelectionTab {
             id: ALL_PLUGINS_TAB_ID.to_string(),
             label: "All Plugins".to_string(),
             header: plugins_header(
-                "Browse plugins from available marketplaces.".to_string(),
-                format!("Installed {installed} of {total} available plugins."),
+                "Duyệt plugin từ các marketplace khả dụng.".to_string(),
+                format!("Đã cài {installed} trên tổng số {total} plugin khả dụng."),
             ),
             items: all_items,
         });
@@ -786,7 +786,7 @@ impl ChatWidget {
             label: format!("Installed ({installed})"),
             header: plugins_header(
                 "Installed plugins.".to_string(),
-                format!("Showing {installed} installed plugins."),
+                format!("Đang hiển thị {installed} plugin đã cài."),
             ),
             items: self.plugin_selection_items(
                 installed_entries,
@@ -814,7 +814,7 @@ impl ChatWidget {
         let (curated_empty_name, curated_empty_description) =
             if curated_loading && !curated_has_entries {
                 (
-                    "Loading OpenAI Curated plugins...",
+                    "Đang tải các plugin OpenAI Curated...",
                     OPENAI_CURATED_LOADING_DESCRIPTION,
                 )
             } else if let Some(section_error) = by_openai_section_error
@@ -823,8 +823,8 @@ impl ChatWidget {
                 ("OpenAI Curated unavailable", section_error.message.as_str())
             } else {
                 (
-                    "No OpenAI Curated plugins available",
-                    "No OpenAI Curated plugins available.",
+                    "Không có plugin OpenAI Curated nào khả dụng",
+                    "Không có plugin OpenAI Curated nào khả dụng.",
                 )
             };
         let mut curated_items = self.plugin_selection_items(
@@ -853,7 +853,7 @@ impl ChatWidget {
             label: "OpenAI Curated".to_string(),
             header: plugins_header(
                 "OpenAI Curated marketplace.".to_string(),
-                format!("Installed {curated_installed} of {curated_total} OpenAI Curated plugins."),
+                format!("Đã cài {curated_installed} trên tổng số {curated_total} plugin OpenAI Curated."),
             ),
             items: curated_items,
         });
@@ -914,14 +914,14 @@ impl ChatWidget {
             let header = if self.newly_installed_marketplace_tab_id.as_deref() == Some(&tab_id) {
                 plugins_header(
                     format!("{label} installed successfully."),
-                    "Select the plugins you want to use and press Enter to install or view details."
+                    "Chọn các plugin bạn muốn dùng và nhấn Enter để cài đặt hoặc xem chi tiết."
                         .to_string(),
                 )
             } else {
                 plugins_header(
                     format!("{label}."),
                     format!(
-                        "Installed {marketplace_installed} of {marketplace_total} {label} plugins."
+                        "Đã cài {marketplace_installed} trên tổng số {marketplace_total} plugin {label}."
                     ),
                 )
             };
@@ -936,7 +936,7 @@ impl ChatWidget {
                         &preferred_local_sources,
                         /*include_marketplace_names*/ false,
                         "No plugins available in this marketplace",
-                        "No plugins available in this marketplace.",
+                        "Không có plugin nào khả dụng trong marketplace này.",
                     ),
                 },
             ));
@@ -958,7 +958,7 @@ impl ChatWidget {
             tabs,
             initial_tab_id,
             is_searchable: true,
-            search_placeholder: Some("Type to search plugins".to_string()),
+            search_placeholder: Some("Gõ để tìm kiếm plugin".to_string()),
             col_width_mode: ColumnWidthMode::AutoAllRows,
             row_display: SelectionRowDisplay::SingleLine,
             name_column_width,
@@ -972,16 +972,16 @@ impl ChatWidget {
             id: ADD_MARKETPLACE_TAB_ID.to_string(),
             label: "Add Marketplace".to_string(),
             header: plugins_header(
-                "Add a marketplace from a Git repo or local root.".to_string(),
-                "Enter a source to make its plugins available in this menu.".to_string(),
+                "Thêm marketplace từ repo Git hoặc thư mục gốc cục bộ.".to_string(),
+                "Nhập nguồn để các plugin của nó khả dụng trong menu này.".to_string(),
             ),
             items: vec![SelectionItem {
                 name: "Add marketplace".to_string(),
                 description: Some(
-                    "Enter owner/repo, a Git URL, or a local marketplace path.".to_string(),
+                    "Nhập owner/repo, URL Git hoặc đường dẫn marketplace cục bộ.".to_string(),
                 ),
                 selected_description: Some(
-                    "Press Enter to enter a marketplace source.".to_string(),
+                    "Nhấn Enter để nhập nguồn marketplace.".to_string(),
                 ),
                 actions: vec![Box::new(|tx| {
                     tx.send(AppEvent::OpenMarketplaceAddPrompt);
@@ -1013,7 +1013,7 @@ impl ChatWidget {
         if !plugin.summary.installed {
             header.push(PluginDisclosureLine {
                 line: Line::from(vec![
-                    "Data shared with this app is subject to the app's ".into(),
+                    "Dữ liệu chia sẻ với ứng dụng này phụ thuộc vào ".into(),
                     "terms of service".bold(),
                     " and ".into(),
                     "privacy policy".bold(),
@@ -1031,8 +1031,8 @@ impl ChatWidget {
         let plugins_response = plugins_response.clone();
         let mut items = vec![SelectionItem {
             name: "Back to plugins".to_string(),
-            description: Some("Return to the plugin list.".to_string()),
-            selected_description: Some("Return to the plugin list.".to_string()),
+            description: Some("Quay lại danh sách plugin.".to_string()),
+            selected_description: Some("Quay lại danh sách plugin.".to_string()),
             actions: vec![Box::new(move |tx| {
                 tx.send(AppEvent::OpenPluginsList {
                     cwd: cwd.clone(),
@@ -1047,7 +1047,7 @@ impl ChatWidget {
                 items.push(SelectionItem {
                     name: "Installed by admin".to_string(),
                     description: Some(
-                        "This plugin is installed by your workspace admin.".to_string(),
+                        "Plugin này được quản trị viên workspace cài đặt.".to_string(),
                     ),
                     is_disabled: true,
                     ..Default::default()
@@ -1057,8 +1057,8 @@ impl ChatWidget {
                 let plugin_display_name = display_name;
                 items.push(SelectionItem {
                     name: "Uninstall plugin".to_string(),
-                    description: Some("Remove this plugin now.".to_string()),
-                    selected_description: Some("Remove this plugin now.".to_string()),
+                    description: Some("Xóa plugin này ngay.".to_string()),
+                    selected_description: Some("Xóa plugin này ngay.".to_string()),
                     actions: vec![Box::new(move |tx| {
                         tx.send(AppEvent::OpenPluginUninstallLoading {
                             plugin_display_name: plugin_display_name.clone(),
@@ -1075,7 +1075,7 @@ impl ChatWidget {
                 items.push(SelectionItem {
                     name: "Uninstall plugin".to_string(),
                     description: Some(
-                        "This remote plugin did not provide an uninstall identity.".to_string(),
+                        "Plugin từ xa này không cung cấp định danh gỡ cài đặt.".to_string(),
                     ),
                     is_disabled: true,
                     ..Default::default()
@@ -1084,7 +1084,7 @@ impl ChatWidget {
         } else if plugin.summary.availability == PluginAvailability::DisabledByAdmin {
             items.push(SelectionItem {
                 name: "Install plugin".to_string(),
-                description: Some("This plugin is disabled by your workspace admin.".to_string()),
+                description: Some("Plugin này bị quản trị viên workspace tắt.".to_string()),
                 is_disabled: true,
                 ..Default::default()
             });
@@ -1092,7 +1092,7 @@ impl ChatWidget {
             items.push(SelectionItem {
                 name: "Install plugin".to_string(),
                 description: Some(
-                    "This plugin is not installable from this marketplace.".to_string(),
+                    "Không thể cài đặt plugin này từ marketplace này.".to_string(),
                 ),
                 is_disabled: true,
                 ..Default::default()
@@ -1103,8 +1103,8 @@ impl ChatWidget {
             let plugin_display_name = display_name;
             items.push(SelectionItem {
                 name: "Install plugin".to_string(),
-                description: Some("Install this plugin now.".to_string()),
-                selected_description: Some("Install this plugin now.".to_string()),
+                description: Some("Cài đặt plugin này ngay.".to_string()),
+                selected_description: Some("Cài đặt plugin này ngay.".to_string()),
                 actions: vec![Box::new(move |tx| {
                     tx.send(AppEvent::OpenPluginInstallLoading {
                         plugin_display_name: plugin_display_name.clone(),
@@ -1121,7 +1121,7 @@ impl ChatWidget {
         } else {
             items.push(SelectionItem {
                 name: "Install plugin".to_string(),
-                description: Some("This plugin did not provide an install location.".to_string()),
+                description: Some("Plugin này không cung cấp vị trí cài đặt.".to_string()),
                 is_disabled: true,
                 ..Default::default()
             });
@@ -1200,23 +1200,23 @@ impl ChatWidget {
                 let toggle_action = if plugin.enabled { "disable" } else { "enable" };
                 if can_view_details {
                     format!(
-                        "{selected_status_label}   Space to {toggle_action}; Enter view details."
+                        "{selected_status_label}   Space để {toggle_action}; Enter xem chi tiết."
                     )
                 } else {
-                    format!("{selected_status_label}   Space to {toggle_action}.")
+                    format!("{selected_status_label}   Space để {toggle_action}.")
                 }
             } else if disabled_by_admin && can_view_details {
-                format!("{selected_status_label}   Press Enter to view plugin details.")
+                format!("{selected_status_label}   Nhấn Enter để xem chi tiết plugin.")
             } else if disabled_by_admin {
-                format!("{selected_status_label}   Plugin details are unavailable.")
+                format!("{selected_status_label}   Chi tiết plugin không khả dụng.")
             } else if plugin.installed && can_view_details {
-                format!("{selected_status_label}   Press Enter to view plugin details.")
+                format!("{selected_status_label}   Nhấn Enter để xem chi tiết plugin.")
             } else if plugin.installed {
-                format!("{selected_status_label}   Plugin details are unavailable.")
+                format!("{selected_status_label}   Chi tiết plugin không khả dụng.")
             } else if can_view_details {
-                format!("{selected_status_label}   Press Enter to install or view plugin details.")
+                format!("{selected_status_label}   Nhấn Enter để cài đặt hoặc xem chi tiết plugin.")
             } else {
-                format!("{selected_status_label}   Remote plugin details are not available yet.")
+                format!("{selected_status_label}   Chi tiết plugin từ xa chưa khả dụng.")
             };
             let search_value = format!(
                 "{display_name} {} {} {} {} {}",
@@ -1316,7 +1316,7 @@ fn plugins_popup_hint_line(
 }
 
 pub(super) fn plugin_detail_hint_line() -> Line<'static> {
-    Line::from("Press esc to close.")
+    Line::from("Nhấn esc để đóng.")
 }
 
 pub(super) fn plugins_header(subtitle: String, count_line: String) -> Box<dyn Renderable> {
@@ -1740,7 +1740,7 @@ fn remote_section_loading_tab(id: &str, label: &str, item_description: &str) -> 
         label: label.to_string(),
         header: plugins_header(
             format!("Loading {label} plugins."),
-            "Local plugin functionality is already available.".to_string(),
+            "Chức năng plugin cục bộ đã khả dụng.".to_string(),
         ),
         items: vec![remote_section_loading_item(label, item_description)],
     }
@@ -1757,7 +1757,7 @@ fn remote_section_empty_tab(
         label: label.to_string(),
         header: plugins_header(
             format!("{label}."),
-            "This section loaded successfully.".to_string(),
+            "Mục này đã tải thành công.".to_string(),
         ),
         items: vec![SelectionItem {
             name: item_name.to_string(),
@@ -1774,7 +1774,7 @@ fn remote_section_error_tab(section_error: &PluginRemoteSectionError) -> Selecti
         label: section_error.label.clone(),
         header: plugins_header(
             format!("{} unavailable.", section_error.label),
-            "Local plugin functionality is still available.".to_string(),
+            "Chức năng plugin cục bộ vẫn khả dụng.".to_string(),
         ),
         items: vec![remote_section_error_item(
             &section_error.label,
@@ -2057,7 +2057,7 @@ fn plugin_hook_summary(plugin: &PluginDetail) -> String {
 
 fn plugin_mcp_summary(plugin: &PluginDetail) -> String {
     if plugin.mcp_servers.is_empty() {
-        "No plugin MCP servers.".to_string()
+        "Không có máy chủ MCP plugin.".to_string()
     } else {
         plugin.mcp_servers.join(", ")
     }

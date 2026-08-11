@@ -59,7 +59,7 @@ impl App {
         } = &mut turn
         else {
             self.chat_widget.add_error_message(
-                "Failed to retry with a faster model: original turn is unavailable.".to_string(),
+                "Không thể thử lại với model nhanh hơn: lượt ban đầu không khả dụng.".to_string(),
             );
             return;
         };
@@ -75,7 +75,7 @@ impl App {
 
         if let Err(err) = app_server.turn_interrupt(thread_id, turn_id.clone()).await {
             self.chat_widget
-                .add_error_message(format!("Failed to retry with a faster model: {err}"));
+                .add_error_message(format!("Không thể thử lại với model nhanh hơn: {err}"));
             return;
         }
 
@@ -109,7 +109,7 @@ impl App {
                         .await?;
                     if page.next_cursor.is_some() {
                         color_eyre::eyre::bail!(
-                            "Cannot safely retry a turn whose input exceeds the bounded history page."
+                            "Không thể thử lại an toàn một lượt có đầu vào vượt quá trang lịch sử giới hạn."
                         );
                     }
                     let turn = &mut thread.turns[turn_index];
@@ -226,7 +226,7 @@ impl App {
         self.chat_widget.cancel_safety_buffered_retry_submission();
         self.chat_widget.restore_user_message_to_composer(prompt);
         self.chat_widget
-            .add_error_message(format!("Failed to retry with a faster model: {err}"));
+            .add_error_message(format!("Không thể thử lại với model nhanh hơn: {err}"));
     }
 }
 

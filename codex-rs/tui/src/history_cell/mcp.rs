@@ -297,14 +297,14 @@ fn decode_mcp_image(block: &serde_json::Value) -> Option<DynamicImage> {
     let raw_data = base64::engine::general_purpose::STANDARD
         .decode(base64_data)
         .map_err(|e| {
-            error!("Failed to decode image data: {e}");
+            error!("Không thể giải mã dữ liệu hình ảnh: {e}");
             e
         })
         .ok()?;
     let reader = ImageReader::new(Cursor::new(raw_data))
         .with_guessed_format()
         .map_err(|e| {
-            error!("Failed to guess image format: {e}");
+            error!("Không thể đoán định dạng hình ảnh: {e}");
             e
         })
         .ok()?;
@@ -312,7 +312,7 @@ fn decode_mcp_image(block: &serde_json::Value) -> Option<DynamicImage> {
     reader
         .decode()
         .map_err(|e| {
-            error!("Image decoding failed: {e}");
+            error!("Giải mã hình ảnh thất bại: {e}");
             e
         })
         .ok()

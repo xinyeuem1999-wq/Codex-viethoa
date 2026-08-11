@@ -304,7 +304,7 @@ impl App {
             let source_for_event = source.clone();
             let result = fetch_marketplace_add(request_handle, cwd, source)
                 .await
-                .map_err(|err| format!("Failed to add marketplace: {err}"));
+                .map_err(|err| format!("Không thể thêm marketplace: {err}"));
             app_event_tx.send(AppEvent::MarketplaceAddLoaded {
                 cwd: cwd_for_event,
                 source: source_for_event,
@@ -327,7 +327,7 @@ impl App {
             let marketplace_name_for_event = marketplace_name.clone();
             let result = fetch_marketplace_remove(request_handle, marketplace_name)
                 .await
-                .map_err(|err| format!("Failed to remove marketplace: {err}"));
+                .map_err(|err| format!("Không thể xóa marketplace: {err}"));
             app_event_tx.send(AppEvent::MarketplaceRemoveLoaded {
                 cwd: cwd_for_event,
                 marketplace_name: marketplace_name_for_event,
@@ -349,7 +349,7 @@ impl App {
             let cwd_for_event = cwd.clone();
             let result = fetch_marketplace_upgrade(request_handle, marketplace_name)
                 .await
-                .map_err(|err| format!("Failed to upgrade marketplace: {err}"));
+                .map_err(|err| format!("Không thể nâng cấp marketplace: {err}"));
             app_event_tx.send(AppEvent::MarketplaceUpgradeLoaded {
                 cwd: cwd_for_event,
                 result,
@@ -373,7 +373,7 @@ impl App {
             let plugin_name_for_event = plugin_name.clone();
             let result = fetch_plugin_install(request_handle, location, plugin_name)
                 .await
-                .map_err(|err| format!("Failed to install plugin: {err}"));
+                .map_err(|err| format!("Không thể cài đặt plugin: {err}"));
             app_event_tx.send(AppEvent::PluginInstallLoaded {
                 cwd: cwd_for_event,
                 location: location_for_event,
@@ -398,7 +398,7 @@ impl App {
             let plugin_id_for_event = plugin_id.clone();
             let result = fetch_plugin_uninstall(request_handle, plugin_id)
                 .await
-                .map_err(|err| format!("Failed to uninstall plugin: {err}"));
+                .map_err(|err| format!("Không thể gỡ cài đặt plugin: {err}"));
             app_event_tx.send(AppEvent::PluginUninstallLoaded {
                 cwd: cwd_for_event,
                 plugin_id: plugin_id_for_event,
@@ -440,7 +440,7 @@ impl App {
             let result = write_plugin_enabled(request_handle, plugin_id, enabled)
                 .await
                 .map(|_| ())
-                .map_err(|err| format!("Failed to update plugin config: {err}"));
+                .map_err(|err| format!("Không thể cập nhật cấu hình plugin: {err}"));
             app_event_tx.send(AppEvent::PluginEnabledSet {
                 cwd: cwd_for_event,
                 plugin_id: plugin_id_for_event,
@@ -480,7 +480,7 @@ impl App {
                 .map(|_| ())
                 .map_err(|err| {
                     format!(
-                        "Failed to update hook config: {}",
+                        "Không thể cập nhật cấu hình hook: {}",
                         format_config_error(&err)
                     )
                 });
@@ -504,7 +504,7 @@ impl App {
             let result = write_hook_trust(request_handle, key, current_hash)
                 .await
                 .map(|_| ())
-                .map_err(|err| format!("Failed to trust hook: {}", format_config_error(&err)));
+                .map_err(|err| format!("Không thể tin cậy hook: {}", format_config_error(&err)));
             app_event_tx.send(AppEvent::HookTrusted { result });
         });
     }
@@ -520,7 +520,7 @@ impl App {
             let result = write_hook_trusts(request_handle, updates)
                 .await
                 .map(|_| ())
-                .map_err(|err| format!("Failed to trust hooks: {}", format_config_error(&err)));
+                .map_err(|err| format!("Không thể tin cậy các hook: {}", format_config_error(&err)));
             app_event_tx.send(AppEvent::HookTrusted { result });
         });
     }
@@ -600,7 +600,7 @@ impl App {
             Err(err) => self
                 .chat_widget
                 .add_to_history(history_cell::new_error_event(format!(
-                    "Failed to upload feedback: {err}"
+                    "Không thể tải phản hồi lên: {err}"
                 ))),
         }
     }
@@ -690,7 +690,7 @@ impl App {
             Ok(statuses) => statuses,
             Err(err) => {
                 self.chat_widget
-                    .add_error_message(format!("Failed to load MCP inventory: {err}"));
+                    .add_error_message(format!("Không thể tải danh mục MCP: {err}"));
                 return;
             }
         };
@@ -948,24 +948,24 @@ fn plugin_remote_section_error_message(label: &str, err: &str) -> String {
 fn plugin_remote_section_error_next_step(label: &str, err: &str) -> &'static str {
     let err = err.to_ascii_lowercase();
     if err.contains("api key auth is not supported") {
-        "Sign in with ChatGPT auth; API key auth cannot load remote plugin catalogs."
+        "Hãy đăng nhập bằng ChatGPT auth; xác thực bằng API key không thể tải các danh mục plugin từ xa."
     } else if err.contains("authentication required")
         || err.contains("not signed in")
         || err.contains("not logged in")
     {
-        "Sign in to ChatGPT, then try loading this section again."
+        "Hãy đăng nhập vào ChatGPT, rồi thử tải lại mục này."
     } else if err.contains("codex plugins are disabled")
         || err.contains("plugin sharing is disabled")
         || err.contains("plugin sharing is not enabled")
         || err.contains("feature disabled")
     {
-        "Ask a workspace admin to enable Codex plugins or plugin sharing."
+        "Hãy nhờ quản trị viên workspace bật Codex plugins hoặc plugin sharing."
     } else if err.contains("workspace") && (err.contains("access") || err.contains("mismatch")) {
-        "Switch to the matching workspace or ask the sharer for access."
+        "Chuyển sang workspace phù hợp hoặc nhờ người chia sẻ cấp quyền truy cập."
     } else if err.contains("not found") || err.contains("status 404") {
-        "Check that you are signed in to the correct workspace and still have access."
+        "Kiểm tra rằng bạn đã đăng nhập đúng workspace và vẫn còn quyền truy cập."
     } else if err.contains("old build") || err.contains("update codex") || err.contains("stale") {
-        "Update Codex, then try opening the shared plugin again."
+        "Cập nhật Codex, rồi thử mở lại plugin được chia sẻ."
     } else if err.contains("service unavailable")
         || err.contains("temporarily unavailable")
         || err.contains("status 503")
@@ -973,11 +973,11 @@ fn plugin_remote_section_error_next_step(label: &str, err: &str) -> &'static str
         || err.contains("request")
         || err.contains("status")
     {
-        "Try again later; local plugin functionality is still available."
+        "Thử lại sau; chức năng plugin cục bộ vẫn khả dụng."
     } else if err.contains("disabled by admin") || err.contains("admin disabled") {
-        "Ask a workspace admin to confirm plugin access."
+        "Hãy nhờ quản trị viên workspace xác nhận quyền truy cập plugin."
     } else if label == "Shared with me" && err.contains("plugin") && err.contains("disabled") {
-        "Ask the sharer or a workspace admin to confirm plugin access."
+        "Hãy nhờ người chia sẻ hoặc quản trị viên workspace xác nhận quyền truy cập plugin."
     } else {
         ""
     }
@@ -987,7 +987,7 @@ fn plugin_sharing_disabled_remote_section_error() -> PluginRemoteSectionError {
     PluginRemoteSectionError {
         section_id: "shared-with-me".to_string(),
         label: "Shared with me".to_string(),
-        message: "Plugin sharing is disabled for this Codex session. Enable plugin sharing to load shared plugins.".to_string(),
+        message: "Plugin sharing bị tắt cho phiên Codex này. Hãy bật plugin sharing để tải các plugin được chia sẻ.".to_string(),
     }
 }
 
@@ -1378,42 +1378,42 @@ mod tests {
             (
                 "Workspace",
                 "chatgpt authentication required for remote plugin catalog",
-                "Sign in to ChatGPT, then try loading this section again.",
+                "Hãy đăng nhập vào ChatGPT, rồi thử tải lại mục này.",
             ),
             (
                 "OpenAI Curated",
                 "chatgpt authentication required for remote plugin catalog; api key auth is not supported",
-                "Sign in with ChatGPT auth; API key auth cannot load remote plugin catalogs.",
+                "Hãy đăng nhập bằng ChatGPT auth; xác thực bằng API key không thể tải các danh mục plugin từ xa.",
             ),
             (
                 "Shared with me",
                 "remote plugin catalog request failed with status 404: missing",
-                "Check that you are signed in to the correct workspace and still have access.",
+                "Kiểm tra rằng bạn đã đăng nhập đúng workspace và vẫn còn quyền truy cập.",
             ),
             (
                 "Shared with me",
                 "workspace access mismatch",
-                "Switch to the matching workspace or ask the sharer for access.",
+                "Chuyển sang workspace phù hợp hoặc nhờ người chia sẻ cấp quyền truy cập.",
             ),
             (
                 "Shared with me",
                 "old build fallback",
-                "Update Codex, then try opening the shared plugin again.",
+                "Cập nhật Codex, rồi thử mở lại plugin được chia sẻ.",
             ),
             (
                 "Shared with me",
                 "remote service unavailable",
-                "Try again later; local plugin functionality is still available.",
+                "Thử lại sau; chức năng plugin cục bộ vẫn khả dụng.",
             ),
             (
                 "Workspace",
                 "plugin disabled by admin",
-                "Ask a workspace admin to confirm plugin access.",
+                "Hãy nhờ quản trị viên workspace xác nhận quyền truy cập plugin.",
             ),
             (
                 "Shared with me",
                 "plugin sharing is not enabled",
-                "Ask a workspace admin to enable Codex plugins or plugin sharing.",
+                "Hãy nhờ quản trị viên workspace bật Codex plugins hoặc plugin sharing.",
             ),
         ];
 
@@ -1432,7 +1432,7 @@ mod tests {
             PluginRemoteSectionError {
                 section_id: "shared-with-me".to_string(),
                 label: "Shared with me".to_string(),
-                message: "Plugin sharing is disabled for this Codex session. Enable plugin sharing to load shared plugins.".to_string(),
+                message: "Plugin sharing bị tắt cho phiên Codex này. Hãy bật plugin sharing để tải các plugin được chia sẻ.".to_string(),
             }
         );
     }

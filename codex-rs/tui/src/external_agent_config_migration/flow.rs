@@ -17,9 +17,9 @@ use super::source::ExternalAgentConfigMigrationSource;
 use super::source::run_external_agent_config_source_prompt;
 
 pub(crate) const EXTERNAL_AGENT_CONFIG_MIGRATION_NO_ITEMS_MESSAGE: &str =
-    "No compatible setup was found to import.";
-pub(crate) const EXTERNAL_AGENT_CONFIG_MIGRATION_REMOTE_UNAVAILABLE_MESSAGE: &str = "Import from other apps is unavailable in remote sessions. Start Codex locally and run /import.";
-pub(crate) const EXTERNAL_AGENT_CONFIG_MIGRATION_DAEMON_UNAVAILABLE_MESSAGE: &str = "Import from other apps is unavailable while Codex is connected to the local app-server daemon. Stop the daemon, restart Codex, and run /import.";
+    "Không tìm thấy thiết lập tương thích để nhập.";
+pub(crate) const EXTERNAL_AGENT_CONFIG_MIGRATION_REMOTE_UNAVAILABLE_MESSAGE: &str = "Nhập từ ứng dụng khác không khả dụng trong phiên từ xa. Hãy khởi động Codex cục bộ và chạy /import.";
+pub(crate) const EXTERNAL_AGENT_CONFIG_MIGRATION_DAEMON_UNAVAILABLE_MESSAGE: &str = "Nhập từ ứng dụng khác không khả dụng khi Codex đang kết nối với daemon app-server cục bộ. Hãy dừng daemon, khởi động lại Codex và chạy /import.";
 
 pub(crate) enum ExternalAgentConfigMigrationFlowOutcome {
     Started(Vec<Line<'static>>),
@@ -71,7 +71,7 @@ impl ExternalAgentConfigDetection {
             ExternalAgentConfigDetectionOutcome::NoItems
         } else {
             ExternalAgentConfigDetectionOutcome::Failed(format!(
-                "Could not check for importable setup: {}",
+                "Không thể kiểm tra thiết lập có thể nhập: {}",
                 self.errors.join("; ")
             ))
         }
@@ -147,10 +147,10 @@ fn external_agent_config_migration_started_lines(
         vec![
             "• ".dim(),
             "Import started.".cyan(),
-            " You can keep working while it finishes.".into(),
+            " Bạn có thể tiếp tục làm việc trong khi nó hoàn tất.".into(),
         ]
         .into(),
-        vec!["  ".into(), "Imported setup will apply to new chats.".dim()].into(),
+        vec!["  ".into(), "Thiết lập đã nhập sẽ áp dụng cho các cuộc trò chuyện mới.".dim()].into(),
         vec!["  ".into(), "Importing:".cyan().bold()].into(),
     ];
     lines.extend(
@@ -233,7 +233,7 @@ pub(crate) fn external_agent_config_migration_finished_lines(
     lines.push(
         vec![
             "  ".into(),
-            "Run /import again to check for additional items.".dim(),
+            "Chạy /import lần nữa để kiểm tra các mục bổ sung.".dim(),
         ]
         .into(),
     );
@@ -244,11 +244,11 @@ fn remaining_items_handoff(remaining_item_count: usize) -> Option<String> {
     match remaining_item_count {
         0 => None,
         1 => Some(
-            "1 additional item remains. After it finishes, run /import again to review it."
+            "Còn 1 mục bổ sung. Sau khi nó hoàn tất, hãy chạy /import lần nữa để xem xét."
                 .to_string(),
         ),
         _ => Some(format!(
-            "{remaining_item_count} additional items remain. After it finishes, run /import again to review them."
+            "Còn {remaining_item_count} mục bổ sung. Sau khi chúng hoàn tất, hãy chạy /import lần nữa để xem xét."
         )),
     }
 }
@@ -321,7 +321,7 @@ pub(crate) async fn handle_external_agent_config_migration_prompt(
         .into_iter()
         .find(|detected| detected.source == selected_source)
     else {
-        return Err("Selected import source is no longer available.".to_string());
+        return Err("Nguồn nhập đã chọn không còn khả dụng.".to_string());
     };
     let detected_items = detected_source.items;
 

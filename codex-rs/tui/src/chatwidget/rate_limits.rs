@@ -47,7 +47,7 @@ impl RateLimitWarningState {
                     limit_label_for_window(secondary_window_minutes, /*is_secondary*/ true);
                 let remaining_percent = 100.0 - threshold;
                 warnings.push(format!(
-                    "Heads up, you have less than {remaining_percent:.0}% of your {limit_label} limit left. Run /status for a breakdown."
+                    "Lưu ý, bạn còn dưới {remaining_percent:.0}% hạn mức {limit_label}. Chạy /status để xem chi tiết."
                 ));
             }
         }
@@ -65,7 +65,7 @@ impl RateLimitWarningState {
                     limit_label_for_window(primary_window_minutes, /*is_secondary*/ false);
                 let remaining_percent = 100.0 - threshold;
                 warnings.push(format!(
-                    "Heads up, you have less than {remaining_percent:.0}% of your {limit_label} limit left. Run /status for a breakdown."
+                    "Lưu ý, bạn còn dưới {remaining_percent:.0}% hạn mức {limit_label}. Chạy /status để xem chi tiết."
                 ));
             }
         }
@@ -397,14 +397,14 @@ impl ChatWidget {
             tx.send(AppEvent::PersistRateLimitSwitchPromptHidden);
         })];
         let description = if preset.description.is_empty() {
-            Some("Uses fewer credits for upcoming turns.".to_string())
+            Some("Dùng ít tín dụng hơn cho các lượt sắp tới.".to_string())
         } else {
             Some(preset.description)
         };
 
         let items = vec![
             SelectionItem {
-                name: format!("Switch to {switch_model}"),
+                name: format!("Chuyển sang {switch_model}"),
                 description,
                 selected_description: None,
                 is_current: false,
@@ -422,9 +422,9 @@ impl ChatWidget {
                 ..Default::default()
             },
             SelectionItem {
-                name: "Keep current model (never show again)".to_string(),
+                name: "Giữ model hiện tại (không hiện lại)".to_string(),
                 description: Some(
-                    "Hide future rate limit reminders about switching models.".to_string(),
+                    "Ẩn các nhắc nhở hạn mức trong tương lai về việc chuyển model.".to_string(),
                 ),
                 selected_description: None,
                 is_current: false,
@@ -437,7 +437,7 @@ impl ChatWidget {
         self.bottom_pane.show_selection_view(SelectionViewParams {
             view_id: Some(RATE_LIMIT_SWITCH_PROMPT_VIEW_ID),
             title: Some("Approaching rate limits".to_string()),
-            subtitle: Some(format!("Switch to {switch_model} for lower credit usage?")),
+            subtitle: Some(format!("Chuyển sang {switch_model} để dùng ít tín dụng hơn?")),
             footer_hint: Some(standard_popup_hint_line()),
             items,
             ..Default::default()
@@ -454,12 +454,12 @@ impl ChatWidget {
 
         let (title, prompt) = match credit_type {
             AddCreditsNudgeCreditType::Credits => (
-                "You've reached your workspace credit limit",
-                "Your workspace is out of credits. Ask your workspace owner to add more. Notify owner?",
+                "Bạn đã đạt đến hạn mức tín dụng của workspace",
+                "Workspace của bạn đã hết tín dụng. Hãy nhờ chủ sở hữu workspace nạp thêm. Thông báo cho chủ sở hữu?",
             ),
             AddCreditsNudgeCreditType::UsageLimit => (
                 "Usage limit reached",
-                "Request a limit increase from your owner to continue using codex. Request increase?",
+                "Yêu cầu tăng hạn mức từ chủ sở hữu để tiếp tục dùng Codex. Gửi yêu cầu tăng?",
             ),
         };
         let send_actions: Vec<SelectionAction> = vec![Box::new(move |tx| {
@@ -515,9 +515,9 @@ impl ChatWidget {
             (
                 AddCreditsNudgeCreditType::Credits,
                 Ok(AddCreditsNudgeEmailStatus::CooldownActive),
-            ) => "Workspace owner was already notified recently.",
+            ) => "Đã thông báo cho chủ sở hữu workspace gần đây.",
             (AddCreditsNudgeCreditType::Credits, Err(_)) => {
-                "Could not notify your workspace owner. Please try again."
+                "Không thể thông báo cho chủ sở hữu workspace. Vui lòng thử lại."
             }
             (AddCreditsNudgeCreditType::UsageLimit, Ok(AddCreditsNudgeEmailStatus::Sent)) => {
                 "Limit increase requested."
@@ -525,9 +525,9 @@ impl ChatWidget {
             (
                 AddCreditsNudgeCreditType::UsageLimit,
                 Ok(AddCreditsNudgeEmailStatus::CooldownActive),
-            ) => "A limit increase was already requested recently.",
+            ) => "Đã yêu cầu tăng hạn mức gần đây.",
             (AddCreditsNudgeCreditType::UsageLimit, Err(_)) => {
-                "Could not request a limit increase. Please try again."
+                "Không thể yêu cầu tăng hạn mức. Vui lòng thử lại."
             }
         };
         self.add_to_history(history_cell::new_info_event(

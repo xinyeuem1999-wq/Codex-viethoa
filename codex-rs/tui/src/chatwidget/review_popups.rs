@@ -7,7 +7,7 @@ impl ChatWidget {
         let mut items: Vec<SelectionItem> = Vec::new();
 
         items.push(SelectionItem {
-            name: "Review against a base branch".to_string(),
+            name: "Đánh giá so với nhánh cơ sở".to_string(),
             description: Some("(PR Style)".into()),
             actions: vec![Box::new({
                 let cwd = self.config.cwd.to_path_buf();
@@ -53,7 +53,7 @@ impl ChatWidget {
         });
 
         self.bottom_pane.show_selection_view(SelectionViewParams {
-            title: Some("Select a review preset".into()),
+            title: Some("Chọn bộ cài sẵn đánh giá".into()),
             footer_hint: Some(standard_popup_hint_line()),
             items,
             ..Default::default()
@@ -83,11 +83,11 @@ impl ChatWidget {
         }
 
         self.bottom_pane.show_selection_view(SelectionViewParams {
-            title: Some("Select a base branch".to_string()),
+            title: Some("Chọn nhánh cơ sở".to_string()),
             footer_hint: Some(standard_popup_hint_line()),
             items,
             is_searchable: true,
-            search_placeholder: Some("Type to search branches".to_string()),
+            search_placeholder: Some("Gõ để tìm kiếm nhánh".to_string()),
             ..Default::default()
         });
     }
@@ -116,11 +116,11 @@ impl ChatWidget {
         }
 
         self.bottom_pane.show_selection_view(SelectionViewParams {
-            title: Some("Select a commit to review".to_string()),
+            title: Some("Chọn commit để đánh giá".to_string()),
             footer_hint: Some(standard_popup_hint_line()),
             items,
             is_searchable: true,
-            search_placeholder: Some("Type to search commits".to_string()),
+            search_placeholder: Some("Gõ để tìm kiếm commit".to_string()),
             ..Default::default()
         });
     }
@@ -129,7 +129,7 @@ impl ChatWidget {
         let tx = self.app_event_tx.clone();
         let view = CustomPromptView::new(
             "Custom review instructions".to_string(),
-            "Type instructions and press Enter".to_string(),
+            "Nhập hướng dẫn và nhấn Enter".to_string(),
             /*initial_text*/ String::new(),
             /*context_label*/ None,
             Box::new(move |prompt: String| {
@@ -172,11 +172,11 @@ pub(crate) fn show_review_commit_picker_with_entries(
     }
 
     chat.bottom_pane.show_selection_view(SelectionViewParams {
-        title: Some("Select a commit to review".to_string()),
+        title: Some("Chọn commit để đánh giá".to_string()),
         footer_hint: Some(standard_popup_hint_line()),
         items,
         is_searchable: true,
-        search_placeholder: Some("Type to search commits".to_string()),
+        search_placeholder: Some("Gõ để tìm kiếm commit".to_string()),
         ..Default::default()
     });
 }

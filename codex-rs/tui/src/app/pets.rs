@@ -115,7 +115,7 @@ impl App {
             }
             Err(err) => {
                 self.chat_widget
-                    .add_error_message(format!("Failed to disable pets: {err}"));
+                    .add_error_message(format!("Không thể tắt thú cưng: {err}"));
             }
         }
     }
@@ -159,13 +159,13 @@ impl App {
                     }
                     Err(err) => {
                         self.chat_widget
-                            .add_error_message(format!("Failed to save pet selection: {err}"));
+                            .add_error_message(format!("Không thể lưu lựa chọn thú cưng: {err}"));
                     }
                 }
             }
             Err(err) => {
                 self.chat_widget
-                    .add_error_message(format!("Failed to load pet: {err}"));
+                    .add_error_message(format!("Không thể tải thú cưng: {err}"));
             }
         }
         tui.frame_requester().schedule_frame();
@@ -190,7 +190,7 @@ impl App {
             }
             Err(err) => {
                 self.chat_widget
-                    .add_warning_message(format!("Failed to load configured pet: {err}"));
+                    .add_warning_message(format!("Không thể tải thú cưng đã cấu hình: {err}"));
             }
         }
     }

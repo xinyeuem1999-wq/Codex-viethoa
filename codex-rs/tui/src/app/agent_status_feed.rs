@@ -47,7 +47,7 @@ impl HistoryCell for AgentStatusHistoryCell {
             let preview_width = width.saturating_sub(AGENT_STATUS_PREVIEW_INDENT).max(1);
             let preview_lines = entry.preview_lines(preview_width);
             if preview_lines.is_empty() {
-                lines.push(vec!["    ".into(), "No recent activity yet.".dim().italic()].into());
+                lines.push(vec!["    ".into(), "Chưa có hoạt động gần đây.".dim().italic()].into());
             } else {
                 lines.extend(preview_lines.into_iter().map(indent_preview_line));
             }
@@ -159,9 +159,9 @@ fn activity_summary(item: &ThreadItem) -> Option<String> {
         ThreadItem::CollabAgentToolCall { tool, .. } => {
             let action = match tool {
                 CollabAgentTool::SpawnAgent => "Spawned an agent",
-                CollabAgentTool::SendInput => "Sent input to an agent",
+                CollabAgentTool::SendInput => "Đã gửi đầu vào cho một tác tử",
                 CollabAgentTool::ResumeAgent => "Resumed an agent",
-                CollabAgentTool::Wait => "Waited for an agent",
+                CollabAgentTool::Wait => "Đã chờ một tác tử",
                 CollabAgentTool::CloseAgent => "Closed an agent",
             };
             return Some(action.to_string());

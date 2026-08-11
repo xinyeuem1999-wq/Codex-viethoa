@@ -703,7 +703,7 @@ fn session_start_error(
     }
 
     let target_label = target_session.display_label();
-    color_eyre::eyre::eyre!("Failed to {action} session from {target_label}: {err}")
+    color_eyre::eyre::eyre!("Không thể {action} phiên từ {target_label}: {err}")
 }
 
 fn archived_session_guidance(err: &color_eyre::eyre::Report) -> Option<String> {

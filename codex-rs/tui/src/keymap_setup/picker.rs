@@ -84,38 +84,38 @@ const KEYMAP_COMMON_ACTIONS: &[(&str, &str)] = &[
 const KEYMAP_CONTEXT_TABS: &[KeymapContextTab] = &[
     KeymapContextTab {
         id: "app-shortcuts",
-        label: "App",
-        description: "Global and chat-level shortcuts.",
+        label: "Ứng dụng",
+        description: "Các phím tắt cấp toàn cục và cấp trò chuyện.",
         contexts: &["global", "chat"],
     },
     KeymapContextTab {
         id: "composer-shortcuts",
-        label: "Composer",
-        description: "Composer submission and queue shortcuts.",
+        label: "Soạn tin",
+        description: "Phím tắt gửi và xếp hàng soạn tin.",
         contexts: &["composer"],
     },
     KeymapContextTab {
         id: "editor-shortcuts",
-        label: "Editor",
-        description: "Inline editor movement and editing shortcuts.",
+        label: "Trình soạn thảo",
+        description: "Phím tắt di chuyển và chỉnh sửa trong trình soạn thảo nội tuyến.",
         contexts: &["editor"],
     },
     KeymapContextTab {
         id: "vim-shortcuts",
         label: "Vim",
-        description: "Vim normal-mode and operator shortcuts.",
+        description: "Phím tắt chế độ thường và toán tử của Vim.",
         contexts: &["vim_normal", "vim_operator", "vim_text_object"],
     },
     KeymapContextTab {
         id: "navigation-shortcuts",
-        label: "Navigation",
-        description: "Pager and selection-list navigation shortcuts.",
+        label: "Điều hướng",
+        description: "Phím tắt điều hướng pager và danh sách lựa chọn.",
         contexts: &["pager", "list"],
     },
     KeymapContextTab {
         id: "approval-shortcuts",
-        label: "Approval",
-        description: "Approval prompt shortcuts.",
+        label: "Duyệt",
+        description: "Phím tắt cho lời nhắc duyệt.",
         contexts: &["approval"],
     },
 ];
@@ -198,15 +198,15 @@ fn build_keymap_picker_params_for_action(
     let mut tabs = Vec::new();
     tabs.push(SelectionTab {
         id: KEYMAP_ALL_TAB_ID.to_string(),
-        label: "All".to_string(),
+        label: "Tất cả".to_string(),
         header: keymap_header(
-            "All configurable shortcuts.".to_string(),
-            format!("{total} actions, {custom_count} customized, {unbound_count} unbound."),
+            "Tất cả phím tắt có thể cấu hình.".to_string(),
+            format!("{total} hành động, {custom_count} đã tùy chỉnh, {unbound_count} chưa gán."),
         ),
         items: keymap_selection_items(
             rows.iter(),
-            "No shortcuts available",
-            "No configurable shortcuts are available.",
+            "Không có phím tắt nào",
+            "Không có phím tắt nào có thể cấu hình.",
         ),
     });
 
@@ -214,15 +214,15 @@ fn build_keymap_picker_params_for_action(
     let common_count = common_rows.len();
     tabs.push(SelectionTab {
         id: KEYMAP_COMMON_TAB_ID.to_string(),
-        label: "Common".to_string(),
+        label: "Phổ biến".to_string(),
         header: keymap_header(
-            "Frequently customized shortcuts.".to_string(),
+            "Các phím tắt thường được tùy chỉnh.".to_string(),
             action_count_line(common_count),
         ),
         items: keymap_selection_items(
             common_rows,
-            "No common shortcuts",
-            "No common shortcut actions are available.",
+            "Không có phím tắt phổ biến",
+            "Không có hành động phím tắt phổ biến nào.",
         ),
     });
 
@@ -232,15 +232,15 @@ fn build_keymap_picker_params_for_action(
         .collect::<Vec<_>>();
     tabs.push(SelectionTab {
         id: KEYMAP_CUSTOM_TAB_ID.to_string(),
-        label: format!("Customized ({custom_count})"),
+        label: format!("Đã tùy chỉnh ({custom_count})"),
         header: keymap_header(
-            "Root-level shortcut overrides.".to_string(),
+            "Ghi đè phím tắt cấp gốc.".to_string(),
             action_count_line(custom_count),
         ),
         items: keymap_selection_items(
             custom_rows,
-            "No customized shortcuts",
-            "No root-level keymap overrides have been configured.",
+            "Không có phím tắt tùy chỉnh",
+            "Chưa có ghi đè keymap cấp gốc nào được cấu hình.",
         ),
     });
 
@@ -250,15 +250,15 @@ fn build_keymap_picker_params_for_action(
         .collect::<Vec<_>>();
     tabs.push(SelectionTab {
         id: KEYMAP_UNBOUND_TAB_ID.to_string(),
-        label: format!("Unbound ({unbound_count})"),
+        label: format!("Chưa gán ({unbound_count})"),
         header: keymap_header(
-            "Actions without an active shortcut.".to_string(),
+            "Các hành động chưa có phím tắt đang hoạt động.".to_string(),
             action_count_line(unbound_count),
         ),
         items: keymap_selection_items(
             unbound_rows,
-            "No unbound shortcuts",
-            "Every configurable action currently has a shortcut.",
+            "Không có phím tắt chưa gán",
+            "Mọi hành động có thể cấu hình hiện đều có phím tắt.",
         ),
     });
 
@@ -274,8 +274,8 @@ fn build_keymap_picker_params_for_action(
             header: keymap_header(tab.description.to_string(), action_count_line(count)),
             items: keymap_selection_items(
                 tab_rows,
-                "No shortcuts in this group",
-                "No configurable actions are available in this group.",
+                "Không có phím tắt trong nhóm này",
+                "Không có hành động có thể cấu hình nào trong nhóm này.",
             ),
         });
     }
@@ -289,7 +289,7 @@ fn build_keymap_picker_params_for_action(
         tabs,
         initial_tab_id: Some(KEYMAP_ALL_TAB_ID.to_string()),
         is_searchable: true,
-        search_placeholder: Some("Type to search shortcuts".to_string()),
+        search_placeholder: Some("Gõ để tìm kiếm phím tắt".to_string()),
         col_width_mode: ColumnWidthMode::AutoAllRows,
         row_display: SelectionRowDisplay::SingleLine,
         name_column_width,
@@ -301,19 +301,19 @@ fn build_keymap_picker_params_for_action(
 fn keymap_debug_tab() -> SelectionTab {
     SelectionTab {
         id: KEYMAP_DEBUG_TAB_ID.to_string(),
-        label: "Debug".to_string(),
+        label: "Gỡ lỗi".to_string(),
         header: keymap_header(
-            "Inspect keypresses from your terminal.".to_string(),
-            "See the key Codex detects and any shortcuts assigned to it.".to_string(),
+            "Kiểm tra các phím nhấn từ terminal của bạn.".to_string(),
+            "Xem phím Codex phát hiện và mọi phím tắt được gán cho phím đó.".to_string(),
         ),
         items: vec![SelectionItem {
-            name: "Inspect keypresses".to_string(),
+            name: "Kiểm tra phím nhấn".to_string(),
             description: Some(
-                "Press Enter to start. Then press any key to inspect it; Ctrl+C exits."
+                "Nhấn Enter để bắt đầu. Sau đó nhấn bất kỳ phím nào để kiểm tra; Ctrl+C để thoát."
                     .to_string(),
             ),
             selected_description: Some(
-                "Open a live inspector that shows the detected key, config key, and matching actions."
+                "Mở trình kiểm tra trực tiếp hiển thị phím phát hiện được, phím cấu hình và các hành động khớp."
                     .to_string(),
             ),
             actions: vec![Box::new(|tx| {
@@ -390,9 +390,9 @@ fn keymap_selection_item(row: &KeymapActionRow) -> SelectionItem {
     let context = row.context.to_string();
     let action = row.action.to_string();
     let source = if row.custom_binding {
-        "Custom"
+        "Tùy chỉnh"
     } else {
-        "Default"
+        "Mặc định"
     };
     let search_value = format!(
         "{} {} {} {} {} {}",
@@ -445,8 +445,8 @@ fn keymap_header(description: String, summary: String) -> Box<dyn Renderable> {
 
 fn action_count_line(count: usize) -> String {
     match count {
-        1 => "1 action.".to_string(),
-        _ => format!("{count} actions."),
+        1 => "1 hành động.".to_string(),
+        _ => format!("{count} hành động."),
     }
 }
 
@@ -462,7 +462,7 @@ fn keymap_picker_hint_line() -> Line<'static> {
         "-".set_style(style),
         " unbound · ".dim(),
         "esc".set_style(style),
-        " close".dim(),
+        " để đóng".dim(),
     ])
 }
 
@@ -472,6 +472,6 @@ fn keymap_debug_hint_line() -> Line<'static> {
         "enter".set_style(style),
         " start inspector · ".dim(),
         "esc".set_style(style),
-        " close".dim(),
+        " để đóng".dim(),
     ])
 }

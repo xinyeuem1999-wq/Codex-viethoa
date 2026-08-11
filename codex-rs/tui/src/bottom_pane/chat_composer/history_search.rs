@@ -360,7 +360,7 @@ impl ChatComposer {
         ]);
         match search.status {
             HistorySearchStatus::Idle => {}
-            HistorySearchStatus::Searching => line.push_span("  searching".dim()),
+            HistorySearchStatus::Searching => line.push_span("  đang tìm kiếm".dim()),
             HistorySearchStatus::Match => {
                 line.push_span("  ".dim());
                 line.push_span(Self::history_search_action_key_span(KeyCode::Enter));

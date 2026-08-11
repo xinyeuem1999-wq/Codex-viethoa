@@ -295,7 +295,7 @@ impl ChatWidget {
         self.bottom_pane.show_selection_view(SelectionViewParams {
             view_id: Some(PET_SELECTION_LOADING_VIEW_ID),
             title: Some("Loading Pet".to_string()),
-            subtitle: Some("Preparing the terminal pet.".to_string()),
+            subtitle: Some("Đang chuẩn bị thú cưng terminal.".to_string()),
             items: vec![SelectionItem {
                 name: "Loading selected pet...".to_string(),
                 is_disabled: true,

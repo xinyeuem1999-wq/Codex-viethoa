@@ -7,9 +7,9 @@ const SAFETY_BUFFERING_PROMPT_VIEW_ID: &str = "safety-buffering-prompt";
 const SAFETY_BUFFERING_LEARN_MORE_URL: &str = "https://help.openai.com/en/articles/20001326";
 
 const SAFETY_BUFFERING_HEADER: &str =
-    "Our systems are thinking a bit more about this request before responding.";
-const SAFETY_BUFFERING_MESSAGE_WITH_RETRY: &str = "Hang tight or retry with a faster model for a quicker response, though it may be less capable of handling complex requests.";
-const SAFETY_BUFFERING_FOOTER: &str = "No action is required. Codex will keep waiting, and this menu will close when the response is ready.";
+    "Hệ thống của chúng tôi đang suy nghĩ thêm một chút về yêu cầu này trước khi phản hồi.";
+const SAFETY_BUFFERING_MESSAGE_WITH_RETRY: &str = "Kiên nhẫn chờ hoặc thử lại với model nhanh hơn để có phản hồi nhanh hơn, dù nó có thể kém khả năng hơn trong việc xử lý yêu cầu phức tạp.";
+const SAFETY_BUFFERING_FOOTER: &str = "Không cần hành động gì. Codex sẽ tiếp tục chờ, và menu này sẽ đóng khi phản hồi sẵn sàng.";
 
 #[derive(Debug)]
 struct ActiveSafetyBuffering {
@@ -150,7 +150,7 @@ impl ChatWidget {
         };
         self.bottom_pane.ensure_status_indicator();
         self.set_status(
-            "Working".to_string(),
+            "Đang xử lý".to_string(),
             Some(status_details),
             StatusDetailsCapitalization::Preserve,
             /*details_max_lines*/ 6,
@@ -177,7 +177,7 @@ impl ChatWidget {
             (faster_model, retry_turn, retry_prompt, thread_id)
         {
             items.push(SelectionItem {
-                name: "Retry with a faster model".to_string(),
+                name: "Thử lại với model nhanh hơn".to_string(),
                 actions: vec![Box::new(move |tx| {
                     tx.send(AppEvent::RetrySafetyBufferedTurn {
                         thread_id,
@@ -193,7 +193,7 @@ impl ChatWidget {
         }
         items.extend([
             SelectionItem {
-                name: "Dismiss and keep waiting".to_string(),
+                name: "Đóng và tiếp tục chờ".to_string(),
                 dismiss_on_select: true,
                 ..Default::default()
             },

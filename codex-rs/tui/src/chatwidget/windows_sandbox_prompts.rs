@@ -104,14 +104,14 @@ impl ChatWidget {
             });
         let info_line = if failed_scan {
             Line::from(vec![
-                "We couldn't complete the world-writable scan, so protections cannot be verified. "
+                "Không thể hoàn tất quá trình quét thư mục ghi toàn cầu, nên không thể xác minh biện pháp bảo vệ. "
                     .into(),
-                format!("The Windows sandbox cannot guarantee protection in {mode_label}.").red(),
+                format!("Sandbox Windows không thể đảm bảo bảo vệ trong {mode_label}.").red(),
             ])
         } else {
             Line::from(vec![
-                "The Windows sandbox cannot protect writes to folders that are writable by Everyone.".into(),
-                " Consider removing write access for Everyone from the following folders:".into(),
+                "Sandbox Windows không thể bảo vệ ghi vào các thư mục mà Everyone có quyền ghi.".into(),
+                " Cân nhắc gỡ quyền ghi cho Everyone khỏi các thư mục sau:".into(),
             ])
         };
         header_children.push(Box::new(
@@ -182,14 +182,14 @@ impl ChatWidget {
         let items = vec![
             SelectionItem {
                 name: "Continue".to_string(),
-                description: Some(format!("Apply {mode_label} for this session")),
+                description: Some(format!("Áp dụng {mode_label} cho phiên này")),
                 actions: accept_actions,
                 dismiss_on_select: true,
                 ..Default::default()
             },
             SelectionItem {
-                name: "Continue and don't warn again".to_string(),
-                description: Some(format!("Enable {mode_label} and remember this choice")),
+                name: "Tiếp tục và không cảnh báo lại".to_string(),
+                description: Some(format!("Bật {mode_label} và ghi nhớ lựa chọn này")),
                 actions: accept_and_remember_actions,
                 dismiss_on_select: true,
                 ..Default::default()
@@ -237,12 +237,12 @@ impl ChatWidget {
         header.push(*Box::new(
             Paragraph::new(if allow_unelevated {
                 vec![
-                    line!["Set up the Codex agent sandbox to protect your files and control network access. Learn more <https://developers.openai.com/codex/windows>"],
+                    line!["Thiết lập sandbox agent Codex để bảo vệ file và kiểm soát truy cập mạng. Tìm hiểu thêm <https://developers.openai.com/codex/windows>"],
                 ]
             } else {
                 vec![
-                    line!["Your organization requires the default Codex agent sandbox to continue. Set it up to protect your files and control network access."],
-                    line!["Learn more <https://developers.openai.com/codex/windows>"],
+                    line!["Tổ chức của bạn yêu cầu sandbox agent Codex mặc định để tiếp tục. Thiết lập để bảo vệ file và kiểm soát truy cập mạng."],
+                    line!["Tìm hiểu thêm <https://developers.openai.com/codex/windows>"],
                 ]
             })
             .wrap(Wrap { trim: false }),
@@ -256,7 +256,7 @@ impl ChatWidget {
         let retry_preset = preset.clone();
         let retry_profile_selection = profile_selection.clone();
         let mut items = vec![SelectionItem {
-            name: "Set up default sandbox (requires Administrator permissions)".to_string(),
+            name: "Thiết lập sandbox mặc định (cần quyền quản trị viên)".to_string(),
             description: None,
             actions: vec![Box::new(move |tx| {
                 accept_otel.counter(
@@ -274,7 +274,7 @@ impl ChatWidget {
         }];
         if allow_unelevated {
             items.push(SelectionItem {
-                name: "Use non-admin sandbox (higher risk if prompt injected)".to_string(),
+                name: "Dùng sandbox không phải quản trị viên (rủi ro cao hơn nếu bị prompt injection)".to_string(),
                 description: None,
                 actions: vec![Box::new(move |tx| {
                     legacy_otel.counter(
@@ -345,20 +345,20 @@ impl ChatWidget {
             !allow_unelevated || self.elevated_windows_sandbox_setup_required();
         let mut lines = Vec::new();
         lines.push(line![
-            "Couldn't set up your sandbox with Administrator permissions".bold()
+            "Không thể thiết lập sandbox với quyền quản trị viên".bold()
         ]);
         lines.push(line![""]);
         if allow_unelevated {
             lines.push(line![
-                "You can still use Codex in a non-admin sandbox. It carries greater risk if prompt injected."
+                "Bạn vẫn có thể dùng Codex trong sandbox không phải quản trị viên. Nó tiềm ẩn rủi ro lớn hơn nếu bị prompt injection."
             ]);
         } else {
             lines.push(line![
-                "Your organization requires the default sandbox before Codex can continue."
+                "Tổ chức của bạn yêu cầu sandbox mặc định trước khi Codex có thể tiếp tục."
             ]);
         }
         lines.push(line![
-            "Learn more <https://developers.openai.com/codex/windows>"
+            "Tìm hiểu thêm <https://developers.openai.com/codex/windows>"
         ]);
 
         let mut header = ColumnRenderable::new();
@@ -372,7 +372,7 @@ impl ChatWidget {
         let legacy_profile_selection = profile_selection;
         let quit_otel = self.session_telemetry.clone();
         let mut items = vec![SelectionItem {
-            name: "Try setting up admin sandbox again".to_string(),
+            name: "Thử thiết lập sandbox quản trị viên lần nữa".to_string(),
             description: None,
             actions: vec![Box::new({
                 let otel = self.session_telemetry.clone();
@@ -394,7 +394,7 @@ impl ChatWidget {
         }];
         if allow_unelevated {
             items.push(SelectionItem {
-                name: "Use Codex with non-admin sandbox".to_string(),
+                name: "Dùng Codex với sandbox không phải quản trị viên".to_string(),
                 description: None,
                 actions: vec![Box::new({
                     let otel = self.session_telemetry.clone();
@@ -479,14 +479,14 @@ impl ChatWidget {
         // accidentally queue messages that will run under an unexpected mode.
         self.bottom_pane.set_composer_input_enabled(
             /*enabled*/ false,
-            Some("Input disabled until setup completes.".to_string()),
+            Some("Nhập liệu bị tắt cho đến khi thiết lập hoàn tất.".to_string()),
         );
         self.bottom_pane.ensure_status_indicator();
         self.bottom_pane
             .set_interrupt_hint_visible(/*visible*/ false);
         self.set_status(
             "Setting up sandbox...".to_string(),
-            Some("Hang tight, this may take a few minutes".to_string()),
+            Some("Chờ chút, việc này có thể mất vài phút".to_string()),
             StatusDetailsCapitalization::CapitalizeFirst,
             STATUS_DETAILS_DEFAULT_MAX_LINES,
         );

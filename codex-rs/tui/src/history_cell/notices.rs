@@ -42,7 +42,7 @@ impl HistoryCell for UpdateAvailableHistoryCell {
             ],
             update_instruction,
             "",
-            "See full release notes:",
+            "Xem ghi chú phát hành đầy đủ:",
             "https://github.com/openai/codex/releases/latest"
                 .cyan()
                 .underlined(),
@@ -60,14 +60,14 @@ impl HistoryCell for UpdateAvailableHistoryCell {
         let update_instruction = if let Some(update_action) = self.update_action {
             format!("Run {} to update.", update_action.command_str())
         } else {
-            "See https://github.com/openai/codex for installation options.".to_string()
+            "Xem https://github.com/openai/codex để biết các tùy chọn cài đặt.".to_string()
         };
         vec![
             Line::from("Update available!"),
             Line::from(format!("{CODEX_CLI_VERSION} -> {}", self.latest_version)),
             Line::from(update_instruction),
             Line::from(""),
-            Line::from("See full release notes:"),
+            Line::from("Xem ghi chú phát hành đầy đủ:"),
             Line::from("https://github.com/openai/codex/releases/latest"),
         ]
     }
@@ -91,12 +91,12 @@ pub(crate) struct SafetyAccessBlockCell {
     trusted_access_url: &'static str,
 }
 
-const SAFETY_ACCESS_BLOCK_TITLE: &str = "This content can't be shown";
+const SAFETY_ACCESS_BLOCK_TITLE: &str = "Không thể hiển thị nội dung này";
 const SAFETY_ACCESS_BLOCK_LEARN_MORE_URL: &str = "https://help.openai.com/en/articles/20001326";
 
 pub(crate) fn new_safety_access_block_event() -> SafetyAccessBlockCell {
     SafetyAccessBlockCell {
-        body: "We take extra caution with requests involving biological research and applications that could pose safety risks. Eligible researchers can apply for Trusted Access.",
+        body: "Chúng tôi đặc biệt thận trọng với các yêu cầu liên quan đến nghiên cứu sinh học và ứng dụng có thể gây rủi ro an toàn. Các nhà nghiên cứu đủ điều kiện có thể đăng ký Trusted Access.",
         trusted_access_url: "https://www.openai.com/form/trusted-access-for-biology-research/",
     }
 }
@@ -154,7 +154,7 @@ impl HistoryCell for SafetyAccessBlockCell {
             Line::from(SAFETY_ACCESS_BLOCK_TITLE),
             Line::from(self.body),
             Line::from(format!("Trusted Access: {trusted_access_url}")),
-            Line::from(format!("Learn more: {SAFETY_ACCESS_BLOCK_LEARN_MORE_URL}")),
+            Line::from(format!("Tìm hiểu thêm: {SAFETY_ACCESS_BLOCK_LEARN_MORE_URL}")),
         ]
     }
 

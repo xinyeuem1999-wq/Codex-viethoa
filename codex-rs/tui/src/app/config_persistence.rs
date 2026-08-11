@@ -65,7 +65,7 @@ impl App {
             .cloud_config_bundle(self.cloud_config_bundle.clone());
         build_config_on_runtime_worker(
             builder,
-            format!("Failed to rebuild config for cwd {cwd_display}"),
+            format!("Không thể xây dựng lại cấu hình cho cwd {cwd_display}"),
         )
         .await
     }
@@ -87,7 +87,7 @@ impl App {
             .cloud_config_bundle(self.cloud_config_bundle.clone());
         build_config_on_runtime_worker(
             builder,
-            format!("Failed to rebuild config for permission profile {profile_id}"),
+            format!("Không thể xây dựng lại cấu hình cho hồ sơ quyền {profile_id}"),
         )
         .await
     }
@@ -137,7 +137,7 @@ impl App {
                     "failed to resolve selected permission profile"
                 );
                 self.chat_widget.add_error_message(format!(
-                    "Failed to set permission profile `{profile_id}`: {err}"
+                    "Không thể đặt hồ sơ quyền `{profile_id}`: {err}"
                 ));
                 return false;
             }
@@ -151,7 +151,7 @@ impl App {
             && !self.try_set_approval_policy_on_config(
                 &mut config,
                 policy,
-                "Failed to set approval policy",
+                "Không thể đặt chính sách phê duyệt",
                 "failed to set selected permission profile approval policy on app config",
             )
         {
@@ -172,7 +172,7 @@ impl App {
                 "failed to set selected permission profile on app config"
             );
             self.chat_widget.add_error_message(format!(
-                "Failed to set permission profile `{profile_id}`: {err}"
+                "Không thể đặt hồ sơ quyền `{profile_id}`: {err}"
             ));
             return false;
         }
@@ -196,7 +196,7 @@ impl App {
                 "failed to set selected permission profile on chat config"
             );
             self.chat_widget.add_error_message(format!(
-                "Failed to set permission profile `{profile_id}`: {err}"
+                "Không thể đặt hồ sơ quyền `{profile_id}`: {err}"
             ));
             return false;
         }
@@ -225,7 +225,7 @@ impl App {
             )));
         self.app_event_tx.send(AppEvent::InsertHistoryCell(Box::new(
             history_cell::new_info_event(
-                format!("Permissions updated to {display_label}"),
+                format!("Đã cập nhật quyền thành {display_label}"),
                 /*hint*/ None,
             ),
         )));
@@ -267,7 +267,7 @@ impl App {
                     "failed to refresh effective config after an overridden write"
                 );
                 self.chat_widget.add_error_message(format!(
-                    "{setting} were saved, but Codex could not refresh the effective config: {err}"
+                    "{setting} đã được lưu, nhưng Codex không thể làm mới cấu hình hiệu lực: {err}"
                 ));
                 None
             }
@@ -303,7 +303,7 @@ impl App {
         {
             tracing::warn!(%err, "failed to carry forward approval policy override");
             self.chat_widget.add_error_message(format!(
-                "Failed to carry forward approval policy override: {err}"
+                "Không thể chuyển tiếp ghi đè chính sách phê duyệt: {err}"
             ));
         }
         if let Some(profile_override) = self.runtime_permission_profile_override.as_ref() {
@@ -321,7 +321,7 @@ impl App {
                 Err(err) => {
                     tracing::warn!(%err, "failed to carry forward permission profile override");
                     self.chat_widget.add_error_message(format!(
-                        "Failed to carry forward permission profile override: {err}"
+                        "Không thể chuyển tiếp ghi đè hồ sơ quyền: {err}"
                     ));
                 }
             }
@@ -365,7 +365,7 @@ impl App {
                 "{log_message}: unsupported active permission profile"
             );
             self.chat_widget.add_error_message(format!(
-                "{user_message_prefix}: unsupported active permission profile `{}`",
+                "{user_message_prefix}: hồ sơ quyền hoạt động `{}` không được hỗ trợ",
                 active_permission_profile.id
             ));
             return None;
@@ -423,7 +423,7 @@ impl App {
                     "failed to update constrained feature flags"
                 );
                 self.chat_widget.add_error_message(format!(
-                    "Failed to update experimental feature `{feature_key}`: {err}"
+                    "Không thể cập nhật tính năng thử nghiệm `{feature_key}`: {err}"
                 ));
                 continue;
             }
@@ -461,7 +461,7 @@ impl App {
                 if !self.try_set_approval_policy_on_config(
                     &mut feature_config,
                     auto_review_preset.approval_policy,
-                    "Failed to enable Approve for me",
+                    "Không thể bật Approve for me",
                     "failed to set auto-review approval policy on staged config",
                 ) {
                     continue;
@@ -470,7 +470,7 @@ impl App {
                     .try_set_builtin_active_permission_profile_on_config(
                         &mut feature_config,
                         auto_review_preset.active_permission_profile.clone(),
-                        "Failed to enable Approve for me",
+                        "Không thể bật Approve for me",
                         "failed to set auto-review permission profile on staged config",
                     )
                 else {
@@ -514,7 +514,7 @@ impl App {
                 let error = crate::config_update::format_config_error(&err);
                 tracing::error!(error = %error, "failed to persist feature flags");
                 self.chat_widget
-                    .add_error_message(format!("Failed to update experimental features: {error}"));
+                    .add_error_message(format!("Không thể cập nhật các tính năng thử nghiệm: {error}"));
                 return;
             }
         };
@@ -525,7 +525,7 @@ impl App {
                 "feature flag config write was overridden by effective config"
             );
             self.chat_widget.add_error_message(format!(
-                "Experimental feature changes were saved but not applied: {message}"
+                "Thay đổi tính năng thử nghiệm đã được lưu nhưng chưa được áp dụng: {message}"
             ));
             if let Some(effective_config) = self
                 .read_effective_config_after_overridden_write(
@@ -589,7 +589,7 @@ impl App {
                 "failed to set auto-review permission profile on chat config"
             );
             self.chat_widget
-                .add_error_message(format!("Failed to enable Approve for me: {err}"));
+                .add_error_message(format!("Không thể bật Approve for me: {err}"));
         }
         if permission_profile_override.is_some() {
             self.runtime_permission_profile_override =
@@ -636,7 +636,7 @@ impl App {
 
         if let Some(label) = permissions_history_label {
             self.chat_widget.add_info_message(
-                format!("Permissions updated to {label}"),
+                format!("Đã cập nhật quyền thành {label}"),
                 /*hint*/ None,
             );
         }
@@ -661,7 +661,7 @@ impl App {
             Err(err) => {
                 tracing::error!(error = %err, "failed to persist memory settings");
                 self.chat_widget
-                    .add_error_message(format!("Failed to save memory settings: {err}"));
+                    .add_error_message(format!("Không thể lưu cài đặt memory: {err}"));
                 return false;
             }
         };
@@ -672,7 +672,7 @@ impl App {
                 "memory settings config write was overridden by effective config"
             );
             self.chat_widget.add_error_message(format!(
-                "Memory setting changes were saved but not applied: {message}"
+                "Thay đổi cài đặt memory đã được lưu nhưng chưa được áp dụng: {message}"
             ));
             let Some(effective_config) = self
                 .read_effective_config_after_overridden_write(app_server, "Memory setting changes")
@@ -734,7 +734,7 @@ impl App {
         if let Err(err) = app_server.memory_reset().await {
             tracing::error!(error = %err, "failed to reset memories");
             self.chat_widget
-                .add_error_message(format!("Failed to reset memories: {err}"));
+                .add_error_message(format!("Không thể đặt lại memories: {err}"));
             return;
         }
 
@@ -936,7 +936,7 @@ impl App {
                     "failed to sync effective approval policy after an overridden write"
                 );
                 self.chat_widget.add_error_message(format!(
-                    "Failed to refresh overridden Approve for me settings: {err}"
+                    "Không thể làm mới cài đặt Approve for me bị ghi đè: {err}"
                 ));
             } else {
                 self.chat_widget.set_approval_policy(policy);
@@ -964,7 +964,7 @@ impl App {
         let Some(permission_profile) = self.try_set_builtin_active_permission_profile_on_config(
             &mut config,
             auto_review_preset.active_permission_profile.clone(),
-            "Failed to refresh overridden Approve for me settings",
+            "Không thể làm mới cài đặt Approve for me bị ghi đè",
             "failed to sync overridden Auto-review permission profile",
         ) else {
             return;
@@ -982,7 +982,7 @@ impl App {
                 "failed to sync overridden Auto-review permission profile on chat config"
             );
             self.chat_widget.add_error_message(format!(
-                "Failed to refresh overridden Approve for me settings: {err}"
+                "Không thể làm mới cài đặt Approve for me bị ghi đè: {err}"
             ));
             return;
         }
@@ -1051,7 +1051,7 @@ impl App {
             "Windows sandbox config write was overridden by effective config"
         );
         self.chat_widget.add_error_message(format!(
-            "Windows sandbox changes were saved but not applied: {message}"
+            "Thay đổi sandbox Windows đã được lưu nhưng chưa được áp dụng: {message}"
         ));
         let Some(effective_config) = self
             .read_effective_config_after_overridden_write(app_server, "Windows sandbox changes")

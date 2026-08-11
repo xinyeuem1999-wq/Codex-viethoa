@@ -77,7 +77,7 @@ impl ChatWidget {
         if !self.connectors_enabled() {
             self.add_info_message(
                 "Apps are disabled.".to_string(),
-                Some("Enable the apps feature to use $ or /apps.".to_string()),
+                Some("Bật tính năng apps để dùng $ hoặc /apps.".to_string()),
             );
             return;
         }
@@ -124,14 +124,14 @@ impl ChatWidget {
     fn connectors_loading_popup_params(&self) -> SelectionViewParams {
         let mut header = ColumnRenderable::new();
         header.push(Line::from("Apps".bold()));
-        header.push(Line::from("Loading installed and available apps...".dim()));
+        header.push(Line::from("Đang tải các ứng dụng đã cài và khả dụng...".dim()));
 
         SelectionViewParams {
             view_id: Some(CONNECTORS_SELECTION_VIEW_ID),
             header: Box::new(header),
             items: vec![SelectionItem {
                 name: "Loading apps...".to_string(),
-                description: Some("This updates when the full list is ready.".to_string()),
+                description: Some("Danh sách này được cập nhật khi danh sách đầy đủ sẵn sàng.".to_string()),
                 is_disabled: true,
                 ..Default::default()
             }],
@@ -152,10 +152,10 @@ impl ChatWidget {
         let mut header = ColumnRenderable::new();
         header.push(Line::from("Apps".bold()));
         header.push(Line::from(
-            "Use $ to insert an installed app into your prompt.".dim(),
+            "Dùng $ để chèn một ứng dụng đã cài vào lời nhắc của bạn.".dim(),
         ));
         header.push(Line::from(
-            format!("Installed {installed} of {total} available apps.").dim(),
+            format!("Đã cài {installed} trên tổng số {total} ứng dụng khả dụng.").dim(),
         ));
         let initial_selected_idx = selected_connector_id.and_then(|selected_connector_id| {
             connectors
@@ -179,16 +179,16 @@ impl ChatWidget {
             let is_installed = connector.is_accessible;
             let selected_label = if is_installed {
                 format!(
-                    "{status_label}. Press Enter to open the app page to install, manage, or enable/disable this app."
+                    "{status_label}. Nhấn Enter để mở trang ứng dụng nhằm cài đặt, quản lý hoặc bật/tắt ứng dụng này."
                 )
             } else {
-                format!("{status_label}. Press Enter to open the app page to install this app.")
+                format!("{status_label}. Nhấn Enter để mở trang ứng dụng nhằm cài đặt ứng dụng này.")
             };
-            let missing_label = format!("{status_label}. App link unavailable.");
+            let missing_label = format!("{status_label}. Liên kết ứng dụng không khả dụng.");
             let instructions = if connector.is_accessible {
-                "Manage this app in your browser."
+                "Quản lý ứng dụng này trong trình duyệt."
             } else {
-                "Install this app in your browser, then reload Codex."
+                "Cài đặt ứng dụng này trong trình duyệt, rồi tải lại Codex."
             };
             if let Some(install_url) = connector.install_url.clone() {
                 let app_id = connector.id.clone();
@@ -231,7 +231,7 @@ impl ChatWidget {
             footer_hint: Some(self.bottom_pane.standard_popup_hint_line()),
             items,
             is_searchable: true,
-            search_placeholder: Some("Type to search apps".to_string()),
+            search_placeholder: Some("Gõ để tìm kiếm ứng dụng".to_string()),
             col_width_mode: ColumnWidthMode::AutoAllRows,
             initial_selected_idx,
             ..Default::default()
@@ -269,12 +269,12 @@ impl ChatWidget {
     fn connector_status_label(connector: &AppInfo) -> &'static str {
         if connector.is_accessible {
             if connector.is_enabled {
-                "Installed"
+                "Đã cài"
             } else {
-                "Installed · Disabled"
+                "Đã cài · Đã tắt"
             }
         } else {
-            "Can be installed"
+            "Có thể cài"
         }
     }
 

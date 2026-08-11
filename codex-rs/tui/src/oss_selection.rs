@@ -69,13 +69,13 @@ static OSS_SELECT_OPTIONS: LazyLock<Vec<SelectOption>> = LazyLock::new(|| {
     vec![
         SelectOption {
             label: Line::from(vec!["L".underlined(), "M Studio".into()]),
-            description: "Local LM Studio server (default port 1234)",
+            description: "Máy chủ LM Studio cục bộ (cổng mặc định 1234)",
             key: KeyCode::Char('l'),
             provider_id: LMSTUDIO_OSS_PROVIDER_ID,
         },
         SelectOption {
             label: Line::from(vec!["O".underlined(), "llama".into()]),
-            description: "Local Ollama server (Responses API, default port 11434)",
+            description: "Máy chủ Ollama cục bộ (Responses API, cổng mặc định 11434)",
             key: KeyCode::Char('o'),
             provider_id: OLLAMA_OSS_PROVIDER_ID,
         },
@@ -128,10 +128,10 @@ impl OssSelectionWidget<'_> {
         let mut contents: Vec<Line> = vec![
             Line::from(vec![
                 "? ".fg(Color::Blue),
-                "Select an open-source provider".bold(),
+                "Chọn nhà cung cấp mã nguồn mở".bold(),
             ]),
             Line::from(""),
-            Line::from("  Choose which local AI server to use for your session."),
+            Line::from("  Chọn máy chủ AI cục bộ nào để dùng cho phiên của bạn."),
             Line::from(""),
         ];
 
@@ -284,7 +284,7 @@ impl WidgetRef for &OssSelectionWidget<'_> {
         ])
         .areas(response_chunk.inner(Margin::new(1, 0)));
 
-        Line::from("Select provider?").render(title_area, buf);
+        Line::from("Chọn nhà cung cấp?").render(title_area, buf);
 
         self.confirmation_prompt.clone().render(prompt_chunk, buf);
         let areas = Layout::horizontal(

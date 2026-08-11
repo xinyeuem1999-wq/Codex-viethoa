@@ -6,9 +6,9 @@
 use super::*;
 
 const LEGACY_SAFETY_ACCESS_BLOCK_PREFIX: &str =
-    "Invalid prompt: we've limited access to this content for safety reasons.";
+    "Lời nhắc không hợp lệ: chúng tôi đã hạn chế truy cập nội dung này vì lý do an toàn.";
 const BIO_POLICY_SAFETY_ACCESS_BLOCK_PREFIX: &str =
-    "This content was flagged for possible biological risk.";
+    "Nội dung này bị gắn cờ vì rủi ro sinh học tiềm ẩn.";
 
 fn is_safety_access_block_message(message: &str) -> bool {
     message.starts_with(LEGACY_SAFETY_ACCESS_BLOCK_PREFIX)
@@ -21,7 +21,7 @@ impl ChatWidget {
         if self.status_state.current_status.is_guardian_review() {
             let header = self
                 .mcp_startup_status_header()
-                .unwrap_or_else(|| String::from("Working"));
+                .unwrap_or_else(|| String::from("Đang xử lý"));
             self.set_status_header(header);
         }
     }
@@ -90,7 +90,7 @@ impl ChatWidget {
             .set_interrupt_hint_visible(/*visible*/ true);
         self.status_state.terminal_title_status_kind = TerminalTitleStatusKind::Working;
         if self.mcp_startup_status.is_none() || !self.status_header_is_mcp_startup_owned() {
-            self.set_status_header(String::from("Working"));
+            self.set_status_header(String::from("Đang xử lý"));
         }
         self.reasoning_summary_parts.clear();
         self.reasoning_buffer.clear();
@@ -347,7 +347,7 @@ impl ChatWidget {
         self.finalize_turn();
 
         let message = if message.trim().is_empty() {
-            "Codex is currently experiencing high load.".to_string()
+            "Codex hiện đang chịu tải cao.".to_string()
         } else {
             message
         };
@@ -411,13 +411,13 @@ impl ChatWidget {
         match rate_limit_reached_type {
             Some(RateLimitReachedType::WorkspaceOwnerCreditsDepleted) => {
                 self.on_error(
-                    "You're out of credits. Your workspace is out of credits. Add credits to continue using Codex."
+                    "Bạn đã hết credits. Workspace của bạn đã hết credits. Hãy thêm credits để tiếp tục dùng Codex."
                         .to_string(),
                 );
             }
             Some(RateLimitReachedType::WorkspaceOwnerUsageLimitReached) => {
                 self.on_error(
-                    "Usage limit reached. You've reached your usage limit. Increase your limits to continue using codex."
+                    "Đã đạt giới hạn sử dụng. Bạn đã chạm giới hạn sử dụng. Hãy tăng giới hạn để tiếp tục dùng Codex."
                         .to_string(),
                 );
             }
@@ -513,9 +513,9 @@ impl ChatWidget {
 
     pub(super) fn interrupted_turn_message(&self, reason: TurnAbortReason) -> String {
         if reason == TurnAbortReason::BudgetLimited {
-            return "Goal budget reached - the turn was stopped.".to_string();
+            return "Đã chạm ngân sách mục tiêu - lượt đã bị dừng.".to_string();
         }
 
-        "Conversation interrupted - tell the model what to do differently. Something went wrong? Hit `/feedback` to report the issue.".to_string()
+        "Cuộc trò chuyện bị gián đoạn - hãy nói cho model biết nên làm khác đi như thế nào. Có gì sai? Bấm `/feedback` để báo cáo vấn đề.".to_string()
     }
 }

@@ -88,7 +88,7 @@ impl PendingInputPreview {
         let mut lines = vec![];
 
         if !self.pending_steers.is_empty() {
-            let mut header = vec!["Messages to be submitted after next tool call".into()];
+            let mut header = vec!["Tin nhắn sẽ được gửi sau lần gọi công cụ tiếp theo".into()];
             if let Some(interrupt_binding) = self.interrupt_binding {
                 header.extend(vec![
                     " (press ".dim(),
@@ -116,7 +116,7 @@ impl PendingInputPreview {
             Self::push_section_header(
                 &mut lines,
                 width,
-                "Messages to be submitted at end of turn".into(),
+                "Tin nhắn sẽ được gửi khi kết thúc lượt".into(),
             );
 
             for steer in &self.rejected_steers {

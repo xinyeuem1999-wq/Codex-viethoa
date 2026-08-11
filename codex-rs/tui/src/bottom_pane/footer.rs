@@ -540,9 +540,9 @@ pub(crate) fn goal_status_indicator_line(
                 "Pursuing goal".to_string()
             }
         }
-        GoalStatusIndicator::Paused => "Goal paused (/goal resume)".to_string(),
-        GoalStatusIndicator::Blocked => "Goal stalled (/goal resume)".to_string(),
-        GoalStatusIndicator::UsageLimited => "Goal hit usage limits (/goal resume)".to_string(),
+        GoalStatusIndicator::Paused => "Mục tiêu đã tạm dừng (/goal resume)".to_string(),
+        GoalStatusIndicator::Blocked => "Mục tiêu bị kẹt (/goal resume)".to_string(),
+        GoalStatusIndicator::UsageLimited => "Mục tiêu chạm giới hạn sử dụng (/goal resume)".to_string(),
         GoalStatusIndicator::BudgetLimited { usage } => {
             if let Some(usage) = usage {
                 format!("Goal unmet ({usage})")

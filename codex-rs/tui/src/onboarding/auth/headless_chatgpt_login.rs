@@ -66,7 +66,7 @@ pub(super) fn start_headless_chatgpt_login(widget: &mut AuthModeWidget) {
                     &request_frame,
                     &error,
                     &request_id,
-                    format!("Unexpected account/login/start response: {other:?}"),
+                    format!("Phản hồi account/login/start không mong đợi: {other:?}"),
                 );
             }
             Err(err) => {
@@ -89,9 +89,9 @@ pub(super) fn render_device_code_login(
     state: &ContinueWithDeviceCodeState,
 ) {
     let banner = if state.is_showing_copyable_auth() {
-        "Finish signing in via your browser"
+        "Hoàn tất đăng nhập qua trình duyệt của bạn"
     } else {
-        "Preparing device code login"
+        "Đang chuẩn bị đăng nhập bằng mã thiết bị"
     };
 
     let mut spans = vec!["  ".into()];
@@ -109,7 +109,7 @@ pub(super) fn render_device_code_login(
     let verification_url = if let (Some(verification_url), Some(user_code)) =
         (&state.verification_url, &state.user_code)
     {
-        lines.push("  1. Open this link in your browser and sign in".into());
+        lines.push("  1. Mở liên kết này trong trình duyệt và đăng nhập".into());
         lines.push("".into());
         lines.push(Line::from(vec![
             "  ".into(),
@@ -117,7 +117,7 @@ pub(super) fn render_device_code_login(
         ]));
         lines.push("".into());
         lines.push(
-            "  2. Enter this one-time code after you are signed in (expires in 15 minutes)".into(),
+            "  2. Nhập mã dùng một lần này sau khi bạn đăng nhập (hết hạn sau 15 phút)".into(),
         );
         lines.push("".into());
         lines.push(Line::from(vec![
@@ -126,22 +126,22 @@ pub(super) fn render_device_code_login(
         ]));
         lines.push("".into());
         lines.push(
-            "  Continue only if you started this login in Codex. If a website or another person gave you this code, cancel."
+            "  Chỉ tiếp tục nếu bạn đã bắt đầu đăng nhập này trong Codex. Nếu một trang web hoặc người khác đưa mã này cho bạn, hãy hủy."
                 .dim()
                 .into(),
         );
         lines.push("".into());
         Some(verification_url.clone())
     } else {
-        lines.push("  Requesting a one-time code...".dim().into());
+        lines.push("  Đang yêu cầu mã dùng một lần...".dim().into());
         lines.push("".into());
         None
     };
 
     lines.push(Line::from(vec![
-        "  Press ".dim(),
+        "  Nhấn ".dim(),
         widget.cancel_binding().into(),
-        " to cancel".dim(),
+        " để hủy".dim(),
     ]));
     Paragraph::new(lines)
         .wrap(Wrap { trim: false })

@@ -144,7 +144,7 @@ use uuid::Uuid;
 const JSONRPC_INVALID_REQUEST: i64 = -32600;
 const JSONRPC_METHOD_NOT_FOUND: i64 = -32601;
 const JSONRPC_INVALID_PARAMS: i64 = -32602;
-pub(crate) const EXTERNAL_AGENT_CONFIG_IMPORT_IN_PROGRESS_MESSAGE: &str = "A previous external agent import is still running. Wait for it to finish before importing again.";
+pub(crate) const EXTERNAL_AGENT_CONFIG_IMPORT_IN_PROGRESS_MESSAGE: &str = "Một lần nhập tác tử ngoài trước đó vẫn đang chạy. Hãy đợi nó hoàn tất trước khi nhập lại.";
 const THREAD_SETTINGS_UPDATE_METHOD: &str = "thread/settings/update";
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -863,7 +863,7 @@ impl AppServerSession {
         let forked_from_id = match ThreadId::from_string(forked_from_id) {
             Ok(thread_id) => thread_id,
             Err(err) => {
-                tracing::warn!("Failed to parse fork parent thread id from app server: {err}");
+                tracing::warn!("Không thể phân tích id luồng cha của fork từ app server: {err}");
                 return None;
             }
         };
@@ -874,7 +874,7 @@ impl AppServerSession {
         {
             Ok(thread) => thread.name,
             Err(err) => {
-                tracing::warn!("Failed to read fork parent metadata from app server: {err}");
+                tracing::warn!("Không thể đọc siêu dữ liệu luồng cha của fork từ app server: {err}");
                 None
             }
         }
@@ -2025,12 +2025,12 @@ async fn thread_session_state_from_thread_response(
     config: &Config,
 ) -> Result<ThreadSessionState, String> {
     let thread_id = ThreadId::from_string(thread_id)
-        .map_err(|err| format!("thread id `{thread_id}` is invalid: {err}"))?;
+        .map_err(|err| format!("id luồng `{thread_id}` không hợp lệ: {err}"))?;
     let forked_from_id = forked_from_id
         .as_deref()
         .map(ThreadId::from_string)
         .transpose()
-        .map_err(|err| format!("forked_from_id is invalid: {err}"))?;
+        .map_err(|err| format!("forked_from_id không hợp lệ: {err}"))?;
     let history_config =
         codex_message_history::HistoryConfig::new(config.codex_home.clone(), &config.history);
     let (log_id, entry_count) = codex_message_history::history_metadata(&history_config).await;

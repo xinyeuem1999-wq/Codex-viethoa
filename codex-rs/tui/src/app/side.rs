@@ -16,15 +16,15 @@ use codex_app_server_protocol::TurnInterruptResponse;
 use codex_protocol::models::ContentItem;
 use codex_protocol::models::ResponseItem;
 
-const SIDE_RENAME_BLOCK_MESSAGE: &str = "Side conversations are ephemeral and cannot be renamed.";
+const SIDE_RENAME_BLOCK_MESSAGE: &str = "Cuộc trò chuyện phụ là tạm thời và không thể đổi tên.";
 const SIDE_MAIN_THREAD_UNAVAILABLE_MESSAGE: &str =
-    "'/side' is unavailable until the main thread is ready.";
+    "'/side' không khả dụng cho đến khi luồng chính sẵn sàng.";
 const SIDE_NO_STARTED_CONVERSATION_MESSAGE: &str = concat!(
-    "'/side' is unavailable until the current conversation has started. ",
-    "Send a message first, then try /side again."
+    "'/side' không khả dụng cho đến khi cuộc trò chuyện hiện tại đã bắt đầu. ",
+    "Hãy gửi một tin nhắn trước, rồi thử /side lần nữa."
 );
 const SIDE_ALREADY_OPEN_MESSAGE: &str =
-    "A side conversation is already open. Press ctrl + c to return before starting another.";
+    "Đã có một cuộc trò chuyện phụ đang mở. Nhấn ctrl + c để quay lại trước khi bắt đầu cuộc khác.";
 const SIDE_BOUNDARY_PROMPT: &str = r#"Side conversation boundary.
 
 Everything before this boundary is inherited history from the parent thread. It is reference context only. It is not your current task.
@@ -144,7 +144,7 @@ mod tests {
 
         assert_eq!(
             App::side_start_error_message(&err),
-            "'/side' is unavailable until the current conversation has started. Send a message first, then try /side again."
+            "'/side' không khả dụng cho đến khi cuộc trò chuyện hiện tại đã bắt đầu. Hãy gửi một tin nhắn trước, rồi thử /side lần nữa."
         );
     }
 
@@ -154,7 +154,7 @@ mod tests {
 
         assert_eq!(
             App::side_start_error_message(&err),
-            "Failed to start side conversation: transport disconnected"
+            "Không thể bắt đầu cuộc trò chuyện phụ: kết nối bị ngắt"
         );
     }
 
@@ -423,7 +423,7 @@ impl App {
         }
         if let Err(err) = app_server.thread_unsubscribe(thread_id).await {
             let message =
-                format!("Failed to close side conversation {thread_id}; it is still open: {err}");
+                format!("Không thể đóng cuộc trò chuyện phụ {thread_id}; nó vẫn đang mở: {err}");
             tracing::warn!("{message}");
             self.chat_widget.add_error_message(message);
             return false;
@@ -521,7 +521,7 @@ impl App {
                 app_server.startup_interrupt(thread_id).await
             };
         interrupt_result.map_err(|err| {
-            format!("Failed to close side conversation {thread_id}; it is still open: {err}")
+            format!("Không thể đóng cuộc trò chuyện phụ {thread_id}; nó vẫn đang mở: {err}")
         })
     }
 
@@ -605,11 +605,11 @@ impl App {
         if err.chain().any(|cause| {
             let message = cause.to_string();
             message.contains("no rollout found for thread id")
-                || message.contains("includeTurns is unavailable before first user message")
+                || message.contains("includeTurns không khả dụng trước tin nhắn đầu tiên của người dùng")
         }) {
             SIDE_NO_STARTED_CONVERSATION_MESSAGE.to_string()
         } else {
-            format!("Failed to start side conversation: {err}")
+            format!("Không thể bắt đầu cuộc trò chuyện phụ: {err}")
         }
     }
 
@@ -714,7 +714,7 @@ impl App {
                         .await;
                     self.restore_side_user_message(user_message.take());
                     self.chat_widget.add_error_message(format!(
-                        "Failed to prepare side conversation {child_thread_id}: {err}"
+                        "Không thể chuẩn bị cuộc trò chuyện phụ {child_thread_id}: {err}"
                     ));
                     return Ok(AppRunControl::Continue);
                 }
@@ -737,7 +737,7 @@ impl App {
                     }
                     self.restore_side_user_message(user_message.take());
                     self.chat_widget.add_error_message(format!(
-                        "Failed to switch into side conversation {child_thread_id}: {err}"
+                        "Không thể chuyển vào cuộc trò chuyện phụ {child_thread_id}: {err}"
                     ));
                     return Ok(AppRunControl::Continue);
                 }
@@ -752,7 +752,7 @@ impl App {
                         .await;
                     self.restore_side_user_message(user_message.take());
                     self.chat_widget.add_error_message(format!(
-                        "Failed to switch into side conversation {child_thread_id}."
+                        "Không thể chuyển vào cuộc trò chuyện phụ {child_thread_id}."
                     ));
                 }
             }

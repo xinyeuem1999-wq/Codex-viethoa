@@ -15,20 +15,20 @@ pub(crate) const MAX_POPUP_ROWS: usize = 8;
 /// Standard footer hint text used by popups.
 pub(crate) fn standard_popup_hint_line() -> Line<'static> {
     Line::from(vec![
-        "Press ".into(),
+        "Nhấn ".into(),
         key_hint::plain(KeyCode::Enter).into(),
-        " to confirm or ".into(),
+        " để xác nhận hoặc ".into(),
         key_hint::plain(KeyCode::Esc).into(),
-        " to go back".into(),
+        " để quay lại".into(),
     ])
 }
 
 pub(crate) fn standard_popup_hint_line_for_keymap(list_keymap: &ListKeymap) -> Line<'static> {
     accept_cancel_hint_line(
         list_keymap.primary_hint(ListAction::Accept),
-        "to confirm",
+        "để xác nhận",
         list_keymap.primary_hint(ListAction::Cancel),
-        "to go back",
+        "để quay lại",
     )
 }
 
@@ -40,19 +40,19 @@ pub(crate) fn accept_cancel_hint_line(
 ) -> Line<'static> {
     match (accept, cancel) {
         (Some(accept), Some(cancel)) => Line::from(vec![
-            "Press ".into(),
+            "Nhấn ".into(),
             accept.into(),
             format!(" {accept_label} or ").into(),
             cancel.into(),
             format!(" {cancel_label}").into(),
         ]),
         (Some(accept), None) => Line::from(vec![
-            "Press ".into(),
+            "Nhấn ".into(),
             accept.into(),
             format!(" {accept_label}").into(),
         ]),
         (None, Some(cancel)) => Line::from(vec![
-            "Press ".into(),
+            "Nhấn ".into(),
             cancel.into(),
             format!(" {cancel_label}").into(),
         ]),

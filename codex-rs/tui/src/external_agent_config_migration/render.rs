@@ -78,14 +78,14 @@ impl WidgetRef for &ExternalAgentConfigMigrationScreen {
         let error_height = u16::from(self.error.is_some());
         let intro_lines = match self.view {
             MigrationView::Summary => vec![
-                Line::from("Bring over supported setup from another coding agent."),
-                Line::from("Codex may add files to your current project folder."),
-                Line::from("Your existing setup will not be changed."),
+                Line::from("Mang thiết lập được hỗ trợ từ một coding agent khác."),
+                Line::from("Codex có thể thêm tệp vào thư mục dự án hiện tại của bạn."),
+                Line::from("Thiết lập hiện có của bạn sẽ không bị thay đổi."),
             ],
             MigrationView::Customize => vec![
-                Line::from("Choose items to import."),
-                Line::from("Codex may add files to your current project folder."),
-                Line::from("Your existing setup will not be changed."),
+                Line::from("Chọn các mục để nhập."),
+                Line::from("Codex có thể thêm tệp vào thư mục dự án hiện tại của bạn."),
+                Line::from("Thiết lập hiện có của bạn sẽ không bị thay đổi."),
             ],
         };
         let intro_height = intro_lines.len() as u16;
@@ -119,7 +119,7 @@ impl WidgetRef for &ExternalAgentConfigMigrationScreen {
 
         let title = match self.view {
             MigrationView::Summary => "Import setup",
-            MigrationView::Customize => "Choose what to import",
+            MigrationView::Customize => "Chọn nội dung để nhập",
         };
         let heading = Line::from(vec!["> ".into(), title.bold()]);
         heading.render(header_area, buf);
@@ -148,7 +148,7 @@ impl WidgetRef for &ExternalAgentConfigMigrationScreen {
             "items"
         };
         let actions_intro = format!(
-            "Selected {} of {} {item_label}.",
+            "Đã chọn {} trên {} {item_label}.",
             self.selected_count(),
             self.items.len()
         );
@@ -171,33 +171,33 @@ impl WidgetRef for &ExternalAgentConfigMigrationScreen {
                 key_hint::plain(KeyCode::Up).into(),
                 "/".dim(),
                 key_hint::plain(KeyCode::Down).into(),
-                " to move, ".dim(),
+                " để di chuyển, ".dim(),
                 key_hint::plain(KeyCode::Enter).into(),
-                " to select, ".dim(),
+                " để chọn, ".dim(),
                 "c".cyan(),
-                " to customize".dim(),
+                " để tùy chỉnh".dim(),
             ]),
             MigrationView::Customize if self.focus == FocusArea::Actions => Line::from(vec![
-                "Press ".dim(),
+                "Nhấn ".dim(),
                 key_hint::plain(KeyCode::Enter).into(),
-                " to continue, ".dim(),
+                " để tiếp tục, ".dim(),
                 key_hint::plain(KeyCode::Up).into(),
                 "/".dim(),
                 key_hint::plain(KeyCode::Down).into(),
-                " to move, ".dim(),
+                " để di chuyển, ".dim(),
                 "b".cyan(),
-                " to go back".dim(),
+                " để quay lại".dim(),
             ]),
             MigrationView::Customize => Line::from(vec![
                 "Use ".dim(),
                 key_hint::plain(KeyCode::Up).into(),
                 "/".dim(),
                 key_hint::plain(KeyCode::Down).into(),
-                " to move, ".dim(),
+                " để di chuyển, ".dim(),
                 key_hint::plain(KeyCode::Char(' ')).into(),
-                " to toggle, ".dim(),
+                " để bật/tắt, ".dim(),
                 "b".cyan(),
-                " to go back".dim(),
+                " để quay lại".dim(),
             ]),
         };
         footer.render(footer_area, buf);

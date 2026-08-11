@@ -75,12 +75,12 @@ pub(crate) enum TerminalTitleItem {
     /// Full thread UUID.
     #[strum(to_string = "thread-id", serialize = "session-id")]
     SessionId,
-    /// Whether Fast mode is currently active.
+    /// Có đang bật chế độ Fast hay không.
     FastMode,
     /// Current model name.
     #[strum(to_string = "model", serialize = "model-name")]
     Model,
-    /// Current model name with reasoning level.
+    /// Tên model hiện tại với mức suy luận.
     ModelWithReasoning,
     /// Current reasoning level.
     Reasoning,
@@ -92,41 +92,41 @@ impl TerminalTitleItem {
     pub(crate) fn description(self) -> &'static str {
         match self {
             TerminalTitleItem::AppName => "Codex app name",
-            TerminalTitleItem::Project => "Project name (falls back to current directory name)",
+            TerminalTitleItem::Project => "Tên dự án (dự phòng sang tên thư mục hiện tại)",
             TerminalTitleItem::CurrentDir => "Current working directory",
             TerminalTitleItem::Spinner => {
-                "Spinner while working, action-required message while blocked."
+                "Vòng xoay khi đang làm việc, thông báo cần hành động khi bị chặn."
             }
             TerminalTitleItem::Status => {
-                "Compact session run-state text (Ready, Working, Thinking)"
+                "Văn bản trạng thái chạy phiên gọn (Ready, Working, Thinking)"
             }
-            TerminalTitleItem::Thread => "Current thread title, or thread identifier when unnamed",
-            TerminalTitleItem::GitBranch => "Current Git branch (omitted when unavailable)",
+            TerminalTitleItem::Thread => "Tiêu đề luồng hiện tại, hoặc định danh luồng khi chưa đặt tên",
+            TerminalTitleItem::GitBranch => "Nhánh Git hiện tại (bỏ qua khi không khả dụng)",
             TerminalTitleItem::ContextRemaining => {
-                "Percentage of context window remaining (omitted when unknown)"
+                "Phần trăm cửa sổ ngữ cảnh còn lại (bỏ qua khi không xác định)"
             }
             TerminalTitleItem::ContextUsed => {
-                "Percentage of context window used (omitted when unknown)"
+                "Phần trăm cửa sổ ngữ cảnh đã dùng (bỏ qua khi không xác định)"
             }
             TerminalTitleItem::FiveHourLimit => {
-                "Remaining usage on the primary usage limit (omitted when unavailable)"
+                "Lượng sử dụng còn lại trên giới hạn sử dụng chính (bỏ qua khi không khả dụng)"
             }
             TerminalTitleItem::WeeklyLimit => {
-                "Remaining usage on the secondary usage limit (omitted when unavailable)"
+                "Lượng sử dụng còn lại trên giới hạn sử dụng phụ (bỏ qua khi không khả dụng)"
             }
             TerminalTitleItem::CodexVersion => "Codex application version",
-            TerminalTitleItem::UsedTokens => "Total tokens used in session (omitted when zero)",
-            TerminalTitleItem::TotalInputTokens => "Total input tokens used in session",
-            TerminalTitleItem::TotalOutputTokens => "Total output tokens used in session",
+            TerminalTitleItem::UsedTokens => "Tổng token đã dùng trong phiên (bỏ qua khi bằng 0)",
+            TerminalTitleItem::TotalInputTokens => "Tổng token đầu vào đã dùng trong phiên",
+            TerminalTitleItem::TotalOutputTokens => "Tổng token đầu ra đã dùng trong phiên",
             TerminalTitleItem::SessionId => {
-                "Current thread identifier (omitted until thread starts)"
+                "Định danh luồng hiện tại (bỏ qua cho đến khi luồng bắt đầu)"
             }
-            TerminalTitleItem::FastMode => "Whether Fast mode is currently active",
+            TerminalTitleItem::FastMode => "Có đang bật chế độ Fast hay không",
             TerminalTitleItem::Model => "Current model name",
-            TerminalTitleItem::ModelWithReasoning => "Current model name with reasoning level",
+            TerminalTitleItem::ModelWithReasoning => "Tên model hiện tại với mức suy luận",
             TerminalTitleItem::Reasoning => "Current reasoning level",
             TerminalTitleItem::TaskProgress => {
-                "Latest task progress from update_plan (omitted until available)"
+                "Tiến độ tác vụ mới nhất từ update_plan (bỏ qua cho đến khi có)"
             }
         }
     }
@@ -276,7 +276,7 @@ impl TerminalTitleSetupView {
         Self {
             picker: MultiSelectPicker::builder(
                 "Configure Terminal Title".to_string(),
-                Some("Select which items to display in the terminal title.".to_string()),
+                Some("Chọn các mục để hiển thị trong tiêu đề terminal.".to_string()),
                 app_event_tx,
             )
             .list_keymap(list_keymap)

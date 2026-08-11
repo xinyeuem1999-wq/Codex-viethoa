@@ -82,64 +82,74 @@ impl SlashCommand {
     /// User-visible description shown in the popup.
     pub fn description(self) -> &'static str {
         match self {
-            SlashCommand::Feedback => "send logs to maintainers",
-            SlashCommand::New => "start a new chat during a conversation",
-            SlashCommand::Init => "create an AGENTS.md file with instructions for Codex",
-            SlashCommand::Compact => "summarize conversation to prevent hitting the context limit",
-            SlashCommand::Review => "review my current changes and find issues",
-            SlashCommand::Rename => "rename the current thread",
-            SlashCommand::Resume => "resume a saved chat",
-            SlashCommand::Archive => "archive this session and exit",
-            SlashCommand::Delete => "permanently delete this session and exit",
-            SlashCommand::Clear => "clear the terminal and start a new chat",
-            SlashCommand::Fork => "fork the current chat",
-            SlashCommand::App => "continue this session in the Desktop app",
-            SlashCommand::Quit | SlashCommand::Exit => "exit Codex",
-            SlashCommand::Copy => "copy last response as markdown",
-            SlashCommand::Raw => "toggle raw scrollback mode for copy-friendly terminal selection",
-            SlashCommand::Diff => "show git diff (including untracked files)",
-            SlashCommand::Mention => "mention a file",
-            SlashCommand::Skills => "use skills to improve how Codex performs specific tasks",
-            SlashCommand::Import => "import setup, this project, and recent chats from Claude Code",
-            SlashCommand::Hooks => "view and manage lifecycle hooks",
-            SlashCommand::Status => "show current session configuration and token usage",
-            SlashCommand::Usage => "view account usage or use a usage limit reset",
-            SlashCommand::DebugConfig => "show config layers and requirement sources for debugging",
-            SlashCommand::Title => "configure which items appear in the terminal title",
-            SlashCommand::Statusline => "configure which items appear in the status line",
-            SlashCommand::Theme => "choose a syntax highlighting theme",
-            SlashCommand::Pets => "choose or hide the terminal pet",
-            SlashCommand::Ps => "list background terminals",
-            SlashCommand::Stop => "stop all background terminals",
+            SlashCommand::Feedback => "gửi log cho đội phát triển",
+            SlashCommand::New => "bắt đầu cuộc trò chuyện mới trong hội thoại",
+            SlashCommand::Init => "tạo file AGENTS.md với hướng dẫn cho Codex",
+            SlashCommand::Compact => "tóm tắt hội thoại để tránh chạm giới hạn ngữ cảnh",
+            SlashCommand::Review => "xem xét các thay đổi hiện tại và tìm vấn đề",
+            SlashCommand::Rename => "đổi tên luồng hiện tại",
+            SlashCommand::Resume => "tiếp tục cuộc trò chuyện đã lưu",
+            SlashCommand::Archive => "lưu trữ phiên này và thoát",
+            SlashCommand::Delete => "xóa vĩnh viễn phiên này và thoát",
+            SlashCommand::Clear => "xóa terminal và bắt đầu cuộc trò chuyện mới",
+            SlashCommand::Fork => "fork cuộc trò chuyện hiện tại",
+            SlashCommand::App => "tiếp tục phiên này trong ứng dụng Desktop",
+            SlashCommand::Quit | SlashCommand::Exit => "thoát Codex",
+            SlashCommand::Copy => "sao chép phản hồi cuối dạng markdown",
+            SlashCommand::Raw => {
+                "bật/tắt chế độ cuộn thô để chọn bản sao thân thiện với terminal"
+            }
+            SlashCommand::Diff => "hiển thị git diff (bao gồm file chưa theo dõi)",
+            SlashCommand::Mention => "nhắc đến một file",
+            SlashCommand::Skills => "dùng skill để cải thiện cách Codex thực hiện tác vụ cụ thể",
+            SlashCommand::Import => {
+                "nhập cấu hình, dự án này và các cuộc trò chuyện gần đây từ Claude Code"
+            }
+            SlashCommand::Hooks => "xem và quản lý lifecycle hooks",
+            SlashCommand::Status => {
+                "hiển thị cấu hình phiên hiện tại và lượng token đã dùng"
+            }
+            SlashCommand::Usage => "xem mức sử dụng tài khoản hoặc đặt lại giới hạn sử dụng",
+            SlashCommand::DebugConfig => {
+                "hiển thị các lớp cấu hình và nguồn yêu cầu để gỡ lỗi"
+            }
+            SlashCommand::Title => "cấu hình các mục xuất hiện trong tiêu đề terminal",
+            SlashCommand::Statusline => "cấu hình các mục xuất hiện trong dòng trạng thái",
+            SlashCommand::Theme => "chọn theme tô màu cú pháp",
+            SlashCommand::Pets => "chọn hoặc ẩn thú cưng terminal",
+            SlashCommand::Ps => "liệt kê terminal nền",
+            SlashCommand::Stop => "dừng mọi terminal nền",
             SlashCommand::MemoryDrop => "DO NOT USE",
             SlashCommand::MemoryUpdate => "DO NOT USE",
-            SlashCommand::Model => "choose what model and reasoning effort to use",
+            SlashCommand::Model => "chọn model và mức độ suy luận cần dùng",
             SlashCommand::Ide => {
-                "include current selection, open files, and other context from your IDE"
+                "đưa lựa chọn hiện tại, file đang mở và ngữ cảnh khác từ IDE của bạn"
             }
-            SlashCommand::Personality => "choose a communication style for Codex",
-            SlashCommand::Plan => "switch to Plan mode",
-            SlashCommand::Goal => "set or view the goal for a long-running task",
-            SlashCommand::Agent | SlashCommand::MultiAgents => "switch the active agent thread",
+            SlashCommand::Personality => "chọn phong cách giao tiếp cho Codex",
+            SlashCommand::Plan => "chuyển sang chế độ Kế hoạch",
+            SlashCommand::Goal => "đặt hoặc xem mục tiêu cho tác vụ chạy lâu",
+            SlashCommand::Agent | SlashCommand::MultiAgents => "chuyển luồng agent đang hoạt động",
             SlashCommand::Side | SlashCommand::Btw => {
-                "start a side conversation in an ephemeral fork"
+                "bắt đầu hội thoại bên trong một fork tạm thời"
             }
-            SlashCommand::Permissions => "choose what Codex is allowed to do",
-            SlashCommand::Keymap => "remap TUI shortcuts",
-            SlashCommand::Vim => "toggle Vim mode for the composer",
-            SlashCommand::ElevateSandbox => "set up elevated agent sandbox",
+            SlashCommand::Permissions => "chọn những gì Codex được phép làm",
+            SlashCommand::Keymap => "đổi phím tắt TUI",
+            SlashCommand::Vim => "bật/tắt chế độ Vim cho ô soạn thảo",
+            SlashCommand::ElevateSandbox => "thiết lập sandbox agent nâng quyền",
             SlashCommand::SandboxReadRoot => {
-                "let sandbox read a directory: /sandbox-add-read-dir <absolute_path>"
+                "cho phép sandbox đọc một thư mục: /sandbox-add-read-dir <absolute_path>"
             }
-            SlashCommand::Experimental => "toggle experimental features",
-            SlashCommand::AutoReview => "approve one retry of a recent auto-review denial",
-            SlashCommand::Memories => "configure memory use and generation",
-            SlashCommand::Mcp => "list configured MCP tools; use /mcp verbose for details",
-            SlashCommand::Apps => "manage apps",
-            SlashCommand::Plugins => "browse plugins",
-            SlashCommand::Logout => "log out of Codex",
-            SlashCommand::Rollout => "print the rollout file path",
-            SlashCommand::TestApproval => "test approval request",
+            SlashCommand::Experimental => "bật/tắt tính năng thử nghiệm",
+            SlashCommand::AutoReview => {
+                "duyệt một lần thử lại cho lần từ chối tự động gần đây"
+            }
+            SlashCommand::Memories => "cấu hình việc dùng và tạo memory",
+            SlashCommand::Mcp => "liệt kê công cụ MCP đã cấu hình; dùng /mcp verbose để xem chi tiết",
+            SlashCommand::Apps => "quản lý ứng dụng",
+            SlashCommand::Plugins => "duyệt plugin",
+            SlashCommand::Logout => "đăng xuất Codex",
+            SlashCommand::Rollout => "in đường dẫn file rollout",
+            SlashCommand::TestApproval => "test yêu cầu duyệt",
         }
     }
 

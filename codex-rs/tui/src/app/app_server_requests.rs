@@ -143,33 +143,33 @@ impl PendingAppServerRequests {
             ServerRequest::DynamicToolCall { request_id, .. } => {
                 Some(UnsupportedAppServerRequest {
                     request_id: request_id.clone(),
-                    message: "Dynamic tool calls are not available in TUI yet.".to_string(),
+                    message: "Lời gọi công cụ động chưa khả dụng trong TUI.".to_string(),
                 })
             }
             ServerRequest::ChatgptAuthTokensRefresh { .. } => None,
             ServerRequest::AttestationGenerate { request_id, .. } => {
                 Some(UnsupportedAppServerRequest {
                     request_id: request_id.clone(),
-                    message: "Attestation generation is not available in TUI.".to_string(),
+                    message: "Tạo chứng nhận (attestation) không khả dụng trong TUI.".to_string(),
                 })
             }
             ServerRequest::CurrentTimeRead { request_id, .. } => {
                 Some(UnsupportedAppServerRequest {
                     request_id: request_id.clone(),
-                    message: "External current time is not available in TUI.".to_string(),
+                    message: "Thời gian hiện tại bên ngoài không khả dụng trong TUI.".to_string(),
                 })
             }
             ServerRequest::ApplyPatchApproval { request_id, .. } => {
                 Some(UnsupportedAppServerRequest {
                     request_id: request_id.clone(),
-                    message: "Legacy patch approval requests are not available in TUI yet."
+                    message: "Yêu cầu phê duyệt patch cũ chưa khả dụng trong TUI."
                         .to_string(),
                 })
             }
             ServerRequest::ExecCommandApproval { request_id, .. } => {
                 Some(UnsupportedAppServerRequest {
                     request_id: request_id.clone(),
-                    message: "Legacy command approval requests are not available in TUI yet."
+                    message: "Yêu cầu phê duyệt lệnh cũ chưa khả dụng trong TUI."
                         .to_string(),
                 })
             }
@@ -738,7 +738,7 @@ mod tests {
         assert_eq!(unsupported.request_id, AppServerRequestId::Integer(99));
         assert_eq!(
             unsupported.message,
-            "Dynamic tool calls are not available in TUI yet."
+            "Lời gọi công cụ động chưa khả dụng trong TUI."
         );
     }
 

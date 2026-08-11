@@ -80,19 +80,19 @@ impl MemoriesSettingsView {
                 MemoriesMenuItem::Setting {
                     setting: MemoriesSetting::Use,
                     name: "Use memories",
-                    description: "Use memories in the following threads. Applied at next thread.",
+                    description: "Dùng memories trong các luồng sau. Được áp dụng ở luồng tiếp theo.",
                     enabled: use_memories,
                 },
                 MemoriesMenuItem::Setting {
                     setting: MemoriesSetting::Generate,
                     name: "Generate memories",
-                    description: "Generate memories from the following threads. Current thread included.",
+                    description: "Tạo memories từ các luồng sau. Bao gồm luồng hiện tại.",
                     enabled: generate_memories,
                 },
                 MemoriesMenuItem::Action {
                     action: MemoriesAction::Reset,
                     name: "Reset all memories",
-                    description: "Clear local memory files and summaries. Existing threads stay intact.",
+                    description: "Xóa các tệp memory cục bộ và bản tóm tắt. Các luồng hiện có vẫn nguyên vẹn.",
                 },
             ],
             state: ScrollState::new(),
@@ -117,7 +117,7 @@ impl MemoriesSettingsView {
         let mut header = ColumnRenderable::new();
         header.push(Line::from("Memories".bold()));
         header.push(Line::from(
-            "Choose how Codex uses and creates memories. Changes are saved to config.toml".dim(),
+            "Chọn cách Codex sử dụng và tạo memories. Thay đổi được lưu vào config.toml".dim(),
         ));
         header
     }
@@ -126,7 +126,7 @@ impl MemoriesSettingsView {
         let mut header = ColumnRenderable::new();
         header.push(Line::from("Reset all memories?".bold()));
         header.push(Line::from(
-            "This clears local memory files and rollout summaries for the current Codex home."
+            "Điều này xóa các tệp memory cục bộ và bản tóm tắt rollout cho Codex home hiện tại."
                 .dim(),
         ));
         header
@@ -160,8 +160,8 @@ impl MemoriesSettingsView {
                         format!("  {name}")
                     },
                     description: Some(match idx {
-                        0 => "Delete local memory files and rollout summaries.".to_string(),
-                        1 => "Return to memory settings.".to_string(),
+                        0 => "Xóa các tệp memory cục bộ và bản tóm tắt rollout.".to_string(),
+                        1 => "Quay lại cài đặt memory.".to_string(),
                         _ => unreachable!("reset confirmation only renders two rows"),
                     }),
                     ..Default::default()
@@ -466,12 +466,12 @@ impl Renderable for MemoriesSettingsView {
 
 fn memories_settings_hint_line(keymap: &ListKeymap) -> Line<'static> {
     let mut spans = vec![
-        "Press ".into(),
+        "Nhấn ".into(),
         key_hint::plain(KeyCode::Char(' ')).into(),
-        " to toggle".into(),
+        " để bật/tắt".into(),
     ];
     if let Some(accept) = keymap.primary_hint(ListAction::Accept) {
-        spans.extend(["; ".into(), accept.into(), " to save or select".into()]);
+        spans.extend(["; ".into(), accept.into(), " để lưu hoặc chọn".into()]);
     }
     Line::from(spans)
 }

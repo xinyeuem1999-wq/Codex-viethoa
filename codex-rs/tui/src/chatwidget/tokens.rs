@@ -129,12 +129,12 @@ impl HistoryCell for TokenActivityHistoryCell {
             TokenActivityState::Loading => {
                 vec![
                     " Token activity".bold().into(),
-                    "   Loading...".dim().into(),
+                    "   Đang tải...".dim().into(),
                 ]
             }
             TokenActivityState::Error => vec![
                 " Token activity".bold().into(),
-                "   Token activity unavailable".dim().into(),
+                "   Không có hoạt động token".dim().into(),
             ],
             TokenActivityState::Loaded { response, today } => {
                 chart::loaded_lines(self.view, response, *today, width)

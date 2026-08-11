@@ -73,9 +73,9 @@ fn format_unified_exec_interaction(command: &[String], input: Option<&str>) -> S
     match input {
         Some(data) if !data.is_empty() => {
             let preview = summarize_interaction_input(data);
-            format!("Interacted with `{command_display}`, sent `{preview}`")
+            format!("Đã tương tác với `{command_display}`, gửi `{preview}`")
         }
-        _ => format!("Waited for `{command_display}`"),
+        _ => format!("Đã chờ `{command_display}`"),
     }
 }
 

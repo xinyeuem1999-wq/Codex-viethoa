@@ -233,9 +233,9 @@ impl ExternalAgentConfigMigrationScreen {
             return reformatted;
         }
 
-        if let Some(source) = description.strip_prefix("Import enabled plugins from ") {
+        if let Some(source) = description.strip_prefix("Nhập các plugin đã bật từ ") {
             let description = format!(
-                "Import enabled plugins from {}",
+                "Nhập các plugin đã bật từ {}",
                 display_path_for(std::path::Path::new(source), cwd)
             );
             if let Some(details) = &item.details {

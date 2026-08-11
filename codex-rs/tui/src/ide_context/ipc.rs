@@ -23,34 +23,34 @@ const MAX_IPC_FRAME_BYTES: usize = 256 * 1024 * 1024;
 const TUI_SOURCE_CLIENT_ID: &str = "codex-tui";
 #[cfg(any(unix, windows))]
 const OPEN_IDE_HINT: &str =
-    "Open this project in VS Code or Cursor with the Codex extension active.";
+    "Mở dự án này trong VS Code hoặc Cursor với tiện ích mở rộng Codex đang hoạt động.";
 #[cfg(any(unix, windows))]
-const IDE_DID_NOT_PROVIDE_CONTEXT_HINT: &str = "The IDE extension did not provide context.";
+const IDE_DID_NOT_PROVIDE_CONTEXT_HINT: &str = "Tiện ích mở rộng IDE không cung cấp ngữ cảnh.";
 #[cfg(any(unix, windows))]
-const KEEP_TRYING_HINT: &str = "Codex will keep trying on future messages.";
+const KEEP_TRYING_HINT: &str = "Codex sẽ tiếp tục thử ở các tin nhắn sau.";
 
 #[derive(Debug, Error)]
 pub(crate) enum IdeContextError {
     #[cfg(any(unix, windows))]
-    #[error("failed to connect to IDE context provider: {0}")]
+    #[error("không thể kết nối tới nhà cung cấp ngữ cảnh IDE: {0}")]
     Connect(std::io::Error),
     #[cfg(any(unix, windows))]
-    #[error("failed to request IDE context: {0}")]
+    #[error("không thể gửi yêu cầu ngữ cảnh IDE: {0}")]
     Send(std::io::Error),
     #[cfg(any(unix, windows))]
-    #[error("failed to read IDE context: {0}")]
+    #[error("không thể đọc ngữ cảnh IDE: {0}")]
     Read(std::io::Error),
     #[cfg(any(unix, windows))]
-    #[error("invalid IDE context response: {0}")]
+    #[error("phản hồi ngữ cảnh IDE không hợp lệ: {0}")]
     InvalidResponse(String),
     #[cfg(any(unix, windows))]
-    #[error("IDE context response exceeded maximum size")]
+    #[error("phản hồi ngữ cảnh IDE vượt quá kích thước tối đa")]
     ResponseTooLarge,
     #[cfg(any(unix, windows))]
-    #[error("IDE context request failed")]
+    #[error("yêu cầu ngữ cảnh IDE thất bại")]
     RequestFailed(String),
     #[cfg(not(any(unix, windows)))]
-    #[error("IDE context is not supported on this platform")]
+    #[error("ngữ cảnh IDE không được hỗ trợ trên nền tảng này")]
     UnsupportedPlatform,
 }
 
@@ -63,16 +63,16 @@ impl IdeContextError {
                 OPEN_IDE_HINT.to_string()
             }
             IdeContextError::RequestFailed(_) => {
-                format!("{IDE_DID_NOT_PROVIDE_CONTEXT_HINT} Try /ide again.")
+                format!("{IDE_DID_NOT_PROVIDE_CONTEXT_HINT} Thử /ide lại.")
             }
             IdeContextError::ResponseTooLarge => {
-                "The selected IDE context is too large. Clear any large selection in your IDE and try /ide again.".to_string()
+                "Ngữ cảnh IDE đã chọn quá lớn. Hãy bỏ vùng chọn lớn trong IDE và thử /ide lại.".to_string()
             }
             IdeContextError::Send(_) => {
-                "Codex could not request IDE context. Try /ide again.".to_string()
+                "Codex không thể gửi yêu cầu ngữ cảnh IDE. Thử /ide lại.".to_string()
             }
             IdeContextError::Read(_) | IdeContextError::InvalidResponse(_) => {
-                "Codex could not read IDE context. Try /ide again.".to_string()
+                "Codex không thể đọc ngữ cảnh IDE. Thử /ide lại.".to_string()
             }
         }
     }
@@ -81,7 +81,7 @@ impl IdeContextError {
     pub(crate) fn prompt_skip_hint(&self) -> String {
         match self {
             IdeContextError::ResponseTooLarge => {
-                "The selected IDE context is too large. Clear any large selection in your IDE."
+                "Ngữ cảnh IDE đã chọn quá lớn. Hãy bỏ vùng chọn lớn trong IDE."
                     .to_string()
             }
             IdeContextError::Connect(_) => OPEN_IDE_HINT.to_string(),
@@ -89,30 +89,30 @@ impl IdeContextError {
                 OPEN_IDE_HINT.to_string()
             }
             IdeContextError::Read(error) if error.kind() == std::io::ErrorKind::TimedOut => {
-                "Codex timed out waiting for IDE context. It will keep trying on future messages."
+                "Codex đã hết thời gian chờ ngữ cảnh IDE. Nó sẽ tiếp tục thử ở các tin nhắn sau."
                     .to_string()
             }
             IdeContextError::RequestFailed(error) if error == "client-disconnected" => {
-                hint_with_retry("The IDE connection changed while Codex was requesting context.")
+                hint_with_retry("Kết nối IDE thay đổi trong khi Codex đang yêu cầu ngữ cảnh.")
             }
             IdeContextError::RequestFailed(error) if error == "request-timeout" => {
-                hint_with_retry("The IDE extension did not answer in time.")
+                hint_with_retry("Tiện ích mở rộng IDE không phản hồi kịp.")
             }
             IdeContextError::RequestFailed(error) if error == "request-version-mismatch" => {
-                "The connected IDE extension is not compatible with this IDE context request."
+                "Tiện ích mở rộng IDE đang kết nối không tương thích với yêu cầu ngữ cảnh IDE này."
                     .to_string()
             }
             IdeContextError::RequestFailed(error) if error == "no-handler-for-request" => {
-                "The connected IDE client does not support IDE context requests.".to_string()
+                "Trình khách IDE đang kết nối không hỗ trợ yêu cầu ngữ cảnh IDE.".to_string()
             }
             IdeContextError::Send(_) => {
-                hint_with_retry("Codex lost the IDE connection while requesting context.")
+                hint_with_retry("Codex mất kết nối IDE trong khi yêu cầu ngữ cảnh.")
             }
             IdeContextError::InvalidResponse(_) => {
-                hint_with_retry("Codex received an unexpected IDE context response.")
+                hint_with_retry("Codex nhận được phản hồi ngữ cảnh IDE bất ngờ.")
             }
             IdeContextError::RequestFailed(_) => hint_with_retry(IDE_DID_NOT_PROVIDE_CONTEXT_HINT),
-            IdeContextError::Read(_) => hint_with_retry("Codex could not read IDE context."),
+            IdeContextError::Read(_) => hint_with_retry("Codex không thể đọc ngữ cảnh IDE."),
         }
     }
 
@@ -235,7 +235,7 @@ fn fetch_ide_context_from_unix_socket_paths(
             Err(err) if Instant::now() >= deadline => {
                 return Err(IdeContextError::Connect(std::io::Error::new(
                     std::io::ErrorKind::TimedOut,
-                    format!("IDE IPC connection exhausted the request deadline: {err}"),
+                    format!("Kết nối IPC IDE đã dùng hết thời hạn yêu cầu: {err}"),
                 )));
             }
             Err(err) => last_error = err,
@@ -325,7 +325,7 @@ fn unix_socket_addr(socket_path: &Path) -> std::io::Result<(libc::sockaddr_un, l
     if path_bytes.contains(&0) {
         return Err(std::io::Error::new(
             std::io::ErrorKind::InvalidInput,
-            "IDE context Unix socket path contains a nul byte",
+            "Đường dẫn socket Unix của ngữ cảnh IDE chứa byte nul",
         ));
     }
 
@@ -333,7 +333,7 @@ fn unix_socket_addr(socket_path: &Path) -> std::io::Result<(libc::sockaddr_un, l
     if path_bytes.len() >= addr.sun_path.len() {
         return Err(std::io::Error::new(
             std::io::ErrorKind::InvalidInput,
-            "IDE context Unix socket path is too long",
+            "Đường dẫn socket Unix của ngữ cảnh IDE quá dài",
         ));
     }
 
@@ -355,7 +355,7 @@ fn unix_socket_addr(socket_path: &Path) -> std::io::Result<(libc::sockaddr_un, l
         addr.sun_len = u8::try_from(addr_len).map_err(|_| {
             std::io::Error::new(
                 std::io::ErrorKind::InvalidInput,
-                "IDE context Unix socket address is too long",
+                "Địa chỉ socket Unix của ngữ cảnh IDE quá dài",
             )
         })?;
     }
@@ -363,7 +363,7 @@ fn unix_socket_addr(socket_path: &Path) -> std::io::Result<(libc::sockaddr_un, l
     let addr_len = libc::socklen_t::try_from(addr_len).map_err(|_| {
         std::io::Error::new(
             std::io::ErrorKind::InvalidInput,
-            "IDE context Unix socket address is too long",
+            "Địa chỉ socket Unix của ngữ cảnh IDE quá dài",
         )
     })?;
     Ok((addr, addr_len))
@@ -477,7 +477,7 @@ fn wait_for_fd_ready(
         if poll_fd.revents & libc::POLLNVAL != 0 {
             return Err(std::io::Error::new(
                 std::io::ErrorKind::InvalidInput,
-                "invalid IDE context Unix socket",
+                "Socket Unix của ngữ cảnh IDE không hợp lệ",
             ));
         }
         if poll_fd.revents & (events | libc::POLLERR | libc::POLLHUP) != 0 {
@@ -700,13 +700,13 @@ fn write_frame<T: std::io::Write + ?Sized>(stream: &mut T, message: &Value) -> s
     let payload = serde_json::to_vec(message).map_err(|err| {
         std::io::Error::new(
             std::io::ErrorKind::InvalidInput,
-            format!("invalid IDE context JSON message: {err}"),
+            format!("Thông điệp JSON của ngữ cảnh IDE không hợp lệ: {err}"),
         )
     })?;
     let payload_len = u32::try_from(payload.len()).map_err(|_| {
         std::io::Error::new(
             std::io::ErrorKind::InvalidInput,
-            "IDE context payload exceeds u32 length",
+            "Dữ liệu ngữ cảnh IDE vượt quá độ dài u32",
         )
     })?;
     stream.write_all(&payload_len.to_le_bytes())?;
@@ -729,7 +729,7 @@ fn read_frame<T: std::io::Read + ?Sized>(
     let mut payload = vec![0_u8; len];
     read_exact_before_deadline(stream, &mut payload, deadline)?;
     serde_json::from_slice(&payload)
-        .map_err(|err| IdeContextError::InvalidResponse(format!("invalid JSON payload: {err}")))
+        .map_err(|err| IdeContextError::InvalidResponse(format!("Dữ liệu JSON không hợp lệ: {err}")))
 }
 
 #[cfg(any(unix, windows))]
@@ -797,12 +797,12 @@ fn read_response_frame(
             }
             Some(other) => {
                 return Err(IdeContextError::InvalidResponse(format!(
-                    "unexpected IDE context message type: {other}"
+                    "Loại thông điệp ngữ cảnh IDE bất ngờ: {other}"
                 )));
             }
             None => {
                 return Err(IdeContextError::InvalidResponse(
-                    "IDE context message did not include a type".to_string(),
+                    "Thông điệp ngữ cảnh IDE không bao gồm loại".to_string(),
                 ));
             }
         }
@@ -827,7 +827,7 @@ fn timeout_error() -> IdeContextError {
 fn deadline_timeout_io_error() -> std::io::Error {
     std::io::Error::new(
         std::io::ErrorKind::TimedOut,
-        "timed out waiting for IDE context",
+        "hết thời gian chờ ngữ cảnh IDE",
     )
 }
 
@@ -845,7 +845,7 @@ fn extract_ide_context(response: Value) -> Result<IdeContext, IdeContextError> {
         .cloned()
         .ok_or_else(|| {
             IdeContextError::InvalidResponse(
-                "ide-context response did not include result.ideContext".to_string(),
+                "Phản hồi ide-context không bao gồm result.ideContext".to_string(),
             )
         })?;
     serde_json::from_value(ide_context)
@@ -864,7 +864,7 @@ fn ensure_success_response(response: &Value) -> Result<(), IdeContextError> {
                 .to_string(),
         )),
         _ => Err(IdeContextError::InvalidResponse(
-            "response did not include a success or error resultType".to_string(),
+            "Phản hồi không bao gồm resultType thành công hoặc lỗi".to_string(),
         )),
     }
 }

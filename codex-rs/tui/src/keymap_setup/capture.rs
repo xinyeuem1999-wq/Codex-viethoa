@@ -64,23 +64,23 @@ impl KeymapCaptureView {
     fn lines(&self, width: u16) -> Vec<Line<'static>> {
         let wrap_width = usize::from(width.max(1));
         let mut lines = vec![
-            Line::from("Remap Shortcut".bold()),
+            Line::from("Đổi phím tắt".bold()),
             Line::from(vec![
-                "Action: ".dim(),
+                "Hành động: ".dim(),
                 self.label.clone().into(),
                 "  ".into(),
                 format!("{}.{}", self.context, self.action).dim(),
             ]),
-            Line::from(vec!["Current: ".dim(), self.current_binding.clone().cyan()]),
+            Line::from(vec!["Hiện tại: ".dim(), self.current_binding.clone().cyan()]),
         ];
 
         let instructions = match (self.capture_mode, self.first_stroke.as_deref()) {
-            (KeymapCaptureMode::SingleKey, _) => "Press the new key now. Esc cancels.".to_string(),
+            (KeymapCaptureMode::SingleKey, _) => "Nhấn phím mới ngay bây giờ. Esc để hủy.".to_string(),
             (KeymapCaptureMode::Chord, None) => {
-                "Press the first key, then the second. Esc cancels.".to_string()
+                "Nhấn phím thứ nhất, rồi phím thứ hai. Esc để hủy.".to_string()
             }
             (KeymapCaptureMode::Chord, Some(first)) => {
-                format!("First key: {first}. Press the second key. Esc cancels.")
+                format!("Phím thứ nhất: {first}. Nhấn phím thứ hai. Esc để hủy.")
             }
         };
         lines.extend(
@@ -92,7 +92,7 @@ impl KeymapCaptureView {
         if let Some(error) = &self.error_message {
             lines.push(Line::from(""));
             let options = textwrap::Options::new(wrap_width)
-                .initial_indent("Error: ")
+                .initial_indent("Lỗi: ")
                 .subsequent_indent("       ");
             lines.extend(
                 textwrap::wrap(error, options)

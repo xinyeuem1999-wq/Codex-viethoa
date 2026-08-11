@@ -296,7 +296,7 @@ impl HooksBrowserView {
     fn event_header_lines() -> Vec<Line<'static>> {
         vec![
             "Hooks".bold().into(),
-            "Lifecycle hooks from config and enabled plugins."
+            "Các hook vòng đời từ cấu hình và plugin đã bật."
                 .dim()
                 .into(),
         ]
@@ -318,7 +318,7 @@ impl HooksBrowserView {
         let mut lines = vec![format!("{} hooks", event_label(event_name)).bold().into()];
         match review_needed_message(review_needed_count) {
             None => lines.push(
-                "Turn hooks on or off. Your changes are saved automatically."
+                "Bật hoặc tắt hook. Thay đổi của bạn được lưu tự động."
                     .dim()
                     .into(),
             ),
@@ -471,7 +471,7 @@ impl HooksBrowserView {
 
     fn detail_lines(&self, event_name: HookEventName, width: usize) -> Vec<Line<'static>> {
         let Some(hook) = self.selected_hook(event_name) else {
-            return vec!["No hooks installed for this event.".dim().into()];
+            return vec!["Không có hook nào được cài đặt cho sự kiện này.".dim().into()];
         };
 
         let mut lines = vec![detail_line("Event", event_label(event_name))];
@@ -497,7 +497,7 @@ impl HooksBrowserView {
             let value = if limit == 0 {
                 "unlimited".to_string()
             } else {
-                format!("limit: {limit} approximate tokens")
+                format!("giới hạn: khoảng {limit} token")
             };
             lines.push(detail_line("Context", &value));
         }
@@ -520,49 +520,49 @@ impl HooksBrowserView {
         let footer = match self.page {
             HooksBrowserPage::Events if self.review_needed_total_count() > 0 => {
                 let mut spans = vec![
-                    "Press ".into(),
+                    "Nhấn ".into(),
                     key_hint::plain(KeyCode::Char('t')).into(),
-                    " to trust all; ".into(),
+                    " để tin cậy tất cả; ".into(),
                 ];
                 if let Some(accept) = accept {
-                    spans.extend([accept.into(), " to review hooks; ".into()]);
+                    spans.extend([accept.into(), " để xem xét hooks; ".into()]);
                 }
-                spans.extend([cancel.into(), " to close".into()]);
+                spans.extend([cancel.into(), " để đóng".into()]);
                 Line::from(spans)
             }
             HooksBrowserPage::Events => {
-                let mut spans = vec!["Press ".into()];
+                let mut spans = vec!["Nhấn ".into()];
                 if let Some(accept) = accept {
-                    spans.extend([accept.into(), " to view hooks; ".into()]);
+                    spans.extend([accept.into(), " để xem hooks; ".into()]);
                 }
-                spans.extend([cancel.into(), " to close".into()]);
+                spans.extend([cancel.into(), " để đóng".into()]);
                 Line::from(spans)
             }
             HooksBrowserPage::Handlers(event_name) => {
                 let selected_hook = self.selected_hook(event_name);
                 if selected_hook.is_none() {
-                    Line::from(vec!["Press ".into(), cancel.into(), " to go back".into()])
+                    Line::from(vec!["Nhấn ".into(), cancel.into(), " để quay lại".into()])
                 } else if selected_hook.is_some_and(|hook| hook.is_managed) {
                     Line::from(vec![
-                        "Managed hooks are always on; press ".into(),
+                        "Hook được quản lý luôn bật; nhấn ".into(),
                         cancel.into(),
-                        " to go back".into(),
+                        " để quay lại".into(),
                     ])
                 } else if selected_hook.is_some_and(hook_needs_review) {
                     Line::from(vec![
-                        "Press ".into(),
+                        "Nhấn ".into(),
                         key_hint::plain(KeyCode::Char('t')).into(),
-                        " to trust; ".into(),
+                        " để tin cậy; ".into(),
                         cancel.into(),
-                        " to go back".into(),
+                        " để quay lại".into(),
                     ])
                 } else {
                     let mut spans =
-                        vec!["Press ".into(), key_hint::plain(KeyCode::Char(' ')).into()];
+                        vec!["Nhấn ".into(), key_hint::plain(KeyCode::Char(' ')).into()];
                     if let Some(accept) = accept {
-                        spans.extend([" or ".into(), accept.into()]);
+                        spans.extend([" hoặc ".into(), accept.into()]);
                     }
-                    spans.extend([" to toggle; ".into(), cancel.into(), " to go back".into()]);
+                    spans.extend([" để bật/tắt; ".into(), cancel.into(), " để quay lại".into()]);
                     Line::from(spans)
                 }
             }
@@ -676,7 +676,7 @@ impl Renderable for HooksBrowserView {
                 if rows.is_empty() {
                     lines.push(Line::default());
                     lines.push(Line::from(
-                        "No hooks installed for this event.".dim().italic(),
+                        "Không có hook nào được cài đặt cho sự kiện này.".dim().italic(),
                     ));
                     lines.push(Line::default());
                     Paragraph::new(lines).render(content_area, buf);
@@ -723,7 +723,7 @@ fn review_needed_message(count: usize) -> Option<String> {
     match count {
         0 => None,
         1 => Some("1 hook needs review before it can run.".to_string()),
-        count => Some(format!("{count} hooks need review before they can run.")),
+        count => Some(format!("{count} hook cần xem xét trước khi có thể chạy.")),
     }
 }
 
@@ -738,8 +738,8 @@ fn hook_trust_label(status: HookTrustStatus) -> &'static str {
     match status {
         HookTrustStatus::Managed => "Managed",
         HookTrustStatus::Trusted => "Trusted",
-        HookTrustStatus::Untrusted => "New hook - review required",
-        HookTrustStatus::Modified => "Modified since last trusted - review required",
+        HookTrustStatus::Untrusted => "Hook mới - cần xem xét",
+        HookTrustStatus::Modified => "Đã sửa đổi kể từ lần tin cậy trước - cần xem xét",
     }
 }
 
@@ -761,17 +761,17 @@ fn event_label(event_name: HookEventName) -> &'static str {
 
 fn event_description(event_name: HookEventName) -> &'static str {
     match event_name {
-        HookEventName::PreToolUse => "Before a tool executes",
-        HookEventName::PermissionRequest => "When permission is requested",
-        HookEventName::PostToolUse => "After a tool executes",
+        HookEventName::PreToolUse => "Trước khi công cụ thực thi",
+        HookEventName::PermissionRequest => "Khi quyền được yêu cầu",
+        HookEventName::PostToolUse => "Sau khi công cụ thực thi",
         HookEventName::PreCompact => "Before context compaction",
         HookEventName::PostCompact => "After context compaction",
-        HookEventName::SessionStart => "When a new session starts",
-        HookEventName::SessionEnd => "Right before a session ends",
-        HookEventName::UserPromptSubmit => "When the user submits a prompt",
-        HookEventName::SubagentStart => "When a subagent is created",
-        HookEventName::SubagentStop => "Right before a subagent ends its turn",
-        HookEventName::Stop => "Right before Codex ends its turn",
+        HookEventName::SessionStart => "Khi một phiên mới bắt đầu",
+        HookEventName::SessionEnd => "Ngay trước khi phiên kết thúc",
+        HookEventName::UserPromptSubmit => "Khi người dùng gửi một lời nhắc",
+        HookEventName::SubagentStart => "Khi một subagent được tạo",
+        HookEventName::SubagentStop => "Ngay trước khi subagent kết thúc lượt",
+        HookEventName::Stop => "Ngay trước khi Codex kết thúc lượt",
     }
 }
 

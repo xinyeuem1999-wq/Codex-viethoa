@@ -65,7 +65,7 @@ impl ChatWidget {
         if !self.config.features.enabled(Feature::Plugins) {
             self.add_info_message(
                 "Plugins are disabled.".to_string(),
-                Some("Enable the plugins feature to use /plugins.".to_string()),
+                Some("Bật tính năng plugin để dùng /plugins.".to_string()),
             );
             return;
         }
@@ -288,7 +288,7 @@ impl ChatWidget {
             "Add marketplace".to_string(),
             "owner/repo, git URL, or local marketplace path".to_string(),
             String::new(),
-            Some("Examples: owner/repo, git URL, ./marketplace".to_string()),
+            Some("Ví dụ: owner/repo, git URL, ./marketplace".to_string()),
             Box::new(move |source: String| {
                 let source = source.trim().to_string();
                 if source.is_empty() {
@@ -461,8 +461,8 @@ impl ChatWidget {
                 self.plugin_install_auth_flow = None;
                 if self.plugin_install_apps_needing_auth.is_empty() {
                     self.add_info_message(
-                        format!("Installed {plugin_display_name} plugin."),
-                        Some("No additional app authentication is required.".to_string()),
+                        format!("Đã cài plugin {plugin_display_name}."),
+                        Some("Không cần xác thực ứng dụng bổ sung.".to_string()),
                     );
                     true
                 } else {
@@ -473,9 +473,9 @@ impl ChatWidget {
                         .collect::<Vec<_>>()
                         .join(", ");
                     self.add_info_message(
-                        format!("Installed {plugin_display_name} plugin."),
+                        format!("Đã cài plugin {plugin_display_name}."),
                         Some(format!(
-                            "{} app(s) still need authentication: {app_names}",
+                            "{} ứng dụng vẫn cần xác thực: {app_names}",
                             self.plugin_install_apps_needing_auth.len()
                         )),
                     );
@@ -521,7 +521,7 @@ impl ChatWidget {
                     (!response.already_added).then_some(marketplace_tab_id);
                 let message = if response.already_added {
                     format!(
-                        "Marketplace {} is already added.",
+                        "Marketplace {} đã được thêm.",
                         response.marketplace_name
                     )
                 } else {
@@ -564,13 +564,13 @@ impl ChatWidget {
             Ok(response) => {
                 self.plugins_active_tab_id = Some(ALL_PLUGINS_TAB_ID.to_string());
                 self.add_info_message(
-                    format!("Removed marketplace {marketplace_display_name}."),
+                    format!("Đã xóa marketplace {marketplace_display_name}."),
                     Some(match response.installed_root {
                         Some(installed_root) => {
                             format!("Marketplace root: {}", installed_root.as_path().display())
                         }
                         None => format!(
-                            "Removed marketplace config for {}.",
+                            "Đã xóa cấu hình marketplace cho {}.",
                             response.marketplace_name
                         ),
                     }),
@@ -617,8 +617,8 @@ impl ChatWidget {
                 let error_count = response.errors.len();
                 if selected_count == 0 {
                     self.add_info_message(
-                        "No configured Git marketplaces to upgrade.".to_string(),
-                        Some("Only configured Git marketplaces can be upgraded.".to_string()),
+                        "Không có marketplace Git nào được cấu hình để nâng cấp.".to_string(),
+                        Some("Chỉ các marketplace Git đã cấu hình mới có thể nâng cấp.".to_string()),
                     );
                     return;
                 }
@@ -626,12 +626,12 @@ impl ChatWidget {
                 if upgraded_count == 0 && error_count == 0 {
                     let message = if selected_count == 1 {
                         format!(
-                            "Marketplace {} is already up to date.",
+                            "Marketplace {} đã ở phiên bản mới nhất.",
                             response.selected_marketplaces[0]
                         )
                     } else {
                         format!(
-                            "Checked {selected_count} marketplaces; all are already up to date."
+                            "Đã kiểm tra {selected_count} marketplace; tất cả đều đã mới nhất."
                         )
                     };
                     self.add_info_message(
@@ -651,7 +651,7 @@ impl ChatWidget {
                         "marketplaces"
                     };
                     self.add_info_message(
-                        format!("Upgraded {upgraded_count} {noun}."),
+                        format!("Đã nâng cấp {upgraded_count} {noun}."),
                         Some(format!(
                             "Updated roots: {}",
                             response
@@ -671,7 +671,7 @@ impl ChatWidget {
                         "marketplaces"
                     };
                     self.add_error_message(format!(
-                        "Failed to upgrade {error_count} {noun}: {}",
+                        "Không thể nâng cấp {error_count} {noun}: {}",
                         response
                             .errors
                             .iter()
@@ -754,7 +754,7 @@ impl ChatWidget {
 
         if let Err(err) = result {
             self.add_error_message(format!(
-                "Failed to update plugin config for {plugin_id}: {err}"
+                "Không thể cập nhật cấu hình plugin cho {plugin_id}: {err}"
             ));
             if let PluginsCacheState::Ready(response) = self.plugins_cache_for_current_cwd() {
                 self.refresh_plugins_popup_if_open(&response);
@@ -799,8 +799,8 @@ impl ChatWidget {
                 self.plugin_install_apps_needing_auth.clear();
                 self.plugin_install_auth_flow = None;
                 self.add_info_message(
-                    format!("Uninstalled {plugin_display_name} plugin."),
-                    Some("Bundled apps remain installed.".to_string()),
+                    format!("Đã gỡ cài đặt plugin {plugin_display_name}."),
+                    Some("Các ứng dụng đi kèm vẫn được cài đặt.".to_string()),
                 );
             }
             Err(err) => {
@@ -860,9 +860,9 @@ impl ChatWidget {
         let current = flow.next_app_index + 1;
         let is_installed = self.plugin_install_auth_app_is_installed(app.id.as_str());
         let status_label = if is_installed {
-            "Already installed in this session."
+            "Đã cài đặt trong phiên này."
         } else {
-            "Install the required Apps in ChatGPT to continue:"
+            "Cài các ứng dụng bắt buộc trong ChatGPT để tiếp tục:"
         };
         let mut header = ColumnRenderable::new();
         header.push(Line::from("Plugins".bold()));
@@ -870,7 +870,7 @@ impl ChatWidget {
             format!("{} plugin installed.", flow.plugin_display_name).bold(),
         ));
         header.push(Line::from(
-            format!("App setup {current}/{total}: {}", app.name).dim(),
+            format!("Thiết lập ứng dụng {current}/{total}: {}", app.name).dim(),
         ));
         header.push(Line::from(status_label.dim()));
 
@@ -884,8 +884,8 @@ impl ChatWidget {
             };
             items.push(SelectionItem {
                 name: install_label.to_string(),
-                description: Some("Open the ChatGPT app management page".to_string()),
-                selected_description: Some("Open the app page in your browser.".to_string()),
+                description: Some("Mở trang quản lý ứng dụng ChatGPT".to_string()),
+                selected_description: Some("Mở trang ứng dụng trong trình duyệt của bạn.".to_string()),
                 actions: vec![Box::new(move |tx| {
                     tx.send(AppEvent::OpenUrlInBrowser {
                         url: install_url.clone(),
@@ -895,8 +895,8 @@ impl ChatWidget {
             });
         } else {
             items.push(SelectionItem {
-                name: "ChatGPT apps link unavailable".to_string(),
-                description: Some("This app did not provide an install/manage URL.".to_string()),
+                name: "Không có liên kết ứng dụng ChatGPT".to_string(),
+                description: Some("Ứng dụng này không cung cấp URL cài đặt/quản lý.".to_string()),
                 is_disabled: true,
                 ..Default::default()
             });
@@ -905,8 +905,8 @@ impl ChatWidget {
         if is_installed {
             items.push(SelectionItem {
                 name: "Continue".to_string(),
-                description: Some("This app is already installed.".to_string()),
-                selected_description: Some("Advance to the next app.".to_string()),
+                description: Some("Ứng dụng này đã được cài đặt.".to_string()),
+                selected_description: Some("Chuyển sang ứng dụng tiếp theo.".to_string()),
                 actions: vec![Box::new(|tx| {
                     tx.send(AppEvent::PluginInstallAuthAdvance {
                         refresh_connectors: false,
@@ -918,10 +918,10 @@ impl ChatWidget {
             items.push(SelectionItem {
                 name: "I've installed it".to_string(),
                 description: Some(
-                    "Trust your confirmation and continue to the next app.".to_string(),
+                    "Xác nhận và tiếp tục sang ứng dụng tiếp theo.".to_string(),
                 ),
                 selected_description: Some(
-                    "Continue without waiting for refresh to complete.".to_string(),
+                    "Tiếp tục mà không chờ làm mới hoàn tất.".to_string(),
                 ),
                 actions: vec![Box::new(|tx| {
                     tx.send(AppEvent::PluginInstallAuthAdvance {
@@ -933,9 +933,9 @@ impl ChatWidget {
         }
 
         items.push(SelectionItem {
-            name: "Skip remaining app setup".to_string(),
-            description: Some("Stop this follow-up flow for this plugin.".to_string()),
-            selected_description: Some("Abandon remaining required app setup.".to_string()),
+            name: "Bỏ qua phần thiết lập ứng dụng còn lại".to_string(),
+            description: Some("Dừng luồng theo dõi này cho plugin này.".to_string()),
+            selected_description: Some("Bỏ qua phần thiết lập ứng dụng bắt buộc còn lại.".to_string()),
             actions: vec![Box::new(|tx| {
                 tx.send(AppEvent::PluginInstallAuthAbandon);
             })],
@@ -968,18 +968,18 @@ impl ChatWidget {
         if abandoned {
             self.add_info_message(
                 format!(
-                    "Skipped remaining app setup for {} plugin.",
+                    "Đã bỏ qua phần thiết lập ứng dụng còn lại cho plugin {}.",
                     flow.plugin_display_name
                 ),
-                Some("The plugin may not be usable until required apps are installed.".to_string()),
+                Some("Plugin có thể không dùng được cho đến khi cài các ứng dụng bắt buộc.".to_string()),
             );
         } else {
             self.add_info_message(
                 format!(
-                    "Completed app setup flow for {} plugin.",
+                    "Đã hoàn tất luồng thiết lập ứng dụng cho plugin {}.",
                     flow.plugin_display_name
                 ),
-                Some("You can now continue managing plugins from /plugins.".to_string()),
+                Some("Giờ bạn có thể tiếp tục quản lý plugin từ /plugins.".to_string()),
             );
         }
 

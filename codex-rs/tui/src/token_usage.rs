@@ -64,7 +64,7 @@ impl fmt::Display for TokenUsage {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(
             f,
-            "Token usage: total={} input={}{} output={}{}",
+            "Lượng token: tổng={} nhập={}{} xuất={}{}",
             format_with_separators(self.blended_total()),
             format_with_separators(self.non_cached_input()),
             if self.cached_input() > 0 {

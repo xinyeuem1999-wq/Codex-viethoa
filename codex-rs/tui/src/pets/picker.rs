@@ -118,12 +118,12 @@ pub(crate) fn build_pet_picker_params(
 
     SelectionViewParams {
         view_id: Some(PET_PICKER_VIEW_ID),
-        title: Some("Select Pet".to_string()),
-        subtitle: Some("Choose a pet to wake in the terminal.".to_string()),
+        title: Some("Chọn thú nuôi".to_string()),
+        subtitle: Some("Chọn một thú nuôi để đánh thức trong terminal.".to_string()),
         footer_hint: Some(standard_popup_hint_line()),
         items,
         is_searchable: true,
-        search_placeholder: Some("Type to filter pets...".to_string()),
+        search_placeholder: Some("Gõ để lọc thú nuôi...".to_string()),
         initial_selected_idx,
         side_content: Box::new(preview_state.renderable()),
         side_content_width: SideContentWidth::Fixed(PET_PICKER_PREVIEW_WIDTH),
@@ -148,7 +148,7 @@ fn available_pet_entries(codex_home: &Path) -> Vec<PetPickerEntry> {
     entries.push(PetPickerEntry {
         selector: DISABLED_PET_ID.to_string(),
         legacy_selector: None,
-        display_name: "Disable terminal pets".to_string(),
+        display_name: "Tắt thú nuôi terminal".to_string(),
         description: None,
     });
     entries.extend(custom_pet_entries(codex_home));
@@ -250,7 +250,7 @@ mod tests {
                 .map(|item| item.name.as_str())
                 .collect::<Vec<_>>(),
             vec![
-                "Disable terminal pets",
+                "Tắt thú nuôi terminal",
                 "BSOD",
                 "Chefito",
                 "Codex",
@@ -293,7 +293,7 @@ mod tests {
         );
 
         assert_eq!(params.initial_selected_idx, Some(0));
-        assert_eq!(params.items[0].name, "Disable terminal pets");
+        assert_eq!(params.items[0].name, "Tắt thú nuôi terminal");
         assert_eq!(params.items[0].description, None);
         assert!(params.items[0].is_current);
         assert_eq!(
